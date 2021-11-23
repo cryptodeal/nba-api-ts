@@ -5,7 +5,7 @@
 
 // NOTE: ANY CHANGES MADE WILL BE OVERWRITTEN ON SUBSEQUENT EXECUTIONS OF MONGOOSE-TSGEN.
 
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 /**
  * Lean version of Coach2SeasonDocument
@@ -15,24 +15,42 @@ import mongoose from "mongoose";
  * const coach2Object = coach2.toObject();
  * ```
  */
-export interface Coach2Season {
-  season: number;
-  team?: Team2["_id"] | Team2;
-  coachType?: string;
-  preseason: {
-    exists: boolean;
-    games: (Game2["_id"] | Game2)[];
-    stats: {
-      games?: number;
-      wins?: number;
-      losses?: number;
-      winLossPct?: number;
-      winsOver500?: number;
-      finish?: number;
-    };
-  };
-  _id: mongoose.Types.ObjectId;
-}
+export type Coach2Season = {
+	season: number;
+	team?: Team2['_id'] | Team2;
+	coachType?: string;
+	preseason: {
+		exists: boolean;
+		games: (Game2['_id'] | Game2)[];
+		stats: {
+			games?: number;
+			wins?: number;
+			losses?: number;
+			winLossPct?: number;
+			winsOver500?: number;
+			finish?: number;
+		};
+	};
+	_id: mongoose.Types.ObjectId;
+};
+
+/**
+ * Lean version of Coach2Document
+ *
+ * This has all Mongoose getters & functions removed. This type will be returned from `Coach2Document.toObject()`. To avoid conflicts with model names, use the type alias `Coach2Object`.
+ * ```
+ * const coach2Object = coach2.toObject();
+ * ```
+ */
+export type Coach2 = {
+	name: {
+		first: string;
+		last: string;
+		full: string;
+	};
+	seasons: Coach2Season[];
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
  * Lean version of Coach2Document (type alias of `Coach2`)
@@ -48,23 +66,17 @@ export interface Coach2Season {
 export type Coach2Object = Coach2;
 
 /**
- * Mongoose Method types
+ * Mongoose Query types
  *
- * Use type assertion to ensure Coach2 methods type safety:
+ * Pass this type to the Mongoose Model constructor:
  * ```
- * Coach2Schema.methods = <Coach2Methods>{ ... };
+ * const Coach2 = mongoose.model<Coach2Document, Coach2Model>("Coach2", Coach2Schema);
  * ```
  */
+export type Coach2Queries = {};
+
 export type Coach2Methods = {};
 
-/**
- * Mongoose Static types
- *
- * Use type assertion to ensure Coach2 statics type safety:
- * ```
- * Coach2Schema.statics = <Coach2Statics>{ ... };
- * ```
- */
 export type Coach2Statics = {};
 
 /**
@@ -75,9 +87,7 @@ export type Coach2Statics = {};
  * const Coach2 = mongoose.model<Coach2Document, Coach2Model>("Coach2", Coach2Schema);
  * ```
  */
-export interface Coach2Model
-  extends mongoose.Model<Coach2Document>,
-    Coach2Statics {}
+export type Coach2Model = mongoose.Model<Coach2Document, Coach2Queries> & Coach2Statics;
 
 /**
  * Mongoose Schema type
@@ -90,46 +100,28 @@ export interface Coach2Model
 export type Coach2Schema = mongoose.Schema<Coach2Document, Coach2Model>;
 
 /**
- * Lean version of Coach2Document
- *
- * This has all Mongoose getters & functions removed. This type will be returned from `Coach2Document.toObject()`. To avoid conflicts with model names, use the type alias `Coach2Object`.
- * ```
- * const coach2Object = coach2.toObject();
- * ```
- */
-export interface Coach2 {
-  name: {
-    first: string;
-    last: string;
-    full: string;
-  };
-  seasons: Coach2Season[];
-  _id: mongoose.Types.ObjectId;
-}
-
-/**
- * Mongoose Embedded Document type
+ * Mongoose Subdocument type
  *
  * Type of `Coach2Document["seasons"]` element.
  */
-export interface Coach2SeasonDocument extends mongoose.Types.EmbeddedDocument {
-  season: number;
-  team?: Team2Document["_id"] | Team2Document;
-  coachType?: string;
-  preseason: {
-    exists: boolean;
-    games: mongoose.Types.Array<Game2Document["_id"] | Game2Document>;
-    stats: {
-      games?: number;
-      wins?: number;
-      losses?: number;
-      winLossPct?: number;
-      winsOver500?: number;
-      finish?: number;
-    };
-  };
-  _id: mongoose.Types.ObjectId;
-}
+export type Coach2SeasonDocument = mongoose.Types.Subdocument & {
+	season: number;
+	team?: Team2Document['_id'] | Team2Document;
+	coachType?: string;
+	preseason: {
+		exists: boolean;
+		games: mongoose.Types.Array<Game2Document['_id'] | Game2Document>;
+		stats: {
+			games?: number;
+			wins?: number;
+			losses?: number;
+			winLossPct?: number;
+			winsOver500?: number;
+			finish?: number;
+		};
+	};
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
  * Mongoose Document type
@@ -139,17 +131,16 @@ export interface Coach2SeasonDocument extends mongoose.Types.EmbeddedDocument {
  * const Coach2 = mongoose.model<Coach2Document, Coach2Model>("Coach2", Coach2Schema);
  * ```
  */
-export interface Coach2Document
-  extends mongoose.Document<mongoose.Types.ObjectId>,
-    Coach2Methods {
-  name: {
-    first: string;
-    last: string;
-    full: string;
-  };
-  seasons: mongoose.Types.DocumentArray<Coach2SeasonDocument>;
-  _id: mongoose.Types.ObjectId;
-}
+export type Coach2Document = mongoose.Document<mongoose.Types.ObjectId, Coach2Queries> &
+	Coach2Methods & {
+		name: {
+			first: string;
+			last: string;
+			full: string;
+		};
+		seasons: mongoose.Types.DocumentArray<Coach2SeasonDocument>;
+		_id: mongoose.Types.ObjectId;
+	};
 
 /**
  * Lean version of Game2OfficialDocument
@@ -159,11 +150,11 @@ export interface Coach2Document
  * const game2Object = game2.toObject();
  * ```
  */
-export interface Game2Official {
-  official?: Official2["_id"] | Official2;
-  jersey_number?: string;
-  _id: mongoose.Types.ObjectId;
-}
+export type Game2Official = {
+	official?: Official2['_id'] | Official2;
+	jersey_number?: string;
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
  * Lean version of Game2HomeStatsPeriodDocument
@@ -173,29 +164,29 @@ export interface Game2Official {
  * const game2Object = game2.toObject();
  * ```
  */
-export interface Game2HomeStatsPeriod {
-  periodValue: number;
-  periodName: string;
-  fieldGoalsMade: number;
-  fieldGoalsAttempted?: number;
-  fieldGoalsPct?: number;
-  threePointersMade?: number;
-  threePointersAttempted?: number;
-  threePointersPct?: number;
-  freeThrowsMade: number;
-  freeThrowsAttempted: number;
-  freeThrowsPct?: number;
-  offReb?: number;
-  defReb?: number;
-  totalReb?: number;
-  assists?: number;
-  steals?: number;
-  blocks?: number;
-  turnovers?: number;
-  personalFouls: number;
-  points: number;
-  _id: mongoose.Types.ObjectId;
-}
+export type Game2HomeStatsPeriod = {
+	periodValue: number;
+	periodName: string;
+	fieldGoalsMade: number;
+	fieldGoalsAttempted?: number;
+	fieldGoalsPct?: number;
+	threePointersMade?: number;
+	threePointersAttempted?: number;
+	threePointersPct?: number;
+	freeThrowsMade: number;
+	freeThrowsAttempted: number;
+	freeThrowsPct?: number;
+	offReb?: number;
+	defReb?: number;
+	totalReb?: number;
+	assists?: number;
+	steals?: number;
+	blocks?: number;
+	turnovers?: number;
+	personalFouls: number;
+	points: number;
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
  * Lean version of Game2HomePlayerStatsPeriodDocument
@@ -205,35 +196,35 @@ export interface Game2HomeStatsPeriod {
  * const game2homeplayerObject = game2homeplayer.toObject();
  * ```
  */
-export interface Game2HomePlayerStatsPeriod {
-  periodValue: number;
-  periodName: string;
-  active: boolean;
-  stats: {
-    minutes?: number;
-    seconds?: number;
-    fieldGoalsMade?: number;
-    fieldGoalsAttempted?: number;
-    fieldGoalsPct?: number;
-    threePointersMade?: number;
-    threePointersAttempted?: number;
-    threePointersPct?: number;
-    freeThrowsMade?: number;
-    freeThrowsAttempted?: number;
-    freeThrowsPct?: number;
-    offReb?: number;
-    defReb?: number;
-    totalReb?: number;
-    assists?: number;
-    steals?: number;
-    blocks?: number;
-    turnovers?: number;
-    personalFouls?: number;
-    points?: number;
-    plusMinus?: number;
-  };
-  _id: mongoose.Types.ObjectId;
-}
+export type Game2HomePlayerStatsPeriod = {
+	periodValue: number;
+	periodName: string;
+	active: boolean;
+	stats: {
+		minutes?: number;
+		seconds?: number;
+		fieldGoalsMade?: number;
+		fieldGoalsAttempted?: number;
+		fieldGoalsPct?: number;
+		threePointersMade?: number;
+		threePointersAttempted?: number;
+		threePointersPct?: number;
+		freeThrowsMade?: number;
+		freeThrowsAttempted?: number;
+		freeThrowsPct?: number;
+		offReb?: number;
+		defReb?: number;
+		totalReb?: number;
+		assists?: number;
+		steals?: number;
+		blocks?: number;
+		turnovers?: number;
+		personalFouls?: number;
+		points?: number;
+		plusMinus?: number;
+	};
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
  * Lean version of Game2HomePlayerDocument
@@ -243,58 +234,58 @@ export interface Game2HomePlayerStatsPeriod {
  * const game2Object = game2.toObject();
  * ```
  */
-export interface Game2HomePlayer {
-  player?: Player2["_id"] | Player2;
-  jerseyNumber?: string;
-  positionFull?: string;
-  positionShort?: string;
-  active: boolean;
-  inactive: boolean;
-  stats: {
-    totals: {
-      minutes?: number;
-      seconds?: number;
-      fieldGoalsMade?: number;
-      fieldGoalsAttempted?: number;
-      fieldGoalsPct?: number;
-      threePointersMade?: number;
-      threePointersAttempted?: number;
-      threePointersPct?: number;
-      freeThrowsMade?: number;
-      freeThrowsAttempted?: number;
-      freeThrowsPct?: number;
-      offReb?: number;
-      defReb?: number;
-      totalReb?: number;
-      assists?: number;
-      steals?: number;
-      blocks?: number;
-      turnovers?: number;
-      personalFouls?: number;
-      points?: number;
-      plusMinus?: number;
-      advanced: {
-        trueShootingPct?: number;
-        effectiveFieldGoalPct?: number;
-        threePointAttemptRate?: number;
-        freeThrowAttemptRate?: number;
-        offRebPct?: number;
-        defRebPct?: number;
-        totalRebPct?: number;
-        assistPct?: number;
-        stealPct?: number;
-        blockPct?: number;
-        turnoverPct?: number;
-        usagePct?: number;
-        offRating?: number;
-        defRating?: number;
-        boxPlusMinus?: number;
-      };
-    };
-    periods: Game2HomePlayerStatsPeriod[];
-  };
-  _id: mongoose.Types.ObjectId;
-}
+export type Game2HomePlayer = {
+	player?: Player2['_id'] | Player2;
+	jerseyNumber?: string;
+	positionFull?: string;
+	positionShort?: string;
+	active: boolean;
+	inactive: boolean;
+	stats: {
+		totals: {
+			minutes?: number;
+			seconds?: number;
+			fieldGoalsMade?: number;
+			fieldGoalsAttempted?: number;
+			fieldGoalsPct?: number;
+			threePointersMade?: number;
+			threePointersAttempted?: number;
+			threePointersPct?: number;
+			freeThrowsMade?: number;
+			freeThrowsAttempted?: number;
+			freeThrowsPct?: number;
+			offReb?: number;
+			defReb?: number;
+			totalReb?: number;
+			assists?: number;
+			steals?: number;
+			blocks?: number;
+			turnovers?: number;
+			personalFouls?: number;
+			points?: number;
+			plusMinus?: number;
+			advanced: {
+				trueShootingPct?: number;
+				effectiveFieldGoalPct?: number;
+				threePointAttemptRate?: number;
+				freeThrowAttemptRate?: number;
+				offRebPct?: number;
+				defRebPct?: number;
+				totalRebPct?: number;
+				assistPct?: number;
+				stealPct?: number;
+				blockPct?: number;
+				turnoverPct?: number;
+				usagePct?: number;
+				offRating?: number;
+				defRating?: number;
+				boxPlusMinus?: number;
+			};
+		};
+		periods: Game2HomePlayerStatsPeriod[];
+	};
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
  * Lean version of Game2VisitorStatsPeriodDocument
@@ -304,29 +295,29 @@ export interface Game2HomePlayer {
  * const game2Object = game2.toObject();
  * ```
  */
-export interface Game2VisitorStatsPeriod {
-  periodValue: number;
-  periodName: string;
-  fieldGoalsMade: number;
-  fieldGoalsAttempted?: number;
-  fieldGoalsPct?: number;
-  threePointersMade?: number;
-  threePointersAttempted?: number;
-  threePointersPct?: number;
-  freeThrowsMade: number;
-  freeThrowsAttempted: number;
-  freeThrowsPct?: number;
-  offReb?: number;
-  defReb?: number;
-  totalReb?: number;
-  assists?: number;
-  steals?: number;
-  blocks?: number;
-  turnovers?: number;
-  personalFouls: number;
-  points: number;
-  _id: mongoose.Types.ObjectId;
-}
+export type Game2VisitorStatsPeriod = {
+	periodValue: number;
+	periodName: string;
+	fieldGoalsMade: number;
+	fieldGoalsAttempted?: number;
+	fieldGoalsPct?: number;
+	threePointersMade?: number;
+	threePointersAttempted?: number;
+	threePointersPct?: number;
+	freeThrowsMade: number;
+	freeThrowsAttempted: number;
+	freeThrowsPct?: number;
+	offReb?: number;
+	defReb?: number;
+	totalReb?: number;
+	assists?: number;
+	steals?: number;
+	blocks?: number;
+	turnovers?: number;
+	personalFouls: number;
+	points: number;
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
  * Lean version of Game2VisitorPlayerStatsPeriodDocument
@@ -336,35 +327,35 @@ export interface Game2VisitorStatsPeriod {
  * const game2visitorplayerObject = game2visitorplayer.toObject();
  * ```
  */
-export interface Game2VisitorPlayerStatsPeriod {
-  periodValue: number;
-  periodName: string;
-  active: boolean;
-  stats: {
-    minutes?: number;
-    seconds?: number;
-    fieldGoalsMade?: number;
-    fieldGoalsAttempted?: number;
-    fieldGoalsPct?: number;
-    threePointersMade?: number;
-    threePointersAttempted?: number;
-    threePointersPct?: number;
-    freeThrowsMade?: number;
-    freeThrowsAttempted?: number;
-    freeThrowsPct?: number;
-    offReb?: number;
-    defReb?: number;
-    totalReb?: number;
-    assists?: number;
-    steals?: number;
-    blocks?: number;
-    turnovers?: number;
-    personalFouls?: number;
-    points?: number;
-    plusMinus?: number;
-  };
-  _id: mongoose.Types.ObjectId;
-}
+export type Game2VisitorPlayerStatsPeriod = {
+	periodValue: number;
+	periodName: string;
+	active: boolean;
+	stats: {
+		minutes?: number;
+		seconds?: number;
+		fieldGoalsMade?: number;
+		fieldGoalsAttempted?: number;
+		fieldGoalsPct?: number;
+		threePointersMade?: number;
+		threePointersAttempted?: number;
+		threePointersPct?: number;
+		freeThrowsMade?: number;
+		freeThrowsAttempted?: number;
+		freeThrowsPct?: number;
+		offReb?: number;
+		defReb?: number;
+		totalReb?: number;
+		assists?: number;
+		steals?: number;
+		blocks?: number;
+		turnovers?: number;
+		personalFouls?: number;
+		points?: number;
+		plusMinus?: number;
+	};
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
  * Lean version of Game2VisitorPlayerDocument
@@ -374,58 +365,209 @@ export interface Game2VisitorPlayerStatsPeriod {
  * const game2Object = game2.toObject();
  * ```
  */
-export interface Game2VisitorPlayer {
-  player?: Player2["_id"] | Player2;
-  jerseyNumber?: string;
-  positionFull?: string;
-  positionShort?: string;
-  active: boolean;
-  inactive: boolean;
-  stats: {
-    totals: {
-      minutes?: number;
-      seconds?: number;
-      fieldGoalsMade?: number;
-      fieldGoalsAttempted?: number;
-      fieldGoalsPct?: number;
-      threePointersMade?: number;
-      threePointersAttempted?: number;
-      threePointersPct?: number;
-      freeThrowsMade?: number;
-      freeThrowsAttempted?: number;
-      freeThrowsPct?: number;
-      offReb?: number;
-      defReb?: number;
-      totalReb?: number;
-      assists?: number;
-      steals?: number;
-      blocks?: number;
-      turnovers?: number;
-      personalFouls?: number;
-      points?: number;
-      plusMinus?: number;
-      advanced: {
-        trueShootingPct?: number;
-        effectiveFieldGoalPct?: number;
-        threePointAttemptRate?: number;
-        freeThrowAttemptRate?: number;
-        offRebPct?: number;
-        defRebPct?: number;
-        totalRebPct?: number;
-        assistPct?: number;
-        stealPct?: number;
-        blockPct?: number;
-        turnoverPct?: number;
-        usagePct?: number;
-        offRating?: number;
-        defRating?: number;
-        boxPlusMinus?: number;
-      };
-    };
-    periods: Game2VisitorPlayerStatsPeriod[];
-  };
-  _id: mongoose.Types.ObjectId;
-}
+export type Game2VisitorPlayer = {
+	player?: Player2['_id'] | Player2;
+	jerseyNumber?: string;
+	positionFull?: string;
+	positionShort?: string;
+	active: boolean;
+	inactive: boolean;
+	stats: {
+		totals: {
+			minutes?: number;
+			seconds?: number;
+			fieldGoalsMade?: number;
+			fieldGoalsAttempted?: number;
+			fieldGoalsPct?: number;
+			threePointersMade?: number;
+			threePointersAttempted?: number;
+			threePointersPct?: number;
+			freeThrowsMade?: number;
+			freeThrowsAttempted?: number;
+			freeThrowsPct?: number;
+			offReb?: number;
+			defReb?: number;
+			totalReb?: number;
+			assists?: number;
+			steals?: number;
+			blocks?: number;
+			turnovers?: number;
+			personalFouls?: number;
+			points?: number;
+			plusMinus?: number;
+			advanced: {
+				trueShootingPct?: number;
+				effectiveFieldGoalPct?: number;
+				threePointAttemptRate?: number;
+				freeThrowAttemptRate?: number;
+				offRebPct?: number;
+				defRebPct?: number;
+				totalRebPct?: number;
+				assistPct?: number;
+				stealPct?: number;
+				blockPct?: number;
+				turnoverPct?: number;
+				usagePct?: number;
+				offRating?: number;
+				defRating?: number;
+				boxPlusMinus?: number;
+			};
+		};
+		periods: Game2VisitorPlayerStatsPeriod[];
+	};
+	_id: mongoose.Types.ObjectId;
+};
+
+/**
+ * Lean version of Game2Document
+ *
+ * This has all Mongoose getters & functions removed. This type will be returned from `Game2Document.toObject()`. To avoid conflicts with model names, use the type alias `Game2Object`.
+ * ```
+ * const game2Object = game2.toObject();
+ * ```
+ */
+export type Game2 = {
+	meta: {
+		helpers: {
+			nbaGameId?: string;
+			espnGameId?: string;
+			bballRef: {
+				year?: number;
+				missingData?: boolean;
+			};
+		};
+		displaySeason: string;
+		league?: League['_id'] | League;
+	};
+	date: Date;
+	time?: boolean;
+	preseason: boolean;
+	postseason: boolean;
+	arena?: string;
+	city?: string;
+	state?: string;
+	country?: string;
+	officials: Game2Official[];
+	home: {
+		team?: Team2['_id'] | Team2;
+		score?: number;
+		leaders: {
+			points: {
+				statValue?: number;
+				leader: (Player2['_id'] | Player2)[];
+			};
+			assists: {
+				statValue?: number;
+				leader: (Player2['_id'] | Player2)[];
+			};
+			rebounds: {
+				statValue?: number;
+				leader: (Player2['_id'] | Player2)[];
+			};
+		};
+		stats: {
+			totals: {
+				fieldGoalsMade?: number;
+				fieldGoalsAttempted?: number;
+				fieldGoalsPct?: number;
+				threePointersMade?: number;
+				threePointersAttempted?: number;
+				threePointersPct?: number;
+				freeThrowsMade?: number;
+				freeThrowsAttempted?: number;
+				freeThrowsPct?: number;
+				offReb?: number;
+				defReb?: number;
+				totalReb?: number;
+				assists?: number;
+				steals?: number;
+				blocks?: number;
+				turnovers?: number;
+				personalFouls?: number;
+				points?: number;
+				advanced: {
+					trueShootingPct?: number;
+					effectiveFieldGoalPct?: number;
+					threePointAttemptRate?: number;
+					freeThrowAttemptRate?: number;
+					offRebPct?: number;
+					defRebPct?: number;
+					totalRebPct?: number;
+					assistPct?: number;
+					stealPct?: number;
+					blockPct?: number;
+					turnoverPct?: number;
+					offRating?: number;
+					defRating?: number;
+					pace?: number;
+					ftPerFga?: number;
+				};
+			};
+			periods: Game2HomeStatsPeriod[];
+		};
+		players: Game2HomePlayer[];
+	};
+	visitor: {
+		team?: Team2['_id'] | Team2;
+		score?: number;
+		leaders: {
+			points: {
+				statValue?: number;
+				leader: (Player2['_id'] | Player2)[];
+			};
+			assists: {
+				statValue?: number;
+				leader: (Player2['_id'] | Player2)[];
+			};
+			rebounds: {
+				statValue?: number;
+				leader: (Player2['_id'] | Player2)[];
+			};
+		};
+		stats: {
+			totals: {
+				fieldGoalsMade?: number;
+				fieldGoalsAttempted?: number;
+				fieldGoalsPct?: number;
+				threePointersMade?: number;
+				threePointersAttempted?: number;
+				threePointersPct?: number;
+				freeThrowsMade?: number;
+				freeThrowsAttempted?: number;
+				freeThrowsPct?: number;
+				offReb?: number;
+				defReb?: number;
+				totalReb?: number;
+				assists?: number;
+				steals?: number;
+				blocks?: number;
+				turnovers?: number;
+				personalFouls?: number;
+				points?: number;
+				advanced: {
+					trueShootingPct?: number;
+					effectiveFieldGoalPct?: number;
+					threePointAttemptRate?: number;
+					freeThrowAttemptRate?: number;
+					offRebPct?: number;
+					defRebPct?: number;
+					totalRebPct?: number;
+					assistPct?: number;
+					stealPct?: number;
+					blockPct?: number;
+					turnoverPct?: number;
+					offRating?: number;
+					defRating?: number;
+					pace?: number;
+					ftPerFga?: number;
+				};
+			};
+			periods: Game2VisitorStatsPeriod[];
+		};
+		players: Game2VisitorPlayer[];
+	};
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
  * Lean version of Game2Document (type alias of `Game2`)
@@ -443,37 +585,17 @@ export type Game2Object = Game2;
 /**
  * Mongoose Query types
  *
- * Use type assertion to ensure Game2 query type safety:
+ * Pass this type to the Mongoose Model constructor:
  * ```
- * Game2Schema.query = <Game2Queries>{ ... };
+ * const Game2 = mongoose.model<Game2Document, Game2Model>("Game2", Game2Schema);
  * ```
  */
 export type Game2Queries = {
-  populatePlayers: <Q extends mongoose.Query<any, Game2Document>>(this: Q) => Q;
+	populatePlayers: () => mongoose.Query<any, Game2Document, Game2Queries> & Game2Queries;
 };
 
-declare module "mongoose" {
-  interface Query<ResultType, DocType extends Document> extends Game2Queries {}
-}
-
-/**
- * Mongoose Method types
- *
- * Use type assertion to ensure Game2 methods type safety:
- * ```
- * Game2Schema.methods = <Game2Methods>{ ... };
- * ```
- */
 export type Game2Methods = {};
 
-/**
- * Mongoose Static types
- *
- * Use type assertion to ensure Game2 statics type safety:
- * ```
- * Game2Schema.statics = <Game2Statics>{ ... };
- * ```
- */
 export type Game2Statics = {};
 
 /**
@@ -484,9 +606,7 @@ export type Game2Statics = {};
  * const Game2 = mongoose.model<Game2Document, Game2Model>("Game2", Game2Schema);
  * ```
  */
-export interface Game2Model
-  extends mongoose.Model<Game2Document>,
-    Game2Statics {}
+export type Game2Model = mongoose.Model<Game2Document, Game2Queries> & Game2Statics;
 
 /**
  * Mongoose Schema type
@@ -499,416 +619,259 @@ export interface Game2Model
 export type Game2Schema = mongoose.Schema<Game2Document, Game2Model>;
 
 /**
- * Lean version of Game2Document
- *
- * This has all Mongoose getters & functions removed. This type will be returned from `Game2Document.toObject()`. To avoid conflicts with model names, use the type alias `Game2Object`.
- * ```
- * const game2Object = game2.toObject();
- * ```
- */
-export interface Game2 {
-  meta: {
-    helpers: {
-      nbaGameId?: string;
-      espnGameId?: string;
-      bballRef: {
-        year?: number;
-        missingData?: boolean;
-      };
-    };
-    displaySeason: string;
-    league?: League["_id"] | League;
-  };
-  date: Date;
-  time?: boolean;
-  preseason: boolean;
-  postseason: boolean;
-  arena?: string;
-  city?: string;
-  state?: string;
-  country?: string;
-  officials: Game2Official[];
-  home: {
-    team?: Team2["_id"] | Team2;
-    score?: number;
-    leaders: {
-      points: {
-        statValue?: number;
-        leader: (Player2["_id"] | Player2)[];
-      };
-      assists: {
-        statValue?: number;
-        leader: (Player2["_id"] | Player2)[];
-      };
-      rebounds: {
-        statValue?: number;
-        leader: (Player2["_id"] | Player2)[];
-      };
-    };
-    stats: {
-      totals: {
-        fieldGoalsMade?: number;
-        fieldGoalsAttempted?: number;
-        fieldGoalsPct?: number;
-        threePointersMade?: number;
-        threePointersAttempted?: number;
-        threePointersPct?: number;
-        freeThrowsMade?: number;
-        freeThrowsAttempted?: number;
-        freeThrowsPct?: number;
-        offReb?: number;
-        defReb?: number;
-        totalReb?: number;
-        assists?: number;
-        steals?: number;
-        blocks?: number;
-        turnovers?: number;
-        personalFouls?: number;
-        points?: number;
-        advanced: {
-          trueShootingPct?: number;
-          effectiveFieldGoalPct?: number;
-          threePointAttemptRate?: number;
-          freeThrowAttemptRate?: number;
-          offRebPct?: number;
-          defRebPct?: number;
-          totalRebPct?: number;
-          assistPct?: number;
-          stealPct?: number;
-          blockPct?: number;
-          turnoverPct?: number;
-          offRating?: number;
-          defRating?: number;
-          pace?: number;
-          ftPerFga?: number;
-        };
-      };
-      periods: Game2HomeStatsPeriod[];
-    };
-    players: Game2HomePlayer[];
-  };
-  visitor: {
-    team?: Team2["_id"] | Team2;
-    score?: number;
-    leaders: {
-      points: {
-        statValue?: number;
-        leader: (Player2["_id"] | Player2)[];
-      };
-      assists: {
-        statValue?: number;
-        leader: (Player2["_id"] | Player2)[];
-      };
-      rebounds: {
-        statValue?: number;
-        leader: (Player2["_id"] | Player2)[];
-      };
-    };
-    stats: {
-      totals: {
-        fieldGoalsMade?: number;
-        fieldGoalsAttempted?: number;
-        fieldGoalsPct?: number;
-        threePointersMade?: number;
-        threePointersAttempted?: number;
-        threePointersPct?: number;
-        freeThrowsMade?: number;
-        freeThrowsAttempted?: number;
-        freeThrowsPct?: number;
-        offReb?: number;
-        defReb?: number;
-        totalReb?: number;
-        assists?: number;
-        steals?: number;
-        blocks?: number;
-        turnovers?: number;
-        personalFouls?: number;
-        points?: number;
-        advanced: {
-          trueShootingPct?: number;
-          effectiveFieldGoalPct?: number;
-          threePointAttemptRate?: number;
-          freeThrowAttemptRate?: number;
-          offRebPct?: number;
-          defRebPct?: number;
-          totalRebPct?: number;
-          assistPct?: number;
-          stealPct?: number;
-          blockPct?: number;
-          turnoverPct?: number;
-          offRating?: number;
-          defRating?: number;
-          pace?: number;
-          ftPerFga?: number;
-        };
-      };
-      periods: Game2VisitorStatsPeriod[];
-    };
-    players: Game2VisitorPlayer[];
-  };
-  _id: mongoose.Types.ObjectId;
-}
-
-/**
- * Mongoose Embedded Document type
+ * Mongoose Subdocument type
  *
  * Type of `Game2Document["officials"]` element.
  */
-export interface Game2OfficialDocument extends mongoose.Types.EmbeddedDocument {
-  official?: Official2Document["_id"] | Official2Document;
-  jersey_number?: string;
-  _id: mongoose.Types.ObjectId;
-}
+export type Game2OfficialDocument = mongoose.Types.Subdocument & {
+	official?: Official2Document['_id'] | Official2Document;
+	jersey_number?: string;
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
- * Mongoose Embedded Document type
+ * Mongoose Subdocument type
  *
  * Type of `Game2Document["home.stats.periods"]` element.
  */
-export interface Game2HomeStatsPeriodDocument
-  extends mongoose.Types.EmbeddedDocument {
-  periodValue: number;
-  periodName: string;
-  fieldGoalsMade: number;
-  fieldGoalsAttempted?: number;
-  fieldGoalsPct?: number;
-  threePointersMade?: number;
-  threePointersAttempted?: number;
-  threePointersPct?: number;
-  freeThrowsMade: number;
-  freeThrowsAttempted: number;
-  freeThrowsPct?: number;
-  offReb?: number;
-  defReb?: number;
-  totalReb?: number;
-  assists?: number;
-  steals?: number;
-  blocks?: number;
-  turnovers?: number;
-  personalFouls: number;
-  points: number;
-  _id: mongoose.Types.ObjectId;
-}
+export type Game2HomeStatsPeriodDocument = mongoose.Types.Subdocument & {
+	periodValue: number;
+	periodName: string;
+	fieldGoalsMade: number;
+	fieldGoalsAttempted?: number;
+	fieldGoalsPct?: number;
+	threePointersMade?: number;
+	threePointersAttempted?: number;
+	threePointersPct?: number;
+	freeThrowsMade: number;
+	freeThrowsAttempted: number;
+	freeThrowsPct?: number;
+	offReb?: number;
+	defReb?: number;
+	totalReb?: number;
+	assists?: number;
+	steals?: number;
+	blocks?: number;
+	turnovers?: number;
+	personalFouls: number;
+	points: number;
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
- * Mongoose Embedded Document type
+ * Mongoose Subdocument type
  *
  * Type of `Game2HomePlayerDocument["stats.periods"]` element.
  */
-export interface Game2HomePlayerStatsPeriodDocument
-  extends mongoose.Types.EmbeddedDocument {
-  periodValue: number;
-  periodName: string;
-  active: boolean;
-  stats: {
-    minutes?: number;
-    seconds?: number;
-    fieldGoalsMade?: number;
-    fieldGoalsAttempted?: number;
-    fieldGoalsPct?: number;
-    threePointersMade?: number;
-    threePointersAttempted?: number;
-    threePointersPct?: number;
-    freeThrowsMade?: number;
-    freeThrowsAttempted?: number;
-    freeThrowsPct?: number;
-    offReb?: number;
-    defReb?: number;
-    totalReb?: number;
-    assists?: number;
-    steals?: number;
-    blocks?: number;
-    turnovers?: number;
-    personalFouls?: number;
-    points?: number;
-    plusMinus?: number;
-  };
-  _id: mongoose.Types.ObjectId;
-}
+export type Game2HomePlayerStatsPeriodDocument = mongoose.Types.Subdocument & {
+	periodValue: number;
+	periodName: string;
+	active: boolean;
+	stats: {
+		minutes?: number;
+		seconds?: number;
+		fieldGoalsMade?: number;
+		fieldGoalsAttempted?: number;
+		fieldGoalsPct?: number;
+		threePointersMade?: number;
+		threePointersAttempted?: number;
+		threePointersPct?: number;
+		freeThrowsMade?: number;
+		freeThrowsAttempted?: number;
+		freeThrowsPct?: number;
+		offReb?: number;
+		defReb?: number;
+		totalReb?: number;
+		assists?: number;
+		steals?: number;
+		blocks?: number;
+		turnovers?: number;
+		personalFouls?: number;
+		points?: number;
+		plusMinus?: number;
+	};
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
- * Mongoose Embedded Document type
+ * Mongoose Subdocument type
  *
  * Type of `Game2Document["home.players"]` element.
  */
-export interface Game2HomePlayerDocument
-  extends mongoose.Types.EmbeddedDocument {
-  player?: Player2Document["_id"] | Player2Document;
-  jerseyNumber?: string;
-  positionFull?: string;
-  positionShort?: string;
-  active: boolean;
-  inactive: boolean;
-  stats: {
-    totals: {
-      minutes?: number;
-      seconds?: number;
-      fieldGoalsMade?: number;
-      fieldGoalsAttempted?: number;
-      fieldGoalsPct?: number;
-      threePointersMade?: number;
-      threePointersAttempted?: number;
-      threePointersPct?: number;
-      freeThrowsMade?: number;
-      freeThrowsAttempted?: number;
-      freeThrowsPct?: number;
-      offReb?: number;
-      defReb?: number;
-      totalReb?: number;
-      assists?: number;
-      steals?: number;
-      blocks?: number;
-      turnovers?: number;
-      personalFouls?: number;
-      points?: number;
-      plusMinus?: number;
-      advanced: {
-        trueShootingPct?: number;
-        effectiveFieldGoalPct?: number;
-        threePointAttemptRate?: number;
-        freeThrowAttemptRate?: number;
-        offRebPct?: number;
-        defRebPct?: number;
-        totalRebPct?: number;
-        assistPct?: number;
-        stealPct?: number;
-        blockPct?: number;
-        turnoverPct?: number;
-        usagePct?: number;
-        offRating?: number;
-        defRating?: number;
-        boxPlusMinus?: number;
-      };
-    };
-    periods: mongoose.Types.DocumentArray<Game2HomePlayerStatsPeriodDocument>;
-  };
-  _id: mongoose.Types.ObjectId;
-}
+export type Game2HomePlayerDocument = mongoose.Types.Subdocument & {
+	player?: Player2Document['_id'] | Player2Document;
+	jerseyNumber?: string;
+	positionFull?: string;
+	positionShort?: string;
+	active: boolean;
+	inactive: boolean;
+	stats: {
+		totals: {
+			minutes?: number;
+			seconds?: number;
+			fieldGoalsMade?: number;
+			fieldGoalsAttempted?: number;
+			fieldGoalsPct?: number;
+			threePointersMade?: number;
+			threePointersAttempted?: number;
+			threePointersPct?: number;
+			freeThrowsMade?: number;
+			freeThrowsAttempted?: number;
+			freeThrowsPct?: number;
+			offReb?: number;
+			defReb?: number;
+			totalReb?: number;
+			assists?: number;
+			steals?: number;
+			blocks?: number;
+			turnovers?: number;
+			personalFouls?: number;
+			points?: number;
+			plusMinus?: number;
+			advanced: {
+				trueShootingPct?: number;
+				effectiveFieldGoalPct?: number;
+				threePointAttemptRate?: number;
+				freeThrowAttemptRate?: number;
+				offRebPct?: number;
+				defRebPct?: number;
+				totalRebPct?: number;
+				assistPct?: number;
+				stealPct?: number;
+				blockPct?: number;
+				turnoverPct?: number;
+				usagePct?: number;
+				offRating?: number;
+				defRating?: number;
+				boxPlusMinus?: number;
+			};
+		};
+		periods: mongoose.Types.DocumentArray<Game2HomePlayerStatsPeriodDocument>;
+	};
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
- * Mongoose Embedded Document type
+ * Mongoose Subdocument type
  *
  * Type of `Game2Document["visitor.stats.periods"]` element.
  */
-export interface Game2VisitorStatsPeriodDocument
-  extends mongoose.Types.EmbeddedDocument {
-  periodValue: number;
-  periodName: string;
-  fieldGoalsMade: number;
-  fieldGoalsAttempted?: number;
-  fieldGoalsPct?: number;
-  threePointersMade?: number;
-  threePointersAttempted?: number;
-  threePointersPct?: number;
-  freeThrowsMade: number;
-  freeThrowsAttempted: number;
-  freeThrowsPct?: number;
-  offReb?: number;
-  defReb?: number;
-  totalReb?: number;
-  assists?: number;
-  steals?: number;
-  blocks?: number;
-  turnovers?: number;
-  personalFouls: number;
-  points: number;
-  _id: mongoose.Types.ObjectId;
-}
+export type Game2VisitorStatsPeriodDocument = mongoose.Types.Subdocument & {
+	periodValue: number;
+	periodName: string;
+	fieldGoalsMade: number;
+	fieldGoalsAttempted?: number;
+	fieldGoalsPct?: number;
+	threePointersMade?: number;
+	threePointersAttempted?: number;
+	threePointersPct?: number;
+	freeThrowsMade: number;
+	freeThrowsAttempted: number;
+	freeThrowsPct?: number;
+	offReb?: number;
+	defReb?: number;
+	totalReb?: number;
+	assists?: number;
+	steals?: number;
+	blocks?: number;
+	turnovers?: number;
+	personalFouls: number;
+	points: number;
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
- * Mongoose Embedded Document type
+ * Mongoose Subdocument type
  *
  * Type of `Game2VisitorPlayerDocument["stats.periods"]` element.
  */
-export interface Game2VisitorPlayerStatsPeriodDocument
-  extends mongoose.Types.EmbeddedDocument {
-  periodValue: number;
-  periodName: string;
-  active: boolean;
-  stats: {
-    minutes?: number;
-    seconds?: number;
-    fieldGoalsMade?: number;
-    fieldGoalsAttempted?: number;
-    fieldGoalsPct?: number;
-    threePointersMade?: number;
-    threePointersAttempted?: number;
-    threePointersPct?: number;
-    freeThrowsMade?: number;
-    freeThrowsAttempted?: number;
-    freeThrowsPct?: number;
-    offReb?: number;
-    defReb?: number;
-    totalReb?: number;
-    assists?: number;
-    steals?: number;
-    blocks?: number;
-    turnovers?: number;
-    personalFouls?: number;
-    points?: number;
-    plusMinus?: number;
-  };
-  _id: mongoose.Types.ObjectId;
-}
+export type Game2VisitorPlayerStatsPeriodDocument = mongoose.Types.Subdocument & {
+	periodValue: number;
+	periodName: string;
+	active: boolean;
+	stats: {
+		minutes?: number;
+		seconds?: number;
+		fieldGoalsMade?: number;
+		fieldGoalsAttempted?: number;
+		fieldGoalsPct?: number;
+		threePointersMade?: number;
+		threePointersAttempted?: number;
+		threePointersPct?: number;
+		freeThrowsMade?: number;
+		freeThrowsAttempted?: number;
+		freeThrowsPct?: number;
+		offReb?: number;
+		defReb?: number;
+		totalReb?: number;
+		assists?: number;
+		steals?: number;
+		blocks?: number;
+		turnovers?: number;
+		personalFouls?: number;
+		points?: number;
+		plusMinus?: number;
+	};
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
- * Mongoose Embedded Document type
+ * Mongoose Subdocument type
  *
  * Type of `Game2Document["visitor.players"]` element.
  */
-export interface Game2VisitorPlayerDocument
-  extends mongoose.Types.EmbeddedDocument {
-  player?: Player2Document["_id"] | Player2Document;
-  jerseyNumber?: string;
-  positionFull?: string;
-  positionShort?: string;
-  active: boolean;
-  inactive: boolean;
-  stats: {
-    totals: {
-      minutes?: number;
-      seconds?: number;
-      fieldGoalsMade?: number;
-      fieldGoalsAttempted?: number;
-      fieldGoalsPct?: number;
-      threePointersMade?: number;
-      threePointersAttempted?: number;
-      threePointersPct?: number;
-      freeThrowsMade?: number;
-      freeThrowsAttempted?: number;
-      freeThrowsPct?: number;
-      offReb?: number;
-      defReb?: number;
-      totalReb?: number;
-      assists?: number;
-      steals?: number;
-      blocks?: number;
-      turnovers?: number;
-      personalFouls?: number;
-      points?: number;
-      plusMinus?: number;
-      advanced: {
-        trueShootingPct?: number;
-        effectiveFieldGoalPct?: number;
-        threePointAttemptRate?: number;
-        freeThrowAttemptRate?: number;
-        offRebPct?: number;
-        defRebPct?: number;
-        totalRebPct?: number;
-        assistPct?: number;
-        stealPct?: number;
-        blockPct?: number;
-        turnoverPct?: number;
-        usagePct?: number;
-        offRating?: number;
-        defRating?: number;
-        boxPlusMinus?: number;
-      };
-    };
-    periods: mongoose.Types.DocumentArray<Game2VisitorPlayerStatsPeriodDocument>;
-  };
-  _id: mongoose.Types.ObjectId;
-}
+export type Game2VisitorPlayerDocument = mongoose.Types.Subdocument & {
+	player?: Player2Document['_id'] | Player2Document;
+	jerseyNumber?: string;
+	positionFull?: string;
+	positionShort?: string;
+	active: boolean;
+	inactive: boolean;
+	stats: {
+		totals: {
+			minutes?: number;
+			seconds?: number;
+			fieldGoalsMade?: number;
+			fieldGoalsAttempted?: number;
+			fieldGoalsPct?: number;
+			threePointersMade?: number;
+			threePointersAttempted?: number;
+			threePointersPct?: number;
+			freeThrowsMade?: number;
+			freeThrowsAttempted?: number;
+			freeThrowsPct?: number;
+			offReb?: number;
+			defReb?: number;
+			totalReb?: number;
+			assists?: number;
+			steals?: number;
+			blocks?: number;
+			turnovers?: number;
+			personalFouls?: number;
+			points?: number;
+			plusMinus?: number;
+			advanced: {
+				trueShootingPct?: number;
+				effectiveFieldGoalPct?: number;
+				threePointAttemptRate?: number;
+				freeThrowAttemptRate?: number;
+				offRebPct?: number;
+				defRebPct?: number;
+				totalRebPct?: number;
+				assistPct?: number;
+				stealPct?: number;
+				blockPct?: number;
+				turnoverPct?: number;
+				usagePct?: number;
+				offRating?: number;
+				defRating?: number;
+				boxPlusMinus?: number;
+			};
+		};
+		periods: mongoose.Types.DocumentArray<Game2VisitorPlayerStatsPeriodDocument>;
+	};
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
  * Mongoose Document type
@@ -918,150 +881,149 @@ export interface Game2VisitorPlayerDocument
  * const Game2 = mongoose.model<Game2Document, Game2Model>("Game2", Game2Schema);
  * ```
  */
-export interface Game2Document
-  extends mongoose.Document<mongoose.Types.ObjectId>,
-    Game2Methods {
-  meta: {
-    helpers: {
-      nbaGameId?: string;
-      espnGameId?: string;
-      bballRef: {
-        year?: number;
-        missingData?: boolean;
-      };
-    };
-    displaySeason: string;
-    league?: LeagueDocument["_id"] | LeagueDocument;
-  };
-  date: Date;
-  time?: boolean;
-  preseason: boolean;
-  postseason: boolean;
-  arena?: string;
-  city?: string;
-  state?: string;
-  country?: string;
-  officials: mongoose.Types.DocumentArray<Game2OfficialDocument>;
-  home: {
-    team?: Team2Document["_id"] | Team2Document;
-    score?: number;
-    leaders: {
-      points: {
-        statValue?: number;
-        leader: mongoose.Types.Array<Player2Document["_id"] | Player2Document>;
-      };
-      assists: {
-        statValue?: number;
-        leader: mongoose.Types.Array<Player2Document["_id"] | Player2Document>;
-      };
-      rebounds: {
-        statValue?: number;
-        leader: mongoose.Types.Array<Player2Document["_id"] | Player2Document>;
-      };
-    };
-    stats: {
-      totals: {
-        fieldGoalsMade?: number;
-        fieldGoalsAttempted?: number;
-        fieldGoalsPct?: number;
-        threePointersMade?: number;
-        threePointersAttempted?: number;
-        threePointersPct?: number;
-        freeThrowsMade?: number;
-        freeThrowsAttempted?: number;
-        freeThrowsPct?: number;
-        offReb?: number;
-        defReb?: number;
-        totalReb?: number;
-        assists?: number;
-        steals?: number;
-        blocks?: number;
-        turnovers?: number;
-        personalFouls?: number;
-        points?: number;
-        advanced: {
-          trueShootingPct?: number;
-          effectiveFieldGoalPct?: number;
-          threePointAttemptRate?: number;
-          freeThrowAttemptRate?: number;
-          offRebPct?: number;
-          defRebPct?: number;
-          totalRebPct?: number;
-          assistPct?: number;
-          stealPct?: number;
-          blockPct?: number;
-          turnoverPct?: number;
-          offRating?: number;
-          defRating?: number;
-          pace?: number;
-          ftPerFga?: number;
-        };
-      };
-      periods: mongoose.Types.DocumentArray<Game2HomeStatsPeriodDocument>;
-    };
-    players: mongoose.Types.DocumentArray<Game2HomePlayerDocument>;
-  };
-  visitor: {
-    team?: Team2Document["_id"] | Team2Document;
-    score?: number;
-    leaders: {
-      points: {
-        statValue?: number;
-        leader: mongoose.Types.Array<Player2Document["_id"] | Player2Document>;
-      };
-      assists: {
-        statValue?: number;
-        leader: mongoose.Types.Array<Player2Document["_id"] | Player2Document>;
-      };
-      rebounds: {
-        statValue?: number;
-        leader: mongoose.Types.Array<Player2Document["_id"] | Player2Document>;
-      };
-    };
-    stats: {
-      totals: {
-        fieldGoalsMade?: number;
-        fieldGoalsAttempted?: number;
-        fieldGoalsPct?: number;
-        threePointersMade?: number;
-        threePointersAttempted?: number;
-        threePointersPct?: number;
-        freeThrowsMade?: number;
-        freeThrowsAttempted?: number;
-        freeThrowsPct?: number;
-        offReb?: number;
-        defReb?: number;
-        totalReb?: number;
-        assists?: number;
-        steals?: number;
-        blocks?: number;
-        turnovers?: number;
-        personalFouls?: number;
-        points?: number;
-        advanced: {
-          trueShootingPct?: number;
-          effectiveFieldGoalPct?: number;
-          threePointAttemptRate?: number;
-          freeThrowAttemptRate?: number;
-          offRebPct?: number;
-          defRebPct?: number;
-          totalRebPct?: number;
-          assistPct?: number;
-          stealPct?: number;
-          blockPct?: number;
-          turnoverPct?: number;
-          offRating?: number;
-          defRating?: number;
-          pace?: number;
-          ftPerFga?: number;
-        };
-      };
-      periods: mongoose.Types.DocumentArray<Game2VisitorStatsPeriodDocument>;
-    };
-    players: mongoose.Types.DocumentArray<Game2VisitorPlayerDocument>;
-  };
-  _id: mongoose.Types.ObjectId;
-}
+export type Game2Document = mongoose.Document<mongoose.Types.ObjectId, Game2Queries> &
+	Game2Methods & {
+		meta: {
+			helpers: {
+				nbaGameId?: string;
+				espnGameId?: string;
+				bballRef: {
+					year?: number;
+					missingData?: boolean;
+				};
+			};
+			displaySeason: string;
+			league?: LeagueDocument['_id'] | LeagueDocument;
+		};
+		date: Date;
+		time?: boolean;
+		preseason: boolean;
+		postseason: boolean;
+		arena?: string;
+		city?: string;
+		state?: string;
+		country?: string;
+		officials: mongoose.Types.DocumentArray<Game2OfficialDocument>;
+		home: {
+			team?: Team2Document['_id'] | Team2Document;
+			score?: number;
+			leaders: {
+				points: {
+					statValue?: number;
+					leader: mongoose.Types.Array<Player2Document['_id'] | Player2Document>;
+				};
+				assists: {
+					statValue?: number;
+					leader: mongoose.Types.Array<Player2Document['_id'] | Player2Document>;
+				};
+				rebounds: {
+					statValue?: number;
+					leader: mongoose.Types.Array<Player2Document['_id'] | Player2Document>;
+				};
+			};
+			stats: {
+				totals: {
+					fieldGoalsMade?: number;
+					fieldGoalsAttempted?: number;
+					fieldGoalsPct?: number;
+					threePointersMade?: number;
+					threePointersAttempted?: number;
+					threePointersPct?: number;
+					freeThrowsMade?: number;
+					freeThrowsAttempted?: number;
+					freeThrowsPct?: number;
+					offReb?: number;
+					defReb?: number;
+					totalReb?: number;
+					assists?: number;
+					steals?: number;
+					blocks?: number;
+					turnovers?: number;
+					personalFouls?: number;
+					points?: number;
+					advanced: {
+						trueShootingPct?: number;
+						effectiveFieldGoalPct?: number;
+						threePointAttemptRate?: number;
+						freeThrowAttemptRate?: number;
+						offRebPct?: number;
+						defRebPct?: number;
+						totalRebPct?: number;
+						assistPct?: number;
+						stealPct?: number;
+						blockPct?: number;
+						turnoverPct?: number;
+						offRating?: number;
+						defRating?: number;
+						pace?: number;
+						ftPerFga?: number;
+					};
+				};
+				periods: mongoose.Types.DocumentArray<Game2HomeStatsPeriodDocument>;
+			};
+			players: mongoose.Types.DocumentArray<Game2HomePlayerDocument>;
+		};
+		visitor: {
+			team?: Team2Document['_id'] | Team2Document;
+			score?: number;
+			leaders: {
+				points: {
+					statValue?: number;
+					leader: mongoose.Types.Array<Player2Document['_id'] | Player2Document>;
+				};
+				assists: {
+					statValue?: number;
+					leader: mongoose.Types.Array<Player2Document['_id'] | Player2Document>;
+				};
+				rebounds: {
+					statValue?: number;
+					leader: mongoose.Types.Array<Player2Document['_id'] | Player2Document>;
+				};
+			};
+			stats: {
+				totals: {
+					fieldGoalsMade?: number;
+					fieldGoalsAttempted?: number;
+					fieldGoalsPct?: number;
+					threePointersMade?: number;
+					threePointersAttempted?: number;
+					threePointersPct?: number;
+					freeThrowsMade?: number;
+					freeThrowsAttempted?: number;
+					freeThrowsPct?: number;
+					offReb?: number;
+					defReb?: number;
+					totalReb?: number;
+					assists?: number;
+					steals?: number;
+					blocks?: number;
+					turnovers?: number;
+					personalFouls?: number;
+					points?: number;
+					advanced: {
+						trueShootingPct?: number;
+						effectiveFieldGoalPct?: number;
+						threePointAttemptRate?: number;
+						freeThrowAttemptRate?: number;
+						offRebPct?: number;
+						defRebPct?: number;
+						totalRebPct?: number;
+						assistPct?: number;
+						stealPct?: number;
+						blockPct?: number;
+						turnoverPct?: number;
+						offRating?: number;
+						defRating?: number;
+						pace?: number;
+						ftPerFga?: number;
+					};
+				};
+				periods: mongoose.Types.DocumentArray<Game2VisitorStatsPeriodDocument>;
+			};
+			players: mongoose.Types.DocumentArray<Game2VisitorPlayerDocument>;
+		};
+		_id: mongoose.Types.ObjectId;
+	};
 
 /**
  * Lean version of LeagueSeasonDocument
@@ -1071,24 +1033,38 @@ export interface Game2Document
  * const leagueObject = league.toObject();
  * ```
  */
-export interface LeagueSeason {
-  year: number;
-  displaySeason: string;
-  games: {
-    preseason: (Game2["_id"] | Game2)[];
-    regularSeason: (Game2["_id"] | Game2)[];
-    postSeason: (Game2["_id"] | Game2)[];
-  };
-  teams: (Team2["_id"] | Team2)[];
-  awards: {
-    mvp?: Player2["_id"] | Player2;
-    roty?: Player2["_id"] | Player2;
-    dpoy?: Player2["_id"] | Player2;
-    mostImproved?: Player2["_id"] | Player2;
-    sixthMan?: Player2["_id"] | Player2;
-  };
-  _id: mongoose.Types.ObjectId;
-}
+export type LeagueSeason = {
+	year: number;
+	displaySeason: string;
+	games: {
+		preseason: (Game2['_id'] | Game2)[];
+		regularSeason: (Game2['_id'] | Game2)[];
+		postSeason: (Game2['_id'] | Game2)[];
+	};
+	teams: (Team2['_id'] | Team2)[];
+	awards: {
+		mvp?: Player2['_id'] | Player2;
+		roty?: Player2['_id'] | Player2;
+		dpoy?: Player2['_id'] | Player2;
+		mostImproved?: Player2['_id'] | Player2;
+		sixthMan?: Player2['_id'] | Player2;
+	};
+	_id: mongoose.Types.ObjectId;
+};
+
+/**
+ * Lean version of LeagueDocument
+ *
+ * This has all Mongoose getters & functions removed. This type will be returned from `LeagueDocument.toObject()`. To avoid conflicts with model names, use the type alias `LeagueObject`.
+ * ```
+ * const leagueObject = league.toObject();
+ * ```
+ */
+export type League = {
+	name: string;
+	seasons: LeagueSeason[];
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
  * Lean version of LeagueDocument (type alias of `League`)
@@ -1104,23 +1080,17 @@ export interface LeagueSeason {
 export type LeagueObject = League;
 
 /**
- * Mongoose Method types
+ * Mongoose Query types
  *
- * Use type assertion to ensure League methods type safety:
+ * Pass this type to the Mongoose Model constructor:
  * ```
- * LeagueSchema.methods = <LeagueMethods>{ ... };
+ * const League = mongoose.model<LeagueDocument, LeagueModel>("League", LeagueSchema);
  * ```
  */
+export type LeagueQueries = {};
+
 export type LeagueMethods = {};
 
-/**
- * Mongoose Static types
- *
- * Use type assertion to ensure League statics type safety:
- * ```
- * LeagueSchema.statics = <LeagueStatics>{ ... };
- * ```
- */
 export type LeagueStatics = {};
 
 /**
@@ -1131,9 +1101,7 @@ export type LeagueStatics = {};
  * const League = mongoose.model<LeagueDocument, LeagueModel>("League", LeagueSchema);
  * ```
  */
-export interface LeagueModel
-  extends mongoose.Model<LeagueDocument>,
-    LeagueStatics {}
+export type LeagueModel = mongoose.Model<LeagueDocument, LeagueQueries> & LeagueStatics;
 
 /**
  * Mongoose Schema type
@@ -1146,42 +1114,28 @@ export interface LeagueModel
 export type LeagueSchema = mongoose.Schema<LeagueDocument, LeagueModel>;
 
 /**
- * Lean version of LeagueDocument
- *
- * This has all Mongoose getters & functions removed. This type will be returned from `LeagueDocument.toObject()`. To avoid conflicts with model names, use the type alias `LeagueObject`.
- * ```
- * const leagueObject = league.toObject();
- * ```
- */
-export interface League {
-  name: string;
-  seasons: LeagueSeason[];
-  _id: mongoose.Types.ObjectId;
-}
-
-/**
- * Mongoose Embedded Document type
+ * Mongoose Subdocument type
  *
  * Type of `LeagueDocument["seasons"]` element.
  */
-export interface LeagueSeasonDocument extends mongoose.Types.EmbeddedDocument {
-  year: number;
-  displaySeason: string;
-  games: {
-    preseason: mongoose.Types.Array<Game2Document["_id"] | Game2Document>;
-    regularSeason: mongoose.Types.Array<Game2Document["_id"] | Game2Document>;
-    postSeason: mongoose.Types.Array<Game2Document["_id"] | Game2Document>;
-  };
-  teams: mongoose.Types.Array<Team2Document["_id"] | Team2Document>;
-  awards: {
-    mvp?: Player2Document["_id"] | Player2Document;
-    roty?: Player2Document["_id"] | Player2Document;
-    dpoy?: Player2Document["_id"] | Player2Document;
-    mostImproved?: Player2Document["_id"] | Player2Document;
-    sixthMan?: Player2Document["_id"] | Player2Document;
-  };
-  _id: mongoose.Types.ObjectId;
-}
+export type LeagueSeasonDocument = mongoose.Types.Subdocument & {
+	year: number;
+	displaySeason: string;
+	games: {
+		preseason: mongoose.Types.Array<Game2Document['_id'] | Game2Document>;
+		regularSeason: mongoose.Types.Array<Game2Document['_id'] | Game2Document>;
+		postSeason: mongoose.Types.Array<Game2Document['_id'] | Game2Document>;
+	};
+	teams: mongoose.Types.Array<Team2Document['_id'] | Team2Document>;
+	awards: {
+		mvp?: Player2Document['_id'] | Player2Document;
+		roty?: Player2Document['_id'] | Player2Document;
+		dpoy?: Player2Document['_id'] | Player2Document;
+		mostImproved?: Player2Document['_id'] | Player2Document;
+		sixthMan?: Player2Document['_id'] | Player2Document;
+	};
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
  * Mongoose Document type
@@ -1191,13 +1145,12 @@ export interface LeagueSeasonDocument extends mongoose.Types.EmbeddedDocument {
  * const League = mongoose.model<LeagueDocument, LeagueModel>("League", LeagueSchema);
  * ```
  */
-export interface LeagueDocument
-  extends mongoose.Document<mongoose.Types.ObjectId>,
-    LeagueMethods {
-  name: string;
-  seasons: mongoose.Types.DocumentArray<LeagueSeasonDocument>;
-  _id: mongoose.Types.ObjectId;
-}
+export type LeagueDocument = mongoose.Document<mongoose.Types.ObjectId, LeagueQueries> &
+	LeagueMethods & {
+		name: string;
+		seasons: mongoose.Types.DocumentArray<LeagueSeasonDocument>;
+		_id: mongoose.Types.ObjectId;
+	};
 
 /**
  * Lean version of Official2SeasonDocument
@@ -1207,22 +1160,46 @@ export interface LeagueDocument
  * const official2Object = official2.toObject();
  * ```
  */
-export interface Official2Season {
-  year?: number;
-  preseason: {
-    exists: boolean;
-    games: (Game2["_id"] | Game2)[];
-  };
-  regularSeason: {
-    exists: boolean;
-    games: (Game2["_id"] | Game2)[];
-  };
-  postseason: {
-    exists: boolean;
-    games: (Game2["_id"] | Game2)[];
-  };
-  _id: mongoose.Types.ObjectId;
-}
+export type Official2Season = {
+	year?: number;
+	preseason: {
+		exists: boolean;
+		games: (Game2['_id'] | Game2)[];
+	};
+	regularSeason: {
+		exists: boolean;
+		games: (Game2['_id'] | Game2)[];
+	};
+	postseason: {
+		exists: boolean;
+		games: (Game2['_id'] | Game2)[];
+	};
+	_id: mongoose.Types.ObjectId;
+};
+
+/**
+ * Lean version of Official2Document
+ *
+ * This has all Mongoose getters & functions removed. This type will be returned from `Official2Document.toObject()`. To avoid conflicts with model names, use the type alias `Official2Object`.
+ * ```
+ * const official2Object = official2.toObject();
+ * ```
+ */
+export type Official2 = {
+	meta: {
+		helpers: {
+			nbaOfficialId?: number;
+			bballRef: {
+				officialUrl: string;
+			};
+		};
+	};
+	name: {
+		full: string;
+	};
+	seasons: Official2Season[];
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
  * Lean version of Official2Document (type alias of `Official2`)
@@ -1238,26 +1215,20 @@ export interface Official2Season {
 export type Official2Object = Official2;
 
 /**
- * Mongoose Method types
+ * Mongoose Query types
  *
- * Use type assertion to ensure Official2 methods type safety:
+ * Pass this type to the Mongoose Model constructor:
  * ```
- * Official2Schema.methods = <Official2Methods>{ ... };
+ * const Official2 = mongoose.model<Official2Document, Official2Model>("Official2", Official2Schema);
  * ```
  */
+export type Official2Queries = {};
+
 export type Official2Methods = {};
 
-/**
- * Mongoose Static types
- *
- * Use type assertion to ensure Official2 statics type safety:
- * ```
- * Official2Schema.statics = <Official2Statics>{ ... };
- * ```
- */
 export type Official2Statics = {
-  findByUrl: (this: Official2Model, url: string) => any;
-  findByName: (this: Official2Model, name: string) => any;
+	findByUrl: (this: Official2Model, url: string) => any;
+	findByName: (this: Official2Model, name: string) => any;
 };
 
 /**
@@ -1268,9 +1239,7 @@ export type Official2Statics = {
  * const Official2 = mongoose.model<Official2Document, Official2Model>("Official2", Official2Schema);
  * ```
  */
-export interface Official2Model
-  extends mongoose.Model<Official2Document>,
-    Official2Statics {}
+export type Official2Model = mongoose.Model<Official2Document, Official2Queries> & Official2Statics;
 
 /**
  * Mongoose Schema type
@@ -1280,57 +1249,29 @@ export interface Official2Model
  * const Official2Schema: Official2Schema = new mongoose.Schema({ ... })
  * ```
  */
-export type Official2Schema = mongoose.Schema<
-  Official2Document,
-  Official2Model
->;
+export type Official2Schema = mongoose.Schema<Official2Document, Official2Model>;
 
 /**
- * Lean version of Official2Document
- *
- * This has all Mongoose getters & functions removed. This type will be returned from `Official2Document.toObject()`. To avoid conflicts with model names, use the type alias `Official2Object`.
- * ```
- * const official2Object = official2.toObject();
- * ```
- */
-export interface Official2 {
-  meta: {
-    helpers: {
-      nbaOfficialId?: number;
-      bballRef: {
-        officialUrl: string;
-      };
-    };
-  };
-  name: {
-    full: string;
-  };
-  seasons: Official2Season[];
-  _id: mongoose.Types.ObjectId;
-}
-
-/**
- * Mongoose Embedded Document type
+ * Mongoose Subdocument type
  *
  * Type of `Official2Document["seasons"]` element.
  */
-export interface Official2SeasonDocument
-  extends mongoose.Types.EmbeddedDocument {
-  year?: number;
-  preseason: {
-    exists: boolean;
-    games: mongoose.Types.Array<Game2Document["_id"] | Game2Document>;
-  };
-  regularSeason: {
-    exists: boolean;
-    games: mongoose.Types.Array<Game2Document["_id"] | Game2Document>;
-  };
-  postseason: {
-    exists: boolean;
-    games: mongoose.Types.Array<Game2Document["_id"] | Game2Document>;
-  };
-  _id: mongoose.Types.ObjectId;
-}
+export type Official2SeasonDocument = mongoose.Types.Subdocument & {
+	year?: number;
+	preseason: {
+		exists: boolean;
+		games: mongoose.Types.Array<Game2Document['_id'] | Game2Document>;
+	};
+	regularSeason: {
+		exists: boolean;
+		games: mongoose.Types.Array<Game2Document['_id'] | Game2Document>;
+	};
+	postseason: {
+		exists: boolean;
+		games: mongoose.Types.Array<Game2Document['_id'] | Game2Document>;
+	};
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
  * Mongoose Document type
@@ -1340,23 +1281,22 @@ export interface Official2SeasonDocument
  * const Official2 = mongoose.model<Official2Document, Official2Model>("Official2", Official2Schema);
  * ```
  */
-export interface Official2Document
-  extends mongoose.Document<mongoose.Types.ObjectId>,
-    Official2Methods {
-  meta: {
-    helpers: {
-      nbaOfficialId?: number;
-      bballRef: {
-        officialUrl: string;
-      };
-    };
-  };
-  name: {
-    full: string;
-  };
-  seasons: mongoose.Types.DocumentArray<Official2SeasonDocument>;
-  _id: mongoose.Types.ObjectId;
-}
+export type Official2Document = mongoose.Document<mongoose.Types.ObjectId, Official2Queries> &
+	Official2Methods & {
+		meta: {
+			helpers: {
+				nbaOfficialId?: number;
+				bballRef: {
+					officialUrl: string;
+				};
+			};
+		};
+		name: {
+			full: string;
+		};
+		seasons: mongoose.Types.DocumentArray<Official2SeasonDocument>;
+		_id: mongoose.Types.ObjectId;
+	};
 
 /**
  * Lean version of Player2SeasonTeamDocument
@@ -1366,12 +1306,12 @@ export interface Official2Document
  * const player2seasonObject = player2season.toObject();
  * ```
  */
-export interface Player2SeasonTeam {
-  id?: Team2["_id"] | Team2;
-  startDate?: Date;
-  endDate?: Date;
-  _id: mongoose.Types.ObjectId;
-}
+export type Player2SeasonTeam = {
+	id?: Team2['_id'] | Team2;
+	startDate?: Date;
+	endDate?: Date;
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
  * Lean version of Player2SeasonDocument
@@ -1381,105 +1321,157 @@ export interface Player2SeasonTeam {
  * const player2Object = player2.toObject();
  * ```
  */
-export interface Player2Season {
-  year?: number;
-  teams: Player2SeasonTeam[];
-  position?: string;
-  preseason: {
-    exists: boolean;
-    games: (Game2["_id"] | Game2)[];
-    stats: {
-      games?: number;
-      gamesStarted?: number;
-      minutes?: number;
-      fieldGoalsMade?: number;
-      fieldGoalsAttempted?: number;
-      fieldGoalsPct?: number;
-      threePointersMade?: number;
-      threePointersAttempted?: number;
-      threePointersPct?: number;
-      twoPointFGMade?: number;
-      twoPointFGAttempted?: number;
-      twoPointFGPct?: number;
-      effectiveFieldGoalPct?: number;
-      freeThrowsMade?: number;
-      freeThrowsAttempted?: number;
-      freeThrowsPct?: number;
-      offReb?: number;
-      defReb?: number;
-      totalReb?: number;
-      assists?: number;
-      steals?: number;
-      blocks?: number;
-      turnovers?: number;
-      personalFouls?: number;
-      points?: number;
-    };
-  };
-  regularSeason: {
-    exists: boolean;
-    games: (Game2["_id"] | Game2)[];
-    stats: {
-      games?: number;
-      gamesStarted?: number;
-      minutes?: number;
-      fieldGoalsMade?: number;
-      fieldGoalsAttempted?: number;
-      fieldGoalsPct?: number;
-      threePointersMade?: number;
-      threePointersAttempted?: number;
-      threePointersPct?: number;
-      twoPointFGMade?: number;
-      twoPointFGAttempted?: number;
-      twoPointFGPct?: number;
-      effectiveFieldGoalPct?: number;
-      freeThrowsMade?: number;
-      freeThrowsAttempted?: number;
-      freeThrowsPct?: number;
-      offReb?: number;
-      defReb?: number;
-      totalReb?: number;
-      assists?: number;
-      steals?: number;
-      blocks?: number;
-      turnovers?: number;
-      personalFouls?: number;
-      points?: number;
-    };
-  };
-  postseason: {
-    exists: boolean;
-    games: (Game2["_id"] | Game2)[];
-    stats: {
-      games?: number;
-      gamesStarted?: number;
-      minutes?: number;
-      fieldGoalsMade?: number;
-      fieldGoalsAttempted?: number;
-      fieldGoalsPct?: number;
-      threePointersMade?: number;
-      threePointersAttempted?: number;
-      threePointersPct?: number;
-      twoPointFGMade?: number;
-      twoPointFGAttempted?: number;
-      twoPointFGPct?: number;
-      effectiveFieldGoalPct?: number;
-      freeThrowsMade?: number;
-      freeThrowsAttempted?: number;
-      freeThrowsPct?: number;
-      offReb?: number;
-      defReb?: number;
-      totalReb?: number;
-      assists?: number;
-      steals?: number;
-      blocks?: number;
-      turnovers?: number;
-      personalFouls?: number;
-      points?: number;
-    };
-  };
-  _id: mongoose.Types.ObjectId;
-}
+export type Player2Season = {
+	year?: number;
+	teams: Player2SeasonTeam[];
+	position?: string;
+	preseason: {
+		exists: boolean;
+		games: (Game2['_id'] | Game2)[];
+		stats: {
+			games?: number;
+			gamesStarted?: number;
+			minutes?: number;
+			fieldGoalsMade?: number;
+			fieldGoalsAttempted?: number;
+			fieldGoalsPct?: number;
+			threePointersMade?: number;
+			threePointersAttempted?: number;
+			threePointersPct?: number;
+			twoPointFGMade?: number;
+			twoPointFGAttempted?: number;
+			twoPointFGPct?: number;
+			effectiveFieldGoalPct?: number;
+			freeThrowsMade?: number;
+			freeThrowsAttempted?: number;
+			freeThrowsPct?: number;
+			offReb?: number;
+			defReb?: number;
+			totalReb?: number;
+			assists?: number;
+			steals?: number;
+			blocks?: number;
+			turnovers?: number;
+			personalFouls?: number;
+			points?: number;
+		};
+	};
+	regularSeason: {
+		exists: boolean;
+		games: (Game2['_id'] | Game2)[];
+		stats: {
+			games?: number;
+			gamesStarted?: number;
+			minutes?: number;
+			fieldGoalsMade?: number;
+			fieldGoalsAttempted?: number;
+			fieldGoalsPct?: number;
+			threePointersMade?: number;
+			threePointersAttempted?: number;
+			threePointersPct?: number;
+			twoPointFGMade?: number;
+			twoPointFGAttempted?: number;
+			twoPointFGPct?: number;
+			effectiveFieldGoalPct?: number;
+			freeThrowsMade?: number;
+			freeThrowsAttempted?: number;
+			freeThrowsPct?: number;
+			offReb?: number;
+			defReb?: number;
+			totalReb?: number;
+			assists?: number;
+			steals?: number;
+			blocks?: number;
+			turnovers?: number;
+			personalFouls?: number;
+			points?: number;
+		};
+	};
+	postseason: {
+		exists: boolean;
+		games: (Game2['_id'] | Game2)[];
+		stats: {
+			games?: number;
+			gamesStarted?: number;
+			minutes?: number;
+			fieldGoalsMade?: number;
+			fieldGoalsAttempted?: number;
+			fieldGoalsPct?: number;
+			threePointersMade?: number;
+			threePointersAttempted?: number;
+			threePointersPct?: number;
+			twoPointFGMade?: number;
+			twoPointFGAttempted?: number;
+			twoPointFGPct?: number;
+			effectiveFieldGoalPct?: number;
+			freeThrowsMade?: number;
+			freeThrowsAttempted?: number;
+			freeThrowsPct?: number;
+			offReb?: number;
+			defReb?: number;
+			totalReb?: number;
+			assists?: number;
+			steals?: number;
+			blocks?: number;
+			turnovers?: number;
+			personalFouls?: number;
+			points?: number;
+		};
+	};
+	_id: mongoose.Types.ObjectId;
+};
+
+/**
+ * Lean version of Player2Document
+ *
+ * This has all Mongoose getters & functions removed. This type will be returned from `Player2Document.toObject()`. To avoid conflicts with model names, use the type alias `Player2Object`.
+ * ```
+ * const player2Object = player2.toObject();
+ * ```
+ */
+export type Player2 = {
+	meta: {
+		helpers: {
+			espnPlayerId?: number;
+			nbaPlayerId?: number;
+			bballRef: {
+				playerUrl: string;
+			};
+		};
+	};
+	name: {
+		full: string;
+		display: string;
+		pronunciation?: string;
+		nicknames: string[];
+		parsed: string[];
+	};
+	birthDate?: Date;
+	birthPlace: {
+		city?: string;
+		state?: string;
+		country?: string;
+	};
+	highSchool?: string;
+	college?: string;
+	socials: {
+		twitter?: string;
+		instagram?: string;
+	};
+	height: {
+		feet?: number;
+		inches?: number;
+	};
+	weight?: number;
+	lastAffiliation?: string;
+	position?: string;
+	shoots?: string;
+	draftYear?: string;
+	draftRound?: string;
+	draftNumber?: string;
+	seasons: Player2Season[];
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
  * Lean version of Player2Document (type alias of `Player2`)
@@ -1495,25 +1487,19 @@ export interface Player2Season {
 export type Player2Object = Player2;
 
 /**
- * Mongoose Method types
+ * Mongoose Query types
  *
- * Use type assertion to ensure Player2 methods type safety:
+ * Pass this type to the Mongoose Model constructor:
  * ```
- * Player2Schema.methods = <Player2Methods>{ ... };
+ * const Player2 = mongoose.model<Player2Document, Player2Model>("Player2", Player2Schema);
  * ```
  */
+export type Player2Queries = {};
+
 export type Player2Methods = {};
 
-/**
- * Mongoose Static types
- *
- * Use type assertion to ensure Player2 statics type safety:
- * ```
- * Player2Schema.statics = <Player2Statics>{ ... };
- * ```
- */
 export type Player2Statics = {
-  findByPlayerUrl: (this: Player2Model, playerUrl: string) => any;
+	findByPlayerUrl: (this: Player2Model, playerUrl: string) => any;
 };
 
 /**
@@ -1524,9 +1510,7 @@ export type Player2Statics = {
  * const Player2 = mongoose.model<Player2Document, Player2Model>("Player2", Player2Schema);
  * ```
  */
-export interface Player2Model
-  extends mongoose.Model<Player2Document>,
-    Player2Statics {}
+export type Player2Model = mongoose.Model<Player2Document, Player2Queries> & Player2Statics;
 
 /**
  * Mongoose Schema type
@@ -1539,174 +1523,121 @@ export interface Player2Model
 export type Player2Schema = mongoose.Schema<Player2Document, Player2Model>;
 
 /**
- * Lean version of Player2Document
- *
- * This has all Mongoose getters & functions removed. This type will be returned from `Player2Document.toObject()`. To avoid conflicts with model names, use the type alias `Player2Object`.
- * ```
- * const player2Object = player2.toObject();
- * ```
- */
-export interface Player2 {
-  meta: {
-    helpers: {
-      espnPlayerId?: number;
-      nbaPlayerId?: number;
-      bballRef: {
-        playerUrl: string;
-      };
-    };
-  };
-  name: {
-    full: string;
-    display: string;
-    pronunciation?: string;
-    nicknames: string[];
-    parsed: string[];
-  };
-  birthDate?: Date;
-  birthPlace: {
-    city?: string;
-    state?: string;
-    country?: string;
-  };
-  highSchool?: string;
-  college?: string;
-  socials: {
-    twitter?: string;
-    instagram?: string;
-  };
-  height: {
-    feet?: number;
-    inches?: number;
-  };
-  weight?: number;
-  lastAffiliation?: string;
-  position?: string;
-  shoots?: string;
-  draftYear?: string;
-  draftRound?: string;
-  draftNumber?: string;
-  seasons: Player2Season[];
-  _id: mongoose.Types.ObjectId;
-}
-
-/**
- * Mongoose Embedded Document type
+ * Mongoose Subdocument type
  *
  * Type of `Player2SeasonDocument["teams"]` element.
  */
-export interface Player2SeasonTeamDocument
-  extends mongoose.Types.EmbeddedDocument {
-  id?: Team2Document["_id"] | Team2Document;
-  startDate?: Date;
-  endDate?: Date;
-  _id: mongoose.Types.ObjectId;
-}
+export type Player2SeasonTeamDocument = mongoose.Types.Subdocument & {
+	id?: Team2Document['_id'] | Team2Document;
+	startDate?: Date;
+	endDate?: Date;
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
- * Mongoose Embedded Document type
+ * Mongoose Subdocument type
  *
  * Type of `Player2Document["seasons"]` element.
  */
-export interface Player2SeasonDocument extends mongoose.Types.EmbeddedDocument {
-  year?: number;
-  teams: mongoose.Types.DocumentArray<Player2SeasonTeamDocument>;
-  position?: string;
-  preseason: {
-    exists: boolean;
-    games: mongoose.Types.Array<Game2Document["_id"] | Game2Document>;
-    stats: {
-      games?: number;
-      gamesStarted?: number;
-      minutes?: number;
-      fieldGoalsMade?: number;
-      fieldGoalsAttempted?: number;
-      fieldGoalsPct?: number;
-      threePointersMade?: number;
-      threePointersAttempted?: number;
-      threePointersPct?: number;
-      twoPointFGMade?: number;
-      twoPointFGAttempted?: number;
-      twoPointFGPct?: number;
-      effectiveFieldGoalPct?: number;
-      freeThrowsMade?: number;
-      freeThrowsAttempted?: number;
-      freeThrowsPct?: number;
-      offReb?: number;
-      defReb?: number;
-      totalReb?: number;
-      assists?: number;
-      steals?: number;
-      blocks?: number;
-      turnovers?: number;
-      personalFouls?: number;
-      points?: number;
-    };
-  };
-  regularSeason: {
-    exists: boolean;
-    games: mongoose.Types.Array<Game2Document["_id"] | Game2Document>;
-    stats: {
-      games?: number;
-      gamesStarted?: number;
-      minutes?: number;
-      fieldGoalsMade?: number;
-      fieldGoalsAttempted?: number;
-      fieldGoalsPct?: number;
-      threePointersMade?: number;
-      threePointersAttempted?: number;
-      threePointersPct?: number;
-      twoPointFGMade?: number;
-      twoPointFGAttempted?: number;
-      twoPointFGPct?: number;
-      effectiveFieldGoalPct?: number;
-      freeThrowsMade?: number;
-      freeThrowsAttempted?: number;
-      freeThrowsPct?: number;
-      offReb?: number;
-      defReb?: number;
-      totalReb?: number;
-      assists?: number;
-      steals?: number;
-      blocks?: number;
-      turnovers?: number;
-      personalFouls?: number;
-      points?: number;
-    };
-  };
-  postseason: {
-    exists: boolean;
-    games: mongoose.Types.Array<Game2Document["_id"] | Game2Document>;
-    stats: {
-      games?: number;
-      gamesStarted?: number;
-      minutes?: number;
-      fieldGoalsMade?: number;
-      fieldGoalsAttempted?: number;
-      fieldGoalsPct?: number;
-      threePointersMade?: number;
-      threePointersAttempted?: number;
-      threePointersPct?: number;
-      twoPointFGMade?: number;
-      twoPointFGAttempted?: number;
-      twoPointFGPct?: number;
-      effectiveFieldGoalPct?: number;
-      freeThrowsMade?: number;
-      freeThrowsAttempted?: number;
-      freeThrowsPct?: number;
-      offReb?: number;
-      defReb?: number;
-      totalReb?: number;
-      assists?: number;
-      steals?: number;
-      blocks?: number;
-      turnovers?: number;
-      personalFouls?: number;
-      points?: number;
-    };
-  };
-  _id: mongoose.Types.ObjectId;
-}
+export type Player2SeasonDocument = mongoose.Types.Subdocument & {
+	year?: number;
+	teams: mongoose.Types.DocumentArray<Player2SeasonTeamDocument>;
+	position?: string;
+	preseason: {
+		exists: boolean;
+		games: mongoose.Types.Array<Game2Document['_id'] | Game2Document>;
+		stats: {
+			games?: number;
+			gamesStarted?: number;
+			minutes?: number;
+			fieldGoalsMade?: number;
+			fieldGoalsAttempted?: number;
+			fieldGoalsPct?: number;
+			threePointersMade?: number;
+			threePointersAttempted?: number;
+			threePointersPct?: number;
+			twoPointFGMade?: number;
+			twoPointFGAttempted?: number;
+			twoPointFGPct?: number;
+			effectiveFieldGoalPct?: number;
+			freeThrowsMade?: number;
+			freeThrowsAttempted?: number;
+			freeThrowsPct?: number;
+			offReb?: number;
+			defReb?: number;
+			totalReb?: number;
+			assists?: number;
+			steals?: number;
+			blocks?: number;
+			turnovers?: number;
+			personalFouls?: number;
+			points?: number;
+		};
+	};
+	regularSeason: {
+		exists: boolean;
+		games: mongoose.Types.Array<Game2Document['_id'] | Game2Document>;
+		stats: {
+			games?: number;
+			gamesStarted?: number;
+			minutes?: number;
+			fieldGoalsMade?: number;
+			fieldGoalsAttempted?: number;
+			fieldGoalsPct?: number;
+			threePointersMade?: number;
+			threePointersAttempted?: number;
+			threePointersPct?: number;
+			twoPointFGMade?: number;
+			twoPointFGAttempted?: number;
+			twoPointFGPct?: number;
+			effectiveFieldGoalPct?: number;
+			freeThrowsMade?: number;
+			freeThrowsAttempted?: number;
+			freeThrowsPct?: number;
+			offReb?: number;
+			defReb?: number;
+			totalReb?: number;
+			assists?: number;
+			steals?: number;
+			blocks?: number;
+			turnovers?: number;
+			personalFouls?: number;
+			points?: number;
+		};
+	};
+	postseason: {
+		exists: boolean;
+		games: mongoose.Types.Array<Game2Document['_id'] | Game2Document>;
+		stats: {
+			games?: number;
+			gamesStarted?: number;
+			minutes?: number;
+			fieldGoalsMade?: number;
+			fieldGoalsAttempted?: number;
+			fieldGoalsPct?: number;
+			threePointersMade?: number;
+			threePointersAttempted?: number;
+			threePointersPct?: number;
+			twoPointFGMade?: number;
+			twoPointFGAttempted?: number;
+			twoPointFGPct?: number;
+			effectiveFieldGoalPct?: number;
+			freeThrowsMade?: number;
+			freeThrowsAttempted?: number;
+			freeThrowsPct?: number;
+			offReb?: number;
+			defReb?: number;
+			totalReb?: number;
+			assists?: number;
+			steals?: number;
+			blocks?: number;
+			turnovers?: number;
+			personalFouls?: number;
+			points?: number;
+		};
+	};
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
  * Mongoose Document type
@@ -1716,51 +1647,50 @@ export interface Player2SeasonDocument extends mongoose.Types.EmbeddedDocument {
  * const Player2 = mongoose.model<Player2Document, Player2Model>("Player2", Player2Schema);
  * ```
  */
-export interface Player2Document
-  extends mongoose.Document<mongoose.Types.ObjectId>,
-    Player2Methods {
-  meta: {
-    helpers: {
-      espnPlayerId?: number;
-      nbaPlayerId?: number;
-      bballRef: {
-        playerUrl: string;
-      };
-    };
-  };
-  name: {
-    full: string;
-    display: string;
-    pronunciation?: string;
-    nicknames: mongoose.Types.Array<string>;
-    parsed: mongoose.Types.Array<string>;
-  };
-  birthDate?: Date;
-  birthPlace: {
-    city?: string;
-    state?: string;
-    country?: string;
-  };
-  highSchool?: string;
-  college?: string;
-  socials: {
-    twitter?: string;
-    instagram?: string;
-  };
-  height: {
-    feet?: number;
-    inches?: number;
-  };
-  weight?: number;
-  lastAffiliation?: string;
-  position?: string;
-  shoots?: string;
-  draftYear?: string;
-  draftRound?: string;
-  draftNumber?: string;
-  seasons: mongoose.Types.DocumentArray<Player2SeasonDocument>;
-  _id: mongoose.Types.ObjectId;
-}
+export type Player2Document = mongoose.Document<mongoose.Types.ObjectId, Player2Queries> &
+	Player2Methods & {
+		meta: {
+			helpers: {
+				espnPlayerId?: number;
+				nbaPlayerId?: number;
+				bballRef: {
+					playerUrl: string;
+				};
+			};
+		};
+		name: {
+			full: string;
+			display: string;
+			pronunciation?: string;
+			nicknames: mongoose.Types.Array<string>;
+			parsed: mongoose.Types.Array<string>;
+		};
+		birthDate?: Date;
+		birthPlace: {
+			city?: string;
+			state?: string;
+			country?: string;
+		};
+		highSchool?: string;
+		college?: string;
+		socials: {
+			twitter?: string;
+			instagram?: string;
+		};
+		height: {
+			feet?: number;
+			inches?: number;
+		};
+		weight?: number;
+		lastAffiliation?: string;
+		position?: string;
+		shoots?: string;
+		draftYear?: string;
+		draftRound?: string;
+		draftNumber?: string;
+		seasons: mongoose.Types.DocumentArray<Player2SeasonDocument>;
+		_id: mongoose.Types.ObjectId;
+	};
 
 /**
  * Lean version of Team2SeasonRosterCoacheDocument
@@ -1770,12 +1700,12 @@ export interface Player2Document
  * const team2seasonObject = team2season.toObject();
  * ```
  */
-export interface Team2SeasonRosterCoache {
-  coach?: Coach2["_id"] | Coach2;
-  coachType: string;
-  isAssistant: boolean;
-  _id: mongoose.Types.ObjectId;
-}
+export type Team2SeasonRosterCoache = {
+	coach?: Coach2['_id'] | Coach2;
+	coachType: string;
+	isAssistant: boolean;
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
  * Lean version of Team2SeasonRosterPlayerDocument
@@ -1785,12 +1715,12 @@ export interface Team2SeasonRosterCoache {
  * const team2seasonObject = team2season.toObject();
  * ```
  */
-export interface Team2SeasonRosterPlayer {
-  player?: Player2["_id"] | Player2;
-  number: string;
-  position: string;
-  _id: mongoose.Types.ObjectId;
-}
+export type Team2SeasonRosterPlayer = {
+	player?: Player2['_id'] | Player2;
+	number: string;
+	position: string;
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
  * Lean version of Team2SeasonDocument
@@ -1800,288 +1730,324 @@ export interface Team2SeasonRosterPlayer {
  * const team2Object = team2.toObject();
  * ```
  */
-export interface Team2Season {
-  season: number;
-  infoCommon: {
-    name?: string;
-    abbreviation?: string;
-    city?: string;
-    slug?: string;
-    code?: string;
-  };
-  roster: {
-    coaches: Team2SeasonRosterCoache[];
-    players: Team2SeasonRosterPlayer[];
-  };
-  preseason: {
-    exists: boolean;
-    games: (Game2["_id"] | Game2)[];
-    stats: {
-      fieldGoalsMade: {
-        value?: number;
-        rank?: number;
-      };
-      fieldGoalsAttempted: {
-        value?: number;
-        rank?: number;
-      };
-      fieldGoalsPct: {
-        value?: number;
-        rank?: number;
-      };
-      threePointersMade: {
-        value?: number;
-        rank?: number;
-      };
-      threePointersAttempted: {
-        value?: number;
-      };
-      threePointersPct: {
-        value?: number;
-        rank?: number;
-      };
-      twoPointFGMade: {
-        value?: number;
-        rank?: number;
-      };
-      twoPointFGAttempted: {
-        value?: number;
-        rank?: number;
-      };
-      twoPointFGPct: {
-        value?: number;
-        rank?: number;
-      };
-      freeThrowsMade: {
-        value?: number;
-        rank?: number;
-      };
-      freeThrowsAttempted: {
-        value?: number;
-        rank?: number;
-      };
-      freeThrowsPct: {
-        value?: number;
-        rank?: number;
-      };
-      offReb: {
-        value?: number;
-        rank?: number;
-      };
-      defReb: {
-        value?: number;
-        rank?: number;
-      };
-      totalReb: {
-        value?: number;
-        rank?: number;
-      };
-      assists: {
-        value?: number;
-        rank?: number;
-      };
-      steals: {
-        value?: number;
-        rank?: number;
-      };
-      blocks: {
-        value?: number;
-        rank?: number;
-      };
-      turnovers: {
-        value?: number;
-        rank?: number;
-      };
-      personalFouls: {
-        value?: number;
-        rank?: number;
-      };
-      points: {
-        value?: number;
-        rank?: number;
-      };
-    };
-  };
-  regularSeason: {
-    exists: boolean;
-    games: (Game2["_id"] | Game2)[];
-    stats: {
-      fieldGoalsMade: {
-        value?: number;
-        rank?: number;
-      };
-      fieldGoalsAttempted: {
-        value?: number;
-        rank?: number;
-      };
-      fieldGoalsPct: {
-        value?: number;
-        rank?: number;
-      };
-      threePointersMade: {
-        value?: number;
-        rank?: number;
-      };
-      threePointersAttempted: {
-        value?: number;
-      };
-      threePointersPct: {
-        value?: number;
-        rank?: number;
-      };
-      twoPointFGMade: {
-        value?: number;
-        rank?: number;
-      };
-      twoPointFGAttempted: {
-        value?: number;
-        rank?: number;
-      };
-      twoPointFGPct: {
-        value?: number;
-        rank?: number;
-      };
-      freeThrowsMade: {
-        value?: number;
-        rank?: number;
-      };
-      freeThrowsAttempted: {
-        value?: number;
-        rank?: number;
-      };
-      freeThrowsPct: {
-        value?: number;
-        rank?: number;
-      };
-      offReb: {
-        value?: number;
-        rank?: number;
-      };
-      defReb: {
-        value?: number;
-        rank?: number;
-      };
-      totalReb: {
-        value?: number;
-        rank?: number;
-      };
-      assists: {
-        value?: number;
-        rank?: number;
-      };
-      steals: {
-        value?: number;
-        rank?: number;
-      };
-      blocks: {
-        value?: number;
-        rank?: number;
-      };
-      turnovers: {
-        value?: number;
-        rank?: number;
-      };
-      personalFouls: {
-        value?: number;
-        rank?: number;
-      };
-      points: {
-        value?: number;
-        rank?: number;
-      };
-    };
-  };
-  postseason: {
-    exists: boolean;
-    games: (Game2["_id"] | Game2)[];
-    stats: {
-      fieldGoalsMade: {
-        value?: number;
-        rank?: number;
-      };
-      fieldGoalsAttempted: {
-        value?: number;
-        rank?: number;
-      };
-      fieldGoalsPct: {
-        value?: number;
-        rank?: number;
-      };
-      threePointersMade: {
-        value?: number;
-        rank?: number;
-      };
-      threePointersAttempted: {
-        value?: number;
-      };
-      threePointersPct: {
-        value?: number;
-        rank?: number;
-      };
-      twoPointFGMade: {
-        value?: number;
-        rank?: number;
-      };
-      twoPointFGAttempted: {
-        value?: number;
-        rank?: number;
-      };
-      twoPointFGPct: {
-        value?: number;
-        rank?: number;
-      };
-      freeThrowsMade: {
-        value?: number;
-        rank?: number;
-      };
-      freeThrowsAttempted: {
-        value?: number;
-        rank?: number;
-      };
-      freeThrowsPct: {
-        value?: number;
-        rank?: number;
-      };
-      offReb: {
-        value?: number;
-        rank?: number;
-      };
-      defReb: {
-        value?: number;
-        rank?: number;
-      };
-      totalReb: {
-        value?: number;
-        rank?: number;
-      };
-      assists: {
-        value?: number;
-        rank?: number;
-      };
-      steals: {
-        value?: number;
-        rank?: number;
-      };
-      blocks: {
-        value?: number;
-        rank?: number;
-      };
-      turnovers: {
-        value?: number;
-        rank?: number;
-      };
-      personalFouls: {
-        value?: number;
-        rank?: number;
-      };
-      points: {
-        value?: number;
-        rank?: number;
-      };
-    };
-  };
-  _id: mongoose.Types.ObjectId;
-}
+export type Team2Season = {
+	season: number;
+	infoCommon: {
+		name?: string;
+		abbreviation?: string;
+		city?: string;
+		slug?: string;
+		code?: string;
+	};
+	roster: {
+		coaches: Team2SeasonRosterCoache[];
+		players: Team2SeasonRosterPlayer[];
+	};
+	preseason: {
+		exists: boolean;
+		games: (Game2['_id'] | Game2)[];
+		stats: {
+			fieldGoalsMade: {
+				value?: number;
+				rank?: number;
+			};
+			fieldGoalsAttempted: {
+				value?: number;
+				rank?: number;
+			};
+			fieldGoalsPct: {
+				value?: number;
+				rank?: number;
+			};
+			threePointersMade: {
+				value?: number;
+				rank?: number;
+			};
+			threePointersAttempted: {
+				value?: number;
+			};
+			threePointersPct: {
+				value?: number;
+				rank?: number;
+			};
+			twoPointFGMade: {
+				value?: number;
+				rank?: number;
+			};
+			twoPointFGAttempted: {
+				value?: number;
+				rank?: number;
+			};
+			twoPointFGPct: {
+				value?: number;
+				rank?: number;
+			};
+			freeThrowsMade: {
+				value?: number;
+				rank?: number;
+			};
+			freeThrowsAttempted: {
+				value?: number;
+				rank?: number;
+			};
+			freeThrowsPct: {
+				value?: number;
+				rank?: number;
+			};
+			offReb: {
+				value?: number;
+				rank?: number;
+			};
+			defReb: {
+				value?: number;
+				rank?: number;
+			};
+			totalReb: {
+				value?: number;
+				rank?: number;
+			};
+			assists: {
+				value?: number;
+				rank?: number;
+			};
+			steals: {
+				value?: number;
+				rank?: number;
+			};
+			blocks: {
+				value?: number;
+				rank?: number;
+			};
+			turnovers: {
+				value?: number;
+				rank?: number;
+			};
+			personalFouls: {
+				value?: number;
+				rank?: number;
+			};
+			points: {
+				value?: number;
+				rank?: number;
+			};
+		};
+	};
+	regularSeason: {
+		exists: boolean;
+		games: (Game2['_id'] | Game2)[];
+		stats: {
+			fieldGoalsMade: {
+				value?: number;
+				rank?: number;
+			};
+			fieldGoalsAttempted: {
+				value?: number;
+				rank?: number;
+			};
+			fieldGoalsPct: {
+				value?: number;
+				rank?: number;
+			};
+			threePointersMade: {
+				value?: number;
+				rank?: number;
+			};
+			threePointersAttempted: {
+				value?: number;
+			};
+			threePointersPct: {
+				value?: number;
+				rank?: number;
+			};
+			twoPointFGMade: {
+				value?: number;
+				rank?: number;
+			};
+			twoPointFGAttempted: {
+				value?: number;
+				rank?: number;
+			};
+			twoPointFGPct: {
+				value?: number;
+				rank?: number;
+			};
+			freeThrowsMade: {
+				value?: number;
+				rank?: number;
+			};
+			freeThrowsAttempted: {
+				value?: number;
+				rank?: number;
+			};
+			freeThrowsPct: {
+				value?: number;
+				rank?: number;
+			};
+			offReb: {
+				value?: number;
+				rank?: number;
+			};
+			defReb: {
+				value?: number;
+				rank?: number;
+			};
+			totalReb: {
+				value?: number;
+				rank?: number;
+			};
+			assists: {
+				value?: number;
+				rank?: number;
+			};
+			steals: {
+				value?: number;
+				rank?: number;
+			};
+			blocks: {
+				value?: number;
+				rank?: number;
+			};
+			turnovers: {
+				value?: number;
+				rank?: number;
+			};
+			personalFouls: {
+				value?: number;
+				rank?: number;
+			};
+			points: {
+				value?: number;
+				rank?: number;
+			};
+		};
+	};
+	postseason: {
+		exists: boolean;
+		games: (Game2['_id'] | Game2)[];
+		stats: {
+			fieldGoalsMade: {
+				value?: number;
+				rank?: number;
+			};
+			fieldGoalsAttempted: {
+				value?: number;
+				rank?: number;
+			};
+			fieldGoalsPct: {
+				value?: number;
+				rank?: number;
+			};
+			threePointersMade: {
+				value?: number;
+				rank?: number;
+			};
+			threePointersAttempted: {
+				value?: number;
+			};
+			threePointersPct: {
+				value?: number;
+				rank?: number;
+			};
+			twoPointFGMade: {
+				value?: number;
+				rank?: number;
+			};
+			twoPointFGAttempted: {
+				value?: number;
+				rank?: number;
+			};
+			twoPointFGPct: {
+				value?: number;
+				rank?: number;
+			};
+			freeThrowsMade: {
+				value?: number;
+				rank?: number;
+			};
+			freeThrowsAttempted: {
+				value?: number;
+				rank?: number;
+			};
+			freeThrowsPct: {
+				value?: number;
+				rank?: number;
+			};
+			offReb: {
+				value?: number;
+				rank?: number;
+			};
+			defReb: {
+				value?: number;
+				rank?: number;
+			};
+			totalReb: {
+				value?: number;
+				rank?: number;
+			};
+			assists: {
+				value?: number;
+				rank?: number;
+			};
+			steals: {
+				value?: number;
+				rank?: number;
+			};
+			blocks: {
+				value?: number;
+				rank?: number;
+			};
+			turnovers: {
+				value?: number;
+				rank?: number;
+			};
+			personalFouls: {
+				value?: number;
+				rank?: number;
+			};
+			points: {
+				value?: number;
+				rank?: number;
+			};
+		};
+	};
+	_id: mongoose.Types.ObjectId;
+};
+
+/**
+ * Lean version of Team2Document
+ *
+ * This has all Mongoose getters & functions removed. This type will be returned from `Team2Document.toObject()`. To avoid conflicts with model names, use the type alias `Team2Object`.
+ * ```
+ * const team2Object = team2.toObject();
+ * ```
+ */
+export type Team2 = {
+	meta: {
+		helpers: {
+			nbaTeamId?: string;
+			espnTeamId?: string;
+		};
+		isComplete: boolean;
+		missingData: string[];
+	};
+	infoCommon: {
+		city: string;
+		state: string;
+		country: string;
+		name: string;
+		allNames: string[];
+		abbreviation: string;
+		nickname?: string;
+		conference?: string;
+		division?: string;
+		code: string;
+		slug: string;
+		minYear: string;
+		maxYear: string;
+	};
+	seasons: Team2Season[];
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
  * Lean version of Team2Document (type alias of `Team2`)
@@ -2097,23 +2063,17 @@ export interface Team2Season {
 export type Team2Object = Team2;
 
 /**
- * Mongoose Method types
+ * Mongoose Query types
  *
- * Use type assertion to ensure Team2 methods type safety:
+ * Pass this type to the Mongoose Model constructor:
  * ```
- * Team2Schema.methods = <Team2Methods>{ ... };
+ * const Team2 = mongoose.model<Team2Document, Team2Model>("Team2", Team2Schema);
  * ```
  */
+export type Team2Queries = {};
+
 export type Team2Methods = {};
 
-/**
- * Mongoose Static types
- *
- * Use type assertion to ensure Team2 statics type safety:
- * ```
- * Team2Schema.statics = <Team2Statics>{ ... };
- * ```
- */
 export type Team2Statics = {};
 
 /**
@@ -2124,9 +2084,7 @@ export type Team2Statics = {};
  * const Team2 = mongoose.model<Team2Document, Team2Model>("Team2", Team2Schema);
  * ```
  */
-export interface Team2Model
-  extends mongoose.Model<Team2Document>,
-    Team2Statics {}
+export type Team2Model = mongoose.Model<Team2Document, Team2Queries> & Team2Statics;
 
 /**
  * Mongoose Schema type
@@ -2139,354 +2097,316 @@ export interface Team2Model
 export type Team2Schema = mongoose.Schema<Team2Document, Team2Model>;
 
 /**
- * Lean version of Team2Document
- *
- * This has all Mongoose getters & functions removed. This type will be returned from `Team2Document.toObject()`. To avoid conflicts with model names, use the type alias `Team2Object`.
- * ```
- * const team2Object = team2.toObject();
- * ```
- */
-export interface Team2 {
-  meta: {
-    helpers: {
-      nbaTeamId?: string;
-      espnTeamId?: string;
-    };
-    isComplete: boolean;
-    missingData: string[];
-  };
-  infoCommon: {
-    city: string;
-    state: string;
-    country: string;
-    name: string;
-    allNames: string[];
-    abbreviation: string;
-    nickname?: string;
-    conference?: string;
-    division?: string;
-    code: string;
-    slug: string;
-    minYear: string;
-    maxYear: string;
-  };
-  seasons: Team2Season[];
-  _id: mongoose.Types.ObjectId;
-}
-
-/**
- * Mongoose Embedded Document type
+ * Mongoose Subdocument type
  *
  * Type of `Team2SeasonDocument["roster.coaches"]` element.
  */
-export interface Team2SeasonRosterCoacheDocument
-  extends mongoose.Types.EmbeddedDocument {
-  coach?: Coach2Document["_id"] | Coach2Document;
-  coachType: string;
-  isAssistant: boolean;
-  _id: mongoose.Types.ObjectId;
-}
+export type Team2SeasonRosterCoacheDocument = mongoose.Types.Subdocument & {
+	coach?: Coach2Document['_id'] | Coach2Document;
+	coachType: string;
+	isAssistant: boolean;
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
- * Mongoose Embedded Document type
+ * Mongoose Subdocument type
  *
  * Type of `Team2SeasonDocument["roster.players"]` element.
  */
-export interface Team2SeasonRosterPlayerDocument
-  extends mongoose.Types.EmbeddedDocument {
-  player?: Player2Document["_id"] | Player2Document;
-  number: string;
-  position: string;
-  _id: mongoose.Types.ObjectId;
-}
+export type Team2SeasonRosterPlayerDocument = mongoose.Types.Subdocument & {
+	player?: Player2Document['_id'] | Player2Document;
+	number: string;
+	position: string;
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
- * Mongoose Embedded Document type
+ * Mongoose Subdocument type
  *
  * Type of `Team2Document["seasons"]` element.
  */
-export interface Team2SeasonDocument extends mongoose.Types.EmbeddedDocument {
-  season: number;
-  infoCommon: {
-    name?: string;
-    abbreviation?: string;
-    city?: string;
-    slug?: string;
-    code?: string;
-  };
-  roster: {
-    coaches: mongoose.Types.DocumentArray<Team2SeasonRosterCoacheDocument>;
-    players: mongoose.Types.DocumentArray<Team2SeasonRosterPlayerDocument>;
-  };
-  preseason: {
-    exists: boolean;
-    games: mongoose.Types.Array<Game2Document["_id"] | Game2Document>;
-    stats: {
-      fieldGoalsMade: {
-        value?: number;
-        rank?: number;
-      };
-      fieldGoalsAttempted: {
-        value?: number;
-        rank?: number;
-      };
-      fieldGoalsPct: {
-        value?: number;
-        rank?: number;
-      };
-      threePointersMade: {
-        value?: number;
-        rank?: number;
-      };
-      threePointersAttempted: {
-        value?: number;
-      };
-      threePointersPct: {
-        value?: number;
-        rank?: number;
-      };
-      twoPointFGMade: {
-        value?: number;
-        rank?: number;
-      };
-      twoPointFGAttempted: {
-        value?: number;
-        rank?: number;
-      };
-      twoPointFGPct: {
-        value?: number;
-        rank?: number;
-      };
-      freeThrowsMade: {
-        value?: number;
-        rank?: number;
-      };
-      freeThrowsAttempted: {
-        value?: number;
-        rank?: number;
-      };
-      freeThrowsPct: {
-        value?: number;
-        rank?: number;
-      };
-      offReb: {
-        value?: number;
-        rank?: number;
-      };
-      defReb: {
-        value?: number;
-        rank?: number;
-      };
-      totalReb: {
-        value?: number;
-        rank?: number;
-      };
-      assists: {
-        value?: number;
-        rank?: number;
-      };
-      steals: {
-        value?: number;
-        rank?: number;
-      };
-      blocks: {
-        value?: number;
-        rank?: number;
-      };
-      turnovers: {
-        value?: number;
-        rank?: number;
-      };
-      personalFouls: {
-        value?: number;
-        rank?: number;
-      };
-      points: {
-        value?: number;
-        rank?: number;
-      };
-    };
-  };
-  regularSeason: {
-    exists: boolean;
-    games: mongoose.Types.Array<Game2Document["_id"] | Game2Document>;
-    stats: {
-      fieldGoalsMade: {
-        value?: number;
-        rank?: number;
-      };
-      fieldGoalsAttempted: {
-        value?: number;
-        rank?: number;
-      };
-      fieldGoalsPct: {
-        value?: number;
-        rank?: number;
-      };
-      threePointersMade: {
-        value?: number;
-        rank?: number;
-      };
-      threePointersAttempted: {
-        value?: number;
-      };
-      threePointersPct: {
-        value?: number;
-        rank?: number;
-      };
-      twoPointFGMade: {
-        value?: number;
-        rank?: number;
-      };
-      twoPointFGAttempted: {
-        value?: number;
-        rank?: number;
-      };
-      twoPointFGPct: {
-        value?: number;
-        rank?: number;
-      };
-      freeThrowsMade: {
-        value?: number;
-        rank?: number;
-      };
-      freeThrowsAttempted: {
-        value?: number;
-        rank?: number;
-      };
-      freeThrowsPct: {
-        value?: number;
-        rank?: number;
-      };
-      offReb: {
-        value?: number;
-        rank?: number;
-      };
-      defReb: {
-        value?: number;
-        rank?: number;
-      };
-      totalReb: {
-        value?: number;
-        rank?: number;
-      };
-      assists: {
-        value?: number;
-        rank?: number;
-      };
-      steals: {
-        value?: number;
-        rank?: number;
-      };
-      blocks: {
-        value?: number;
-        rank?: number;
-      };
-      turnovers: {
-        value?: number;
-        rank?: number;
-      };
-      personalFouls: {
-        value?: number;
-        rank?: number;
-      };
-      points: {
-        value?: number;
-        rank?: number;
-      };
-    };
-  };
-  postseason: {
-    exists: boolean;
-    games: mongoose.Types.Array<Game2Document["_id"] | Game2Document>;
-    stats: {
-      fieldGoalsMade: {
-        value?: number;
-        rank?: number;
-      };
-      fieldGoalsAttempted: {
-        value?: number;
-        rank?: number;
-      };
-      fieldGoalsPct: {
-        value?: number;
-        rank?: number;
-      };
-      threePointersMade: {
-        value?: number;
-        rank?: number;
-      };
-      threePointersAttempted: {
-        value?: number;
-      };
-      threePointersPct: {
-        value?: number;
-        rank?: number;
-      };
-      twoPointFGMade: {
-        value?: number;
-        rank?: number;
-      };
-      twoPointFGAttempted: {
-        value?: number;
-        rank?: number;
-      };
-      twoPointFGPct: {
-        value?: number;
-        rank?: number;
-      };
-      freeThrowsMade: {
-        value?: number;
-        rank?: number;
-      };
-      freeThrowsAttempted: {
-        value?: number;
-        rank?: number;
-      };
-      freeThrowsPct: {
-        value?: number;
-        rank?: number;
-      };
-      offReb: {
-        value?: number;
-        rank?: number;
-      };
-      defReb: {
-        value?: number;
-        rank?: number;
-      };
-      totalReb: {
-        value?: number;
-        rank?: number;
-      };
-      assists: {
-        value?: number;
-        rank?: number;
-      };
-      steals: {
-        value?: number;
-        rank?: number;
-      };
-      blocks: {
-        value?: number;
-        rank?: number;
-      };
-      turnovers: {
-        value?: number;
-        rank?: number;
-      };
-      personalFouls: {
-        value?: number;
-        rank?: number;
-      };
-      points: {
-        value?: number;
-        rank?: number;
-      };
-    };
-  };
-  _id: mongoose.Types.ObjectId;
-}
+export type Team2SeasonDocument = mongoose.Types.Subdocument & {
+	season: number;
+	infoCommon: {
+		name?: string;
+		abbreviation?: string;
+		city?: string;
+		slug?: string;
+		code?: string;
+	};
+	roster: {
+		coaches: mongoose.Types.DocumentArray<Team2SeasonRosterCoacheDocument>;
+		players: mongoose.Types.DocumentArray<Team2SeasonRosterPlayerDocument>;
+	};
+	preseason: {
+		exists: boolean;
+		games: mongoose.Types.Array<Game2Document['_id'] | Game2Document>;
+		stats: {
+			fieldGoalsMade: {
+				value?: number;
+				rank?: number;
+			};
+			fieldGoalsAttempted: {
+				value?: number;
+				rank?: number;
+			};
+			fieldGoalsPct: {
+				value?: number;
+				rank?: number;
+			};
+			threePointersMade: {
+				value?: number;
+				rank?: number;
+			};
+			threePointersAttempted: {
+				value?: number;
+			};
+			threePointersPct: {
+				value?: number;
+				rank?: number;
+			};
+			twoPointFGMade: {
+				value?: number;
+				rank?: number;
+			};
+			twoPointFGAttempted: {
+				value?: number;
+				rank?: number;
+			};
+			twoPointFGPct: {
+				value?: number;
+				rank?: number;
+			};
+			freeThrowsMade: {
+				value?: number;
+				rank?: number;
+			};
+			freeThrowsAttempted: {
+				value?: number;
+				rank?: number;
+			};
+			freeThrowsPct: {
+				value?: number;
+				rank?: number;
+			};
+			offReb: {
+				value?: number;
+				rank?: number;
+			};
+			defReb: {
+				value?: number;
+				rank?: number;
+			};
+			totalReb: {
+				value?: number;
+				rank?: number;
+			};
+			assists: {
+				value?: number;
+				rank?: number;
+			};
+			steals: {
+				value?: number;
+				rank?: number;
+			};
+			blocks: {
+				value?: number;
+				rank?: number;
+			};
+			turnovers: {
+				value?: number;
+				rank?: number;
+			};
+			personalFouls: {
+				value?: number;
+				rank?: number;
+			};
+			points: {
+				value?: number;
+				rank?: number;
+			};
+		};
+	};
+	regularSeason: {
+		exists: boolean;
+		games: mongoose.Types.Array<Game2Document['_id'] | Game2Document>;
+		stats: {
+			fieldGoalsMade: {
+				value?: number;
+				rank?: number;
+			};
+			fieldGoalsAttempted: {
+				value?: number;
+				rank?: number;
+			};
+			fieldGoalsPct: {
+				value?: number;
+				rank?: number;
+			};
+			threePointersMade: {
+				value?: number;
+				rank?: number;
+			};
+			threePointersAttempted: {
+				value?: number;
+			};
+			threePointersPct: {
+				value?: number;
+				rank?: number;
+			};
+			twoPointFGMade: {
+				value?: number;
+				rank?: number;
+			};
+			twoPointFGAttempted: {
+				value?: number;
+				rank?: number;
+			};
+			twoPointFGPct: {
+				value?: number;
+				rank?: number;
+			};
+			freeThrowsMade: {
+				value?: number;
+				rank?: number;
+			};
+			freeThrowsAttempted: {
+				value?: number;
+				rank?: number;
+			};
+			freeThrowsPct: {
+				value?: number;
+				rank?: number;
+			};
+			offReb: {
+				value?: number;
+				rank?: number;
+			};
+			defReb: {
+				value?: number;
+				rank?: number;
+			};
+			totalReb: {
+				value?: number;
+				rank?: number;
+			};
+			assists: {
+				value?: number;
+				rank?: number;
+			};
+			steals: {
+				value?: number;
+				rank?: number;
+			};
+			blocks: {
+				value?: number;
+				rank?: number;
+			};
+			turnovers: {
+				value?: number;
+				rank?: number;
+			};
+			personalFouls: {
+				value?: number;
+				rank?: number;
+			};
+			points: {
+				value?: number;
+				rank?: number;
+			};
+		};
+	};
+	postseason: {
+		exists: boolean;
+		games: mongoose.Types.Array<Game2Document['_id'] | Game2Document>;
+		stats: {
+			fieldGoalsMade: {
+				value?: number;
+				rank?: number;
+			};
+			fieldGoalsAttempted: {
+				value?: number;
+				rank?: number;
+			};
+			fieldGoalsPct: {
+				value?: number;
+				rank?: number;
+			};
+			threePointersMade: {
+				value?: number;
+				rank?: number;
+			};
+			threePointersAttempted: {
+				value?: number;
+			};
+			threePointersPct: {
+				value?: number;
+				rank?: number;
+			};
+			twoPointFGMade: {
+				value?: number;
+				rank?: number;
+			};
+			twoPointFGAttempted: {
+				value?: number;
+				rank?: number;
+			};
+			twoPointFGPct: {
+				value?: number;
+				rank?: number;
+			};
+			freeThrowsMade: {
+				value?: number;
+				rank?: number;
+			};
+			freeThrowsAttempted: {
+				value?: number;
+				rank?: number;
+			};
+			freeThrowsPct: {
+				value?: number;
+				rank?: number;
+			};
+			offReb: {
+				value?: number;
+				rank?: number;
+			};
+			defReb: {
+				value?: number;
+				rank?: number;
+			};
+			totalReb: {
+				value?: number;
+				rank?: number;
+			};
+			assists: {
+				value?: number;
+				rank?: number;
+			};
+			steals: {
+				value?: number;
+				rank?: number;
+			};
+			blocks: {
+				value?: number;
+				rank?: number;
+			};
+			turnovers: {
+				value?: number;
+				rank?: number;
+			};
+			personalFouls: {
+				value?: number;
+				rank?: number;
+			};
+			points: {
+				value?: number;
+				rank?: number;
+			};
+		};
+	};
+	_id: mongoose.Types.ObjectId;
+};
 
 /**
  * Mongoose Document type
@@ -2496,32 +2416,133 @@ export interface Team2SeasonDocument extends mongoose.Types.EmbeddedDocument {
  * const Team2 = mongoose.model<Team2Document, Team2Model>("Team2", Team2Schema);
  * ```
  */
-export interface Team2Document
-  extends mongoose.Document<mongoose.Types.ObjectId>,
-    Team2Methods {
-  meta: {
-    helpers: {
-      nbaTeamId?: string;
-      espnTeamId?: string;
-    };
-    isComplete: boolean;
-    missingData: mongoose.Types.Array<string>;
-  };
-  infoCommon: {
-    city: string;
-    state: string;
-    country: string;
-    name: string;
-    allNames: mongoose.Types.Array<string>;
-    abbreviation: string;
-    nickname?: string;
-    conference?: string;
-    division?: string;
-    code: string;
-    slug: string;
-    minYear: string;
-    maxYear: string;
-  };
-  seasons: mongoose.Types.DocumentArray<Team2SeasonDocument>;
-  _id: mongoose.Types.ObjectId;
+export type Team2Document = mongoose.Document<mongoose.Types.ObjectId, Team2Queries> &
+	Team2Methods & {
+		meta: {
+			helpers: {
+				nbaTeamId?: string;
+				espnTeamId?: string;
+			};
+			isComplete: boolean;
+			missingData: mongoose.Types.Array<string>;
+		};
+		infoCommon: {
+			city: string;
+			state: string;
+			country: string;
+			name: string;
+			allNames: mongoose.Types.Array<string>;
+			abbreviation: string;
+			nickname?: string;
+			conference?: string;
+			division?: string;
+			code: string;
+			slug: string;
+			minYear: string;
+			maxYear: string;
+		};
+		seasons: mongoose.Types.DocumentArray<Team2SeasonDocument>;
+		_id: mongoose.Types.ObjectId;
+	};
+
+/**
+ * Check if a property on a document is populated:
+ * ```
+ * import { IsPopulated } from "../interfaces/mongoose.gen.ts"
+ *
+ * if (IsPopulated<UserDocument["bestFriend"]>) { ... }
+ * ```
+ */
+export function IsPopulated<T>(doc: T | mongoose.Types.ObjectId): doc is T {
+	return doc instanceof mongoose.Document;
+}
+
+/**
+ * Helper type used by `PopulatedDocument`. Returns the parent property of a string
+ * representing a nested property (i.e. `friend.user` -> `friend`)
+ */
+type ParentProperty<T> = T extends `${infer P}.${string}` ? P : never;
+
+/**
+ * Helper type used by `PopulatedDocument`. Returns the child property of a string
+ * representing a nested property (i.e. `friend.user` -> `user`).
+ */
+type ChildProperty<T> = T extends `${string}.${infer C}` ? C : never;
+
+/**
+ * Helper type used by `PopulatedDocument`. Removes the `ObjectId` from the general union type generated
+ * for ref documents (i.e. `mongoose.Types.ObjectId | UserDocument` -> `UserDocument`)
+ */
+type PopulatedProperty<Root, T extends keyof Root> = Omit<Root, T> & {
+	[ref in T]: Root[T] extends mongoose.Types.Array<infer U>
+		? mongoose.Types.Array<Exclude<U, mongoose.Types.ObjectId>>
+		: Exclude<Root[T], mongoose.Types.ObjectId>;
+};
+
+/**
+ * Populate properties on a document type:
+ * ```
+ * import { PopulatedDocument } from "../interfaces/mongoose.gen.ts"
+ *
+ * function example(user: PopulatedDocument<UserDocument, "bestFriend">) {
+ *   console.log(user.bestFriend._id) // typescript knows this is populated
+ * }
+ * ```
+ */
+export type PopulatedDocument<DocType, T> = T extends keyof DocType
+	? PopulatedProperty<DocType, T>
+	: ParentProperty<T> extends keyof DocType
+	? Omit<DocType, ParentProperty<T>> & {
+			[ref in ParentProperty<T>]: DocType[ParentProperty<T>] extends mongoose.Types.Array<infer U>
+				? mongoose.Types.Array<
+						ChildProperty<T> extends keyof U
+							? PopulatedProperty<U, ChildProperty<T>>
+							: PopulatedDocument<U, ChildProperty<T>>
+				  >
+				: ChildProperty<T> extends keyof DocType[ParentProperty<T>]
+				? PopulatedProperty<DocType[ParentProperty<T>], ChildProperty<T>>
+				: PopulatedDocument<DocType[ParentProperty<T>], ChildProperty<T>>;
+	  }
+	: DocType;
+
+/**
+ * Helper types used by the populate overloads
+ */
+type Unarray<T> = T extends Array<infer U> ? U : T;
+type Modify<T, R> = Omit<T, keyof R> & R;
+
+/**
+ * Augment mongoose with Query.populate overloads
+ */
+declare module 'mongoose' {
+	interface Query<ResultType, DocType extends Document, THelpers = {}> {
+		populate<T extends string>(
+			path: T,
+			select?: string | any,
+			model?: string | Model<any, THelpers>,
+			match?: any
+		): Query<
+			ResultType extends Array<DocType>
+				? Array<PopulatedDocument<Unarray<ResultType>, T>>
+				: ResultType extends DocType
+				? PopulatedDocument<Unarray<ResultType>, T>
+				: ResultType,
+			DocType,
+			THelpers
+		> &
+			THelpers;
+
+		populate<T extends string>(
+			options: Modify<PopulateOptions, { path: T }> | Array<PopulateOptions>
+		): Query<
+			ResultType extends Array<DocType>
+				? Array<PopulatedDocument<Unarray<ResultType>, T>>
+				: ResultType extends DocType
+				? PopulatedDocument<Unarray<ResultType>, T>
+				: ResultType,
+			DocType,
+			THelpers
+		> &
+			THelpers;
+	}
 }
