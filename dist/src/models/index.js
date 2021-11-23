@@ -1,17 +1,15 @@
-'use strict';
-Object.defineProperty(exports, '__esModule', { value: true });
-exports.Team2 = exports.Game2 = void 0;
-const Game2_1 = require('./Game2');
-Object.defineProperty(exports, 'Game2', {
-	enumerable: true,
-	get: function () {
-		return Game2_1.Game2;
-	}
-});
-const Team2_1 = require('./Team2');
-Object.defineProperty(exports, 'Team2', {
-	enumerable: true,
-	get: function () {
-		return Team2_1.Team2;
-	}
-});
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Coach2 = exports.Official2 = exports.League = exports.Player2 = exports.Team2 = exports.Game2 = void 0;
+const Game2_1 = require("./Game2");
+Object.defineProperty(exports, "Game2", { enumerable: true, get: function () { return Game2_1.Game2; } });
+const Team2_1 = require("./Team2");
+Object.defineProperty(exports, "Team2", { enumerable: true, get: function () { return Team2_1.Team2; } });
+const Player2_1 = require("./Player2");
+Object.defineProperty(exports, "Player2", { enumerable: true, get: function () { return Player2_1.Player2; } });
+const League_1 = require("./League");
+Object.defineProperty(exports, "League", { enumerable: true, get: function () { return League_1.League; } });
+const Official2_1 = require("./Official2");
+Object.defineProperty(exports, "Official2", { enumerable: true, get: function () { return Official2_1.Official2; } });
+const Coach2_1 = require("./Coach2");
+Object.defineProperty(exports, "Coach2", { enumerable: true, get: function () { return Coach2_1.Coach2; } });
