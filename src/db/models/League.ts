@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { LeagueDocument, LeagueModel, LeagueSchema } from '../interfaces/mongoose.gen';
+import { LeagueDocument, LeagueModel, LeagueSchema } from '../../interfaces/mongoose.gen';
 
 const LeagueSchema = new mongoose.Schema({
 	name: { type: String, required: true, unique: true },

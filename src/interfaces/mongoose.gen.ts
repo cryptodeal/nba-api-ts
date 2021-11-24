@@ -449,7 +449,7 @@ export type Game2 = {
 	country?: string;
 	officials: Game2Official[];
 	home: {
-		team?: Team2['_id'] | Team2;
+		team: Team2['_id'] | Team2;
 		score?: number;
 		leaders: {
 			points: {
@@ -508,7 +508,7 @@ export type Game2 = {
 		players: Game2HomePlayer[];
 	};
 	visitor: {
-		team?: Team2['_id'] | Team2;
+		team: Team2['_id'] | Team2;
 		score?: number;
 		leaders: {
 			points: {
@@ -905,7 +905,7 @@ export type Game2Document = mongoose.Document<mongoose.Types.ObjectId, Game2Quer
 		country?: string;
 		officials: mongoose.Types.DocumentArray<Game2OfficialDocument>;
 		home: {
-			team?: Team2Document['_id'] | Team2Document;
+			team: Team2Document['_id'] | Team2Document;
 			score?: number;
 			leaders: {
 				points: {
@@ -964,7 +964,7 @@ export type Game2Document = mongoose.Document<mongoose.Types.ObjectId, Game2Quer
 			players: mongoose.Types.DocumentArray<Game2HomePlayerDocument>;
 		};
 		visitor: {
-			team?: Team2Document['_id'] | Team2Document;
+			team: Team2Document['_id'] | Team2Document;
 			score?: number;
 			leaders: {
 				points: {

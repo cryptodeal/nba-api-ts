@@ -1,5 +1,10 @@
 import mongoose from 'mongoose';
-import { Game2Document, Game2Model, Game2Schema, Game2Queries } from '../interfaces/mongoose.gen';
+import {
+	Game2Document,
+	Game2Model,
+	Game2Schema,
+	Game2Queries
+} from '../../interfaces/mongoose.gen';
 
 const Game2Schema: Game2Schema = new mongoose.Schema({
 	meta: {
@@ -29,7 +34,7 @@ const Game2Schema: Game2Schema = new mongoose.Schema({
 		}
 	],
 	home: {
-		team: { type: mongoose.Schema.Types.ObjectId, ref: 'Team2', index: true },
+		team: { type: mongoose.Schema.Types.ObjectId, ref: 'Team2', index: true, required: true },
 		score: { type: Number },
 		leaders: {
 			points: {
@@ -213,7 +218,7 @@ const Game2Schema: Game2Schema = new mongoose.Schema({
 		]
 	},
 	visitor: {
-		team: { type: mongoose.Schema.Types.ObjectId, ref: 'Team2', index: true },
+		team: { type: mongoose.Schema.Types.ObjectId, ref: 'Team2', index: true, required: true },
 		score: { type: Number },
 		leaders: {
 			points: {
