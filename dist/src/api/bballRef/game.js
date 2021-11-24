@@ -12,6 +12,7 @@ const utc_1 = __importDefault(require("dayjs/plugin/utc"));
 const timezone_1 = __importDefault(require("dayjs/plugin/timezone"));
 dayjs_1.default.extend(utc_1.default);
 dayjs_1.default.extend(timezone_1.default);
+/** Useful Interfaces */
 class ParsedOfficial {
     constructor(name, url, jerseyNumber) {
         this.name = name;
@@ -52,7 +53,7 @@ class BoxScoreQuery {
     }
 }
 /** Boxscore Parsers */
-const parseGameOfficials = ($) => {
+const parseOfficials = ($) => {
     const officials = [];
     $('strong:contains("Officials:")')
         .parent()
@@ -144,6 +145,13 @@ const fetchTeamBasicData = ($, team, period) => {
     });
     return tableData;
 };
+const getTeamBasicData = ($, team, periods) => {
+    const allData = [];
+    for (let i = 0; i < periods.length; i++) {
+        allData.push(fetchTeamBasicData($, team, periods[i]));
+    }
+    return allData;
+};
 const fetchBasicData = ($, team, period) => {
     const tableData = [];
     $(`#box-${team}-${period}-basic`).each(function (i, table) {
@@ -169,16 +177,13 @@ const fetchBasicData = ($, team, period) => {
                             if (url)
                                 rowData[k] = tempVal;
                         });
-                        //console.log($(cell).text().trim())
                     });
                     $(row)
                         .find('td')
                         .each(function (k, cell) {
                         rowData[k + 1] = $(cell).text().trim();
-                        //console.log($(cell).text().trim())
                     });
                     tableData.push(rowData);
-                    //console.log(rowData)
                 }
             });
         });
@@ -205,14 +210,209 @@ const getBasicData = ($, team, periods) => {
     }
     return allData;
 };
+const getAdvancedData = ($, team) => {
+    const tableData = [];
+    $(`#box-${team}-game-advanced`).each(function (i, table) {
+        $(table)
+            .find('tbody')
+            .each(function (i, tbody) {
+            $(tbody)
+                .find('tr')
+                .each(function (j, row) {
+                if (j !== 5) {
+                    const rowData = [];
+                    $(row)
+                        .find('th')
+                        .each(function (k, cell) {
+                        rowData[k] = $(cell).text().trim();
+                    });
+                    $(row)
+                        .find('td')
+                        .each(function (k, cell) {
+                        rowData[k + 1] = $(cell).text().trim();
+                    });
+                    tableData.push(rowData);
+                }
+            });
+        });
+    });
+    return tableData;
+};
+const getTeamAdvancedData = ($, team) => {
+    const tableData = [];
+    $(`#box-${team}-game-advanced`).each(function (i, table) {
+        $(table)
+            .find('tfoot')
+            .each(function (i, tfoot) {
+            $(tfoot)
+                .find('tr')
+                .each(function (j, row) {
+                $(row)
+                    .find('td')
+                    .each(function (k, cell) {
+                    if (k !== 0 && k !== 12 && k < 15) {
+                        tableData.push($(cell).text().trim());
+                    }
+                });
+            });
+        });
+    });
+    return tableData;
+};
+const parseInactivePlayers = ($, homeAbbrev, visitorAbbrev) => {
+    const inactive = {
+        home: [],
+        visitor: []
+    };
+    const selected = $('strong:contains("Inactive:")').parent();
+    if (selected) {
+        const [vSplit1, hSplit1] = selected.text().split(homeAbbrev);
+        if (hSplit1?.length) {
+            hSplit1.split(',').map((p) => {
+                if (p.trim() !== 'None') {
+                    const player = {
+                        name: p.trim(),
+                        url: undefined
+                    };
+                    inactive.home.push(player);
+                }
+            });
+        }
+        if (vSplit1.length) {
+            vSplit1
+                .split(visitorAbbrev)[1]
+                .split(',')
+                .map((p) => {
+                if (p.trim() !== 'None') {
+                    const player = {
+                        name: p.trim(),
+                        url: undefined
+                    };
+                    inactive.visitor.push(player);
+                }
+            });
+        }
+        selected.find('a').each(function (i, link) {
+            const name = $(link).text().trim();
+            const href = $(link).attr('href')?.split('/');
+            const homeIndex = inactive.home.findIndex((p) => p.name === name);
+            const visitorIndex = inactive.visitor.findIndex((p) => p.name === name);
+            if (href !== undefined) {
+                if (homeIndex !== -1) {
+                    if (href !== undefined) {
+                        inactive.home[homeIndex].url = href[href.length - 1].split('.')[0];
+                    }
+                }
+                else {
+                    inactive.visitor[visitorIndex].url = href[href.length - 1].split('.')[0];
+                }
+            }
+        });
+    }
+    return inactive;
+};
+const findFourFactors = ($) => {
+    $(`#all_four_factors`).each(function (i, div) {
+        $(div)
+            .contents()
+            .each(function () {
+            if (this.type === 'comment') {
+                const comment = this.data;
+                if (comment)
+                    $ = cheerio_1.default.load(comment);
+            }
+        });
+    });
+    return $;
+};
+const getFourFactor = ($) => {
+    $ = findFourFactors($);
+    const tableData = {
+        home: {
+            pace: undefined,
+            ftPerFga: undefined
+        },
+        visitor: {
+            pace: undefined,
+            ftPerFga: undefined
+        }
+    };
+    $(`#div_four_factors`).each(function (i, table) {
+        $(table)
+            .find('tbody')
+            .each(function (i, tbody) {
+            $(tbody)
+                .find('tr')
+                .each(function (j, row) {
+                const rowData = [];
+                $(row)
+                    .find('td')
+                    .each(function (k, cell) {
+                    rowData.push($(cell).text().trim());
+                });
+                const [pace, , , , ftPerFga] = rowData;
+                console.log('Data: ', rowData);
+                tableData[j == 0 ? 'visitor' : 'home'].pace = pace;
+                tableData[j == 0 ? 'visitor' : 'home'].ftPerFga = ftPerFga;
+            });
+        });
+    });
+    return tableData;
+};
+const parseLocale = ($) => {
+    if ($('.scorebox_meta').find('div').length > 2) {
+        const [arena, city, state] = $('.scorebox_meta')
+            .find('div:nth-child(2)')
+            .text()
+            .trim()
+            .split(',');
+        const tempLocale = {};
+        if (arena && arena !== '')
+            tempLocale.arena = arena.trim();
+        if (city && city !== '')
+            tempLocale.city = city.trim();
+        if (state && state !== '')
+            tempLocale.state = state.trim();
+        return tempLocale;
+    }
+    return false;
+};
 const getBoxScore = async (game) => {
     const { date, homeAbbrev, visitorAbbrev, isValid } = new BoxScoreQuery(game);
-    if (isValid && homeAbbrev) {
+    if (isValid && homeAbbrev && visitorAbbrev) {
         const $ = await (0, fetchers_1.loadBoxScorePage)(date, homeAbbrev);
-        //const officials = parseGameOfficials($);
-        //const [visitorLineScore, homeLineScore] = parseLineScore($);
-        const periods = parseGamePeriods($);
-        return getBasicData($, homeAbbrev, periods);
+        const boxScore = {
+            home: {},
+            visitor: {},
+            periods: parseGamePeriods($)
+        };
+        const [visitorLineScore, homeLineScore] = parseLineScore($);
+        const inactive = parseInactivePlayers($, homeAbbrev, visitorAbbrev);
+        const officials = parseOfficials($);
+        const fourFactors = getFourFactor($);
+        const locale = parseLocale($);
+        /** Set data for home team */
+        boxScore.home.lineScore = homeLineScore;
+        boxScore.home.basic = getBasicData($, homeAbbrev, boxScore.periods);
+        boxScore.home.advanced = getAdvancedData($, homeAbbrev);
+        boxScore.home.teamBasic = getTeamBasicData($, homeAbbrev, boxScore.periods);
+        boxScore.home.teamAdvanced = getTeamAdvancedData($, homeAbbrev);
+        boxScore.home.inactive = inactive.home;
+        boxScore.home.fourFactors = fourFactors.home;
+        /** Set data for visitor team */
+        boxScore.visitor.lineScore = visitorLineScore;
+        boxScore.visitor.basic = getBasicData($, visitorAbbrev, boxScore.periods);
+        boxScore.visitor.advanced = getAdvancedData($, visitorAbbrev);
+        boxScore.visitor.teamBasic = getTeamBasicData($, visitorAbbrev, boxScore.periods);
+        boxScore.visitor.teamAdvanced = getTeamAdvancedData($, visitorAbbrev);
+        boxScore.visitor.inactive = inactive.visitor;
+        boxScore.visitor.fourFactors = fourFactors.visitor;
+        /** Set non-team specific data */
+        if (officials.length)
+            boxScore.officials = officials;
+        if (locale !== undefined && typeof locale !== 'boolean')
+            boxScore.locale = locale;
+        return boxScore;
     }
     return;
 };
