@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { Player2Document, Player2Model, Player2Schema } from '../../interfaces/mongoose.gen';
+import { Player2Document, Player2Model, Player2Schema } from '../interfaces/mongoose.gen';
 
 const Player2Schema = new mongoose.Schema({
 	meta: {

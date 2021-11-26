@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { Team2Document, Team2Model, Team2Schema } from '../../interfaces/mongoose.gen';
+import { Team2Document, Team2Model, Team2Schema } from '../interfaces/mongoose.gen';
 
 const Team2Schema = new mongoose.Schema({
 	meta: {

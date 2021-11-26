@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { Official2Document, Official2Model, Official2Schema } from '../../interfaces/mongoose.gen';
+import { Official2Document, Official2Model, Official2Schema } from '../interfaces/mongoose.gen';
 
 const Official2Schema: Official2Schema = new mongoose.Schema({
 	meta: {

@@ -1,10 +1,5 @@
 import mongoose from 'mongoose';
-import {
-	Game2Document,
-	Game2Model,
-	Game2Schema,
-	Game2Queries
-} from '../../interfaces/mongoose.gen';
+import { Game2Document, Game2Model, Game2Schema, Game2Queries } from '../interfaces/mongoose.gen';
 
 const Game2Schema: Game2Schema = new mongoose.Schema({
 	meta: {

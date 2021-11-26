@@ -429,6 +429,7 @@ const getBoxScore = async (game) => {
                 await (0, utils_1.setOfficialId)(boxScoreResult.officials[k]);
             }
         }
+        boxScoreResult.setTeamLeaders();
         return boxScoreResult;
     }
     return;

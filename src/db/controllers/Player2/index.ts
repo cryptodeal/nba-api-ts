@@ -1,7 +1,6 @@
 import { Player2 } from '../../models/Player2';
-import { Player2Document } from '../../../interfaces/mongoose.gen';
+import { Player2Document } from '../../interfaces/mongoose.gen';
 import { BoxScorePlayer } from '../../../api/bballRef/games/utils';
-import type { PlayerMetaData } from '../../../api/bballRef/player';
 import { getPlayerData } from '../../../api/bballRef/player';
 
 export const addOrFindPlayer = async (playerData: BoxScorePlayer) => {

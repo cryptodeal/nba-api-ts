@@ -1,8 +1,6 @@
 import { loadBoxScorePage } from '../fetchers';
-import { Types } from 'mongoose';
 import cheerio from 'cheerio';
 import { Game2Document, IsPopulated } from '../../../db/interfaces/mongoose.gen';
-import { BoxScore, setPlayerId, setOfficialId } from './utils';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -10,26 +8,17 @@ dayjs.extend(utc);
 dayjs.extend(timezone);
 
 /** Useful Interfaces */
-export class ParsedOfficial {
-	public _id?: Types.ObjectId;
-	constructor(public name: string, public url: string, public jerseyNumber?: string) {
+class ParsedOfficial {
+	constructor(public name?: string, public url?: string, public jerseyNumber?: string) {
 		this.name = name;
 		this.url = url;
 		this.jerseyNumber = jerseyNumber;
-	}
-
-	set id(val) {
-		this._id = val;
-	}
-
-	get id() {
-		return this._id;
 	}
 }
 
 interface InactivePlayer {
 	name: string;
-	url: string;
+	url: string | undefined;
 }
 
 interface InactivePlayers {
@@ -37,39 +26,38 @@ interface InactivePlayers {
 	visitor: InactivePlayer[];
 }
 
-export type FourFactorData = {
+interface FourFactorData {
 	pace: string | undefined;
 	ftPerFga: string | undefined;
-};
+}
 
 interface FourFactors {
 	home: FourFactorData;
 	visitor: FourFactorData;
 }
 
-export type BoxScoreLocale = {
+interface Locale {
 	arena?: string | undefined;
 	city?: string | undefined;
 	state?: string | undefined;
-	country?: string | undefined;
-};
+}
 
-export type BoxScoreTeam = {
+interface BoxScoreTeam {
 	teamBasic?: string[][];
 	teamAdvanced?: string[];
-	basic?: [string[], ...string[]][][];
+	basic?: (string | string[])[][][];
 	advanced?: string[][];
 	lineScore?: string[];
 	inactive?: InactivePlayer[];
 	fourFactors?: FourFactorData;
-};
-export type BoxScoreData = {
+}
+interface BoxScore {
 	home: BoxScoreTeam;
 	visitor: BoxScoreTeam;
 	periods: string[];
 	officials?: ParsedOfficial[];
-	locale?: BoxScoreLocale;
-};
+	locale?: Locale;
+}
 
 /** Query Helpers */
 class BoxScoreQuery {
@@ -113,13 +101,12 @@ const parseOfficials = ($: cheerio.Root) => {
 		.parent()
 		.find('a')
 		.each(function (i, link) {
+			let url: string | undefined;
 			const href = $(link).attr('href')?.split('/');
-			if (href) {
-				const url = href[href.length - 1].split('.')[0];
-				const name = $(link).text().trim();
-				const official = new ParsedOfficial(name, url);
-				officials.push(official);
-			}
+			if (href) url = href[href.length - 1].split('.')[0];
+			const name = $(link).text().trim();
+			const official = new ParsedOfficial(name, url);
+			officials.push(official);
 		});
 	return officials;
 };
@@ -211,12 +198,8 @@ const getTeamBasicData = ($: cheerio.Root, team: string, periods: string[]): str
 	return allData;
 };
 
-const fetchBasicData = (
-	$: cheerio.Root,
-	team: string,
-	period: string
-): [string[], ...string[]][] => {
-	const tableData: [string[], ...string[]][] = [];
+const fetchBasicData = ($: cheerio.Root, team: string, period: string): (string | string[])[][] => {
+	const tableData: (string | string[])[][] = [];
 	$(`#box-${team}-${period}-basic`).each(function (i, table) {
 		$(table)
 			.find('tbody')
@@ -225,17 +208,18 @@ const fetchBasicData = (
 					.find('tr')
 					.each(function (j, row) {
 						if (j !== 5) {
-							const rowData: [string[], ...Array<string>] = [[]];
+							const rowData: (string | string[])[] = [];
 							$(row)
 								.find('th')
 								.each(function (k, cell) {
-									rowData[0].push($(cell).text().trim());
+									const tempVal = [$(cell).text().trim()];
 									$(cell)
 										.find('a')
 										.each(function (l, link) {
 											const href = $(link).attr('href')?.split('/');
 											const url = href?.[href.length - 1].split('.')[0];
-											if (url) rowData[0].push(url);
+											if (url) tempVal.push(url);
+											if (url) rowData[k] = tempVal;
 										});
 								});
 							$(row)
@@ -255,20 +239,20 @@ const getBasicData = (
 	$: cheerio.Root,
 	team: string,
 	periods: string[]
-): [string[], ...string[]][][] => {
-	const allData: [string[], ...string[]][][] = [];
+): (string | string[])[][][] => {
+	const allData: (string | string[])[][][] = [];
 	for (let i = 0; i < periods.length; i++) {
 		//if no data in allData, add initial data (totals)
 		if (i == 0) {
 			const initData = fetchBasicData($, team, periods[i]);
-			initData.forEach((playerData: [string[], ...string[]]) => {
+			initData.forEach((playerData: (string | string[])[]) => {
 				allData.push([playerData]);
 			});
 		}
 		//if data in allData, merge with new data
 		else {
 			const periodData = fetchBasicData($, team, periods[i]);
-			periodData.forEach((playerData: [string[], ...string[]], j: number) => {
+			periodData.forEach((playerData: (string | string[])[], j: number) => {
 				allData[j][i] = playerData;
 			});
 		}
@@ -344,7 +328,7 @@ const parseInactivePlayers = (
 				if (p.trim() !== 'None') {
 					const player: InactivePlayer = {
 						name: p.trim(),
-						url: ''
+						url: undefined
 					};
 					inactive.home.push(player);
 				}
@@ -359,7 +343,7 @@ const parseInactivePlayers = (
 					if (p.trim() !== 'None') {
 						const player: InactivePlayer = {
 							name: p.trim(),
-							url: ''
+							url: undefined
 						};
 						inactive.visitor.push(player);
 					}
@@ -433,14 +417,14 @@ const getFourFactor = ($: cheerio.Root): FourFactors => {
 	return tableData;
 };
 
-const parseLocale = ($: cheerio.Root): boolean | BoxScoreLocale => {
+const parseLocale = ($: cheerio.Root): boolean | Locale => {
 	if ($('.scorebox_meta').find('div').length > 2) {
 		const [arena, city, state] = $('.scorebox_meta')
 			.find('div:nth-child(2)')
 			.text()
 			.trim()
 			.split(',');
-		const tempLocale: BoxScoreLocale = {};
+		const tempLocale: Locale = {};
 		if (arena && arena !== '') tempLocale.arena = arena.trim();
 		if (city && city !== '') tempLocale.city = city.trim();
 		if (state && state !== '') tempLocale.state = state.trim();
@@ -449,11 +433,11 @@ const parseLocale = ($: cheerio.Root): boolean | BoxScoreLocale => {
 	return false;
 };
 
-const getBoxScore = async (game: Game2Document): Promise<void | BoxScore> => {
+export const getBoxScore = async (game: Game2Document): Promise<void | BoxScore> => {
 	const { date, homeAbbrev, visitorAbbrev, isValid } = new BoxScoreQuery(game);
 	if (isValid && homeAbbrev && visitorAbbrev) {
 		const $ = await loadBoxScorePage(date, homeAbbrev);
-		const boxScore: BoxScoreData = {
+		const boxScore: BoxScore = {
 			home: {},
 			visitor: {},
 			periods: parseGamePeriods($)
@@ -484,23 +468,7 @@ const getBoxScore = async (game: Game2Document): Promise<void | BoxScore> => {
 		/** Set non-team specific data */
 		if (officials.length) boxScore.officials = officials;
 		if (locale !== undefined && typeof locale !== 'boolean') boxScore.locale = locale;
-		const boxScoreResult = new BoxScore(boxScore);
-		for (let i = 0; i < boxScoreResult.home.players.length; i++) {
-			await setPlayerId(boxScoreResult.home.players[i]);
-		}
-		for (let j = 0; j < boxScoreResult.visitor.players.length; j++) {
-			await setPlayerId(boxScoreResult.visitor.players[j]);
-		}
-		if (boxScoreResult.officials) {
-			for (let k = 0; k < boxScoreResult.officials?.length; k++) {
-				await setOfficialId(boxScoreResult.officials[k]);
-			}
-		}
-		boxScoreResult.setTeamLeaders();
-
-		return boxScoreResult;
+		return boxScore;
 	}
 	return;
 };
-
-export default getBoxScore;

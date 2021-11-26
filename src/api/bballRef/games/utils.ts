@@ -76,9 +76,19 @@ interface TeamStats {
 	periods: TeamStatPeriod[];
 }
 
+interface StatLeaders {
+	statValue: number;
+	leader: Types.ObjectId[];
+}
+
 interface BoxScoreTeam2 {
 	stats: TeamStats;
 	players: BoxScorePlayer[];
+	leaders: {
+		points: StatLeaders;
+		assists: StatLeaders;
+		rebounds: StatLeaders;
+	};
 }
 
 interface PlayerMeta {
@@ -614,7 +624,21 @@ export class BoxScore {
 			totals: {},
 			periods: []
 		},
-		players: []
+		players: [],
+		leaders: {
+			points: {
+				statValue: 0,
+				leader: []
+			},
+			assists: {
+				statValue: 0,
+				leader: []
+			},
+			rebounds: {
+				statValue: 0,
+				leader: []
+			}
+		}
 	};
 	/**
 	 * TODO: Add home.players
@@ -624,7 +648,21 @@ export class BoxScore {
 			totals: {},
 			periods: []
 		},
-		players: []
+		players: [],
+		leaders: {
+			points: {
+				statValue: 0,
+				leader: []
+			},
+			assists: {
+				statValue: 0,
+				leader: []
+			},
+			rebounds: {
+				statValue: 0,
+				leader: []
+			}
+		}
 	};
 
 	constructor(boxScore: BoxScoreData) {
@@ -693,6 +731,99 @@ export class BoxScore {
 			teamStats.periods.push(period);
 		}
 		return teamStats;
+	}
+
+	public setTeamLeaders() {
+		if (this.home.players.length && this.visitor.players.length) {
+			const homePlayers = this.home.players;
+			const visitorPlayers = this.visitor.players;
+
+			for (let i = 0; i < homePlayers.length; i++) {
+				const player = homePlayers[i];
+				if (player.stats) {
+					if (player.stats.totals.points) {
+						if (
+							this.home.leaders.points.statValue
+								? player.stats.totals.points > this.home.leaders.points.statValue
+								: player.stats.totals.points > 0
+						) {
+							this.home.leaders.points.statValue = player.stats.totals.points;
+							if (player.id) this.home.leaders.points.leader = [player.id];
+						} else if (player.stats.totals.points === this.home.leaders.points.statValue) {
+							if (player.id) this.home.leaders.points.leader.push(player.id);
+						}
+					}
+					if (player.stats.totals.assists) {
+						if (
+							this.home.leaders.assists.statValue
+								? player.stats?.totals.assists > this.home.leaders.assists.statValue
+								: player.stats
+						) {
+							this.home.leaders.assists.statValue = player.stats.totals.assists;
+							if (player.id) this.home.leaders.assists.leader = [player.id];
+						} else if (player.stats.totals.assists === this.home.leaders.assists.statValue) {
+							if (player.id) this.home.leaders.assists.leader.push(player.id);
+						}
+					}
+
+					if (player.stats.totals.totalReb) {
+						if (
+							this.home.leaders.rebounds.statValue
+								? player.stats.totals.totalReb > this.home.leaders.rebounds.statValue
+								: player.stats.totals.totalReb > 0
+						) {
+							this.home.leaders.rebounds.statValue = player.stats.totals.totalReb;
+							if (player.id) this.home.leaders.rebounds.leader = [player.id];
+						} else if (player.stats?.totals.totalReb === this.home.leaders.rebounds.statValue) {
+							if (player.id) this.home.leaders.rebounds.leader.push(player.id);
+						}
+					}
+				}
+			}
+
+			for (let i = 0; i < visitorPlayers.length; i++) {
+				const player = visitorPlayers[i];
+				if (player.stats) {
+					if (player.stats.totals.points) {
+						if (
+							this.visitor.leaders.points.statValue
+								? player.stats.totals.points > this.visitor.leaders.points.statValue
+								: player.stats.totals.points > 0
+						) {
+							this.visitor.leaders.points.statValue = player.stats.totals.points;
+							if (player.id) this.visitor.leaders.points.leader = [player.id];
+						} else if (player.stats.totals.points === this.visitor.leaders.points.statValue) {
+							if (player.id) this.visitor.leaders.points.leader.push(player.id);
+						}
+					}
+					if (player.stats.totals.assists) {
+						if (
+							this.visitor.leaders.assists.statValue
+								? player.stats?.totals.assists > this.visitor.leaders.assists.statValue
+								: player.stats
+						) {
+							this.visitor.leaders.assists.statValue = player.stats.totals.assists;
+							if (player.id) this.visitor.leaders.assists.leader = [player.id];
+						} else if (player.stats.totals.assists === this.visitor.leaders.assists.statValue) {
+							if (player.id) this.visitor.leaders.assists.leader.push(player.id);
+						}
+					}
+
+					if (player.stats.totals.totalReb) {
+						if (
+							this.visitor.leaders.rebounds.statValue
+								? player.stats.totals.totalReb > this.visitor.leaders.rebounds.statValue
+								: player.stats.totals.totalReb > 0
+						) {
+							this.visitor.leaders.rebounds.statValue = player.stats.totals.totalReb;
+							if (player.id) this.visitor.leaders.rebounds.leader = [player.id];
+						} else if (player.stats?.totals.totalReb === this.visitor.leaders.rebounds.statValue) {
+							if (player.id) this.visitor.leaders.rebounds.leader.push(player.id);
+						}
+					}
+				}
+			}
+		}
 	}
 
 	private setTeamStatPeriods(
