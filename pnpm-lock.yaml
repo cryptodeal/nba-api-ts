@@ -13,6 +13,8 @@ specifiers:
   eslint-config-prettier: ^8.3.0
   eslint-plugin-prettier: ^4.0.0
   husky: ^7.0.4
+  iso-3166-1-alpha-2: ^1.0.0
+  iso-3166-1-ts: ^0.2.2
   lint-staged: ^12.1.2
   mongoose: ^6.0.13
   mongoose-tsgen: ^8.4.6
@@ -26,6 +28,8 @@ dependencies:
   cross-fetch: 3.1.4
   dayjs: 1.10.7
   dotenv: 10.0.0
+  iso-3166-1-alpha-2: 1.0.0
+  iso-3166-1-ts: 0.2.2
   mongoose: 6.0.13
   mongoose-tsgen: 8.4.6_mongoose@6.0.13+typescript@4.5.2
   typescript: 4.5.2
@@ -1307,6 +1311,17 @@ packages:
   /isexe/2.0.0:
     resolution: {integrity: sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=}
 
+  /iso-3166-1-alpha-2/1.0.0:
+    resolution: {integrity: sha1-vJ4LuU5YTfVGipMpl6KFUuJvl6w=}
+    dependencies:
+      mout: 0.11.1
+    dev: false
+
+  /iso-3166-1-ts/0.2.2:
+    resolution: {integrity: sha512-5KJp6m2Y2tW8bekRpy0Vckob8VqsQTTy2BQQ1o2opXsr30t1MD8M/OvOZzIRBR3DcELCnkpnIXoQbM+Hp5U26A==}
+    engines: {node: '>=10'}
+    dev: false
+
   /js-yaml/3.14.1:
     resolution: {integrity: sha512-okMH7OXXJ7YrN9Ok3/SXrnu4iX9yOk+25nqX4imS2npuvTYDmo/QEZoqwZkYaIDk3jVvBOTOIEgEhaLOynBS9g==}
     hasBin: true
@@ -1530,6 +1545,10 @@ packages:
       sliced: 1.0.1
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /mout/0.11.1:
+    resolution: {integrity: sha1-ujYR318OWx/7/QEWa48C0fX6K5k=}
     dev: false
 
   /mpath/0.8.4:

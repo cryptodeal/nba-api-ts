@@ -23,6 +23,12 @@ class ParsedOfficial {
         this.url = url;
         this.jerseyNumber = jerseyNumber;
     }
+    set id(val) {
+        this._id = val;
+    }
+    get id() {
+        return this._id;
+    }
 }
 exports.ParsedOfficial = ParsedOfficial;
 /** Query Helpers */
@@ -272,7 +278,7 @@ const parseInactivePlayers = ($, homeAbbrev, visitorAbbrev) => {
                 if (p.trim() !== 'None') {
                     const player = {
                         name: p.trim(),
-                        url: undefined
+                        url: ''
                     };
                     inactive.home.push(player);
                 }
@@ -286,7 +292,7 @@ const parseInactivePlayers = ($, homeAbbrev, visitorAbbrev) => {
                 if (p.trim() !== 'None') {
                     const player = {
                         name: p.trim(),
-                        url: undefined
+                        url: ''
                     };
                     inactive.visitor.push(player);
                 }
@@ -411,7 +417,19 @@ const getBoxScore = async (game) => {
             boxScore.officials = officials;
         if (locale !== undefined && typeof locale !== 'boolean')
             boxScore.locale = locale;
-        return new utils_1.BoxScore(boxScore);
+        const boxScoreResult = new utils_1.BoxScore(boxScore);
+        for (let i = 0; i < boxScoreResult.home.players.length; i++) {
+            await (0, utils_1.setPlayerId)(boxScoreResult.home.players[i]);
+        }
+        for (let j = 0; j < boxScoreResult.visitor.players.length; j++) {
+            await (0, utils_1.setPlayerId)(boxScoreResult.visitor.players[j]);
+        }
+        if (boxScoreResult.officials) {
+            for (let k = 0; k < boxScoreResult.officials?.length; k++) {
+                await (0, utils_1.setOfficialId)(boxScoreResult.officials[k]);
+            }
+        }
+        return boxScoreResult;
     }
     return;
 };

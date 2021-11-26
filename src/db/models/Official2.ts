@@ -34,7 +34,7 @@ const Official2Schema: Official2Schema = new mongoose.Schema({
 
 Official2Schema.statics = {
 	findByUrl(url: string) {
-		return this.find({ 'meta.helpers.bballRef.officialUrl': url }).exec();
+		return this.findOne({ 'meta.helpers.bballRef.officialUrl': url }).exec();
 	},
 
 	findByName(name: string) {

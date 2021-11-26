@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BoxScore = exports.BoxScorePlayer = void 0;
+exports.setOfficialId = exports.setPlayerId = exports.BoxScore = exports.BoxScorePlayer = void 0;
+const Player2_1 = require("../../../db/controllers/Player2");
+const Official2_1 = require("../../../db/controllers/Official2");
 class BoxScorePlayer {
     constructor(basicData, advancedData, index, periods) {
         this.isStarter = false;
@@ -51,15 +53,13 @@ class BoxScorePlayer {
             this.active = false;
             this.fullName = basicData.name;
             this.inactive = true;
-            if (basicData.url !== undefined) {
-                this.meta = {
-                    helpers: {
-                        bballRef: {
-                            playerUrl: basicData.url
-                        }
+            this.meta = {
+                helpers: {
+                    bballRef: {
+                        playerUrl: basicData.url
                     }
-                };
-            }
+                }
+            };
         }
     }
     set id(val) {
@@ -710,3 +710,15 @@ class BoxScore {
     }
 }
 exports.BoxScore = BoxScore;
+const setPlayerId = async (player) => {
+    const result = await (0, Player2_1.addOrFindPlayer)(player);
+    if (result)
+        player.id = result._id;
+};
+exports.setPlayerId = setPlayerId;
+const setOfficialId = async (official) => {
+    const result = await (0, Official2_1.addOrFindOfficial)(official);
+    if (result)
+        official.id = result._id;
+};
+exports.setOfficialId = setOfficialId;

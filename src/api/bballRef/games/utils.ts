@@ -1,8 +1,11 @@
 import { FourFactorData, BoxScoreData, ParsedOfficial } from './boxScore';
+import { addOrFindPlayer } from '../../../db/controllers/Player2';
+import { addOrFindOfficial } from '../../../db/controllers/Official2';
+import { Types } from 'mongoose';
 
 interface InactivePlayer {
 	name: string;
-	url: string | undefined;
+	url: string;
 }
 
 interface TeamStatAdv {
@@ -172,12 +175,12 @@ interface BoxScorePlayerGameData {
 
 export class BoxScorePlayer {
 	public fullName: string;
-	public meta?: PlayerMeta;
+	public meta: PlayerMeta;
 	public active: boolean;
 	public isStarter = false;
 	public stats;
 	public inactive = false;
-	public _id?: string;
+	public _id?: Types.ObjectId;
 
 	constructor(
 		basicData: Array<[string[], ...Array<string>]> | InactivePlayer,
@@ -230,15 +233,13 @@ export class BoxScorePlayer {
 			this.active = false;
 			this.fullName = basicData.name;
 			this.inactive = true;
-			if (basicData.url !== undefined) {
-				this.meta = {
-					helpers: {
-						bballRef: {
-							playerUrl: basicData.url
-						}
+			this.meta = {
+				helpers: {
+					bballRef: {
+						playerUrl: basicData.url
 					}
-				};
-			}
+				}
+			};
 		}
 	}
 	set id(val) {
@@ -897,3 +898,13 @@ export class BoxScore {
 		return totals;
 	}
 }
+
+export const setPlayerId = async (player: BoxScorePlayer) => {
+	const result = await addOrFindPlayer(player);
+	if (result) player.id = result._id;
+};
+
+export const setOfficialId = async (official: ParsedOfficial) => {
+	const result = await addOrFindOfficial(official);
+	if (result) official.id = result._id;
+};

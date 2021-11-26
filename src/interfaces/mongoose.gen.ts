@@ -1441,7 +1441,7 @@ export type Player2 = {
 	};
 	name: {
 		full: string;
-		display: string;
+		display?: string;
 		pronunciation?: string;
 		nicknames: string[];
 		parsed: string[];
@@ -1660,7 +1660,7 @@ export type Player2Document = mongoose.Document<mongoose.Types.ObjectId, Player2
 		};
 		name: {
 			full: string;
-			display: string;
+			display?: string;
 			pronunciation?: string;
 			nicknames: mongoose.Types.Array<string>;
 			parsed: mongoose.Types.Array<string>;

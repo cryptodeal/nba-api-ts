@@ -1,7 +1,8 @@
 import { loadBoxScorePage } from '../fetchers';
+import { Types } from 'mongoose';
 import cheerio from 'cheerio';
 import { Game2Document, IsPopulated } from '../../../interfaces/mongoose.gen';
-import { BoxScore } from './utils';
+import { BoxScore, setPlayerId, setOfficialId } from './utils';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -10,16 +11,25 @@ dayjs.extend(timezone);
 
 /** Useful Interfaces */
 export class ParsedOfficial {
+	public _id?: Types.ObjectId;
 	constructor(public name: string, public url: string, public jerseyNumber?: string) {
 		this.name = name;
 		this.url = url;
 		this.jerseyNumber = jerseyNumber;
 	}
+
+	set id(val) {
+		this._id = val;
+	}
+
+	get id() {
+		return this._id;
+	}
 }
 
 interface InactivePlayer {
 	name: string;
-	url: string | undefined;
+	url: string;
 }
 
 interface InactivePlayers {
@@ -334,7 +344,7 @@ const parseInactivePlayers = (
 				if (p.trim() !== 'None') {
 					const player: InactivePlayer = {
 						name: p.trim(),
-						url: undefined
+						url: ''
 					};
 					inactive.home.push(player);
 				}
@@ -349,7 +359,7 @@ const parseInactivePlayers = (
 					if (p.trim() !== 'None') {
 						const player: InactivePlayer = {
 							name: p.trim(),
-							url: undefined
+							url: ''
 						};
 						inactive.visitor.push(player);
 					}
@@ -474,7 +484,20 @@ const getBoxScore = async (game: Game2Document): Promise<void | BoxScore> => {
 		/** Set non-team specific data */
 		if (officials.length) boxScore.officials = officials;
 		if (locale !== undefined && typeof locale !== 'boolean') boxScore.locale = locale;
-		return new BoxScore(boxScore);
+		const boxScoreResult = new BoxScore(boxScore);
+		for (let i = 0; i < boxScoreResult.home.players.length; i++) {
+			await setPlayerId(boxScoreResult.home.players[i]);
+		}
+		for (let j = 0; j < boxScoreResult.visitor.players.length; j++) {
+			await setPlayerId(boxScoreResult.visitor.players[j]);
+		}
+		if (boxScoreResult.officials) {
+			for (let k = 0; k < boxScoreResult.officials?.length; k++) {
+				await setOfficialId(boxScoreResult.officials[k]);
+			}
+		}
+
+		return boxScoreResult;
 	}
 	return;
 };

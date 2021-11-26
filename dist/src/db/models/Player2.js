@@ -17,7 +17,7 @@ const Player2Schema = new mongoose_1.default.Schema({
     },
     name: {
         full: { type: String, required: true },
-        display: { type: String, required: true },
+        display: { type: String },
         pronunciation: { type: String },
         nicknames: [{ type: String }],
         parsed: [{ type: String }]
