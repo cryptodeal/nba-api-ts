@@ -1,0 +1,86 @@
+
+# NBA-API-TS
+
+## Project Info:
+
+Backend data aggregation, storage, and manipulation for basketball statistics (NBA, ABA, BAA) collected from varying authorities (e.g. [Basketball Reference](https://www.basketball-reference.com), [NBA Stats API](https://www.nba.com/stats/), [ESPN](https://www.espn.com/nba/), etc.)  
+
+Data is aggregated from these sources, looking first to [BasketBall Reference](https://www.basketball-reference.com) as the authority on historical data, and then written to varying mongodb collections, which comprise the dataset used for [Baller Analytics](https://balleranalytics.ai).
+
+## Status:
+- [ ] API
+  - [ ] [Basketball Reference](https://www.basketball-reference.com) API
+    - [ ] Games
+      - [x] Game BoxScore
+        - [x] Basic Unit Test
+    - [ ] Players
+      - [x] Player Bio/Meta
+        - [ ] Basic Unit Test
+    - [ ] Teams
+      - [ ] Team Meta Data
+        - [ ] Basic Unit Test
+- [ ] DB
+  - [ ] Models
+    - [ ] Team2
+      - [x] Ported From JS
+      - [ ] Refined Data Model for TS
+    - [ ] Game2
+      - [x] Ported From JS
+      - [ ] Refined Data Model for TS
+    - [ ] Player2
+      - [x] Ported From JS
+      - [ ] Refined Data Model for TS
+    - [ ] Coach2
+      - [x] Ported From JS
+      - [ ] Refined Data Model for TS
+    - [ ] Official2
+      - [x] Ported From JS
+      - [ ] Refined Data Model for TS
+    - [ ] League
+      - [x] Ported From JS
+      - [ ] Refined Data Model for TS
+    - [ ] Team (NBA Stats/Old Model)
+      - [ ] Ported From JS
+      - [ ] Refined Data Model for TS
+    - [ ] Game (NBA Stats/Old Model)
+      - [ ] Ported From JS
+      - [ ] Refined Data Model for TS
+    - [ ] Player (NBA Stats/Old Model)
+      - [ ] Ported From JS
+      - [ ] Refined Data Model for TS
+    - [ ] Coach (NBA Stats/Old Model)
+      - [ ] Ported From JS
+      - [ ] Refined Data Model for TS
+    - [ ] Official (NBA Stats/Old Model)
+      - [ ] Ported From JS
+      - [ ] Refined Data Model for TS
+  - [ ] Controllers
+    - [ ] Team2
+      - []
+    - [ ] Game2
+      - [x] importBoxScores - given game date & opponents, parses and writes boxscore data to mongodb (adds any previously unseen officials & players)
+    - [ ] Player2
+      - [x] addOrFindPlayer - find player in player2 collection by playerUrl; if null -> create a new player in database
+      - [x] addPlayerBasicData - given player from dataset, find and store player meta info from player's profile on [Basketball Reference](https://basketball-reference.com)
+    - [ ] Coach2
+      - [ ]
+    - [ ] Official2
+      - [x] addOrFindOfficial - find official in official2 collection by officialUrl; if null -> create a new official in database
+    - [ ] League
+      - [ ]
+    - [ ] Team (NBA Stats/Old Model)
+      - [ ]
+    - [ ] Game (NBA Stats/Old Model)
+      - [ ]
+    - [ ] Coach (NBA Stats/Old Model)
+      - [ ]
+    - [ ] Official (NBA Stats/Old Model)
+      - [ ]
+
+
+### Disclosure:
+
+- While Baller Analytics strives to provide the most accurate and complete dataset of historical hoops data, Baller Analytics makes no gaurantee as to the accuracy of the data provided
+  - N.B. Migrating the codebase from javascript -> typescript should only improve accuracy of dataset 
+- DB Models are constantly in flux as codebase is refactored to typescript; do not bundle with critical apps until stable release becomes available.
+  - N.B. Migrating the codebase from javascript -> typescript should only improve accuracy of dataset 
