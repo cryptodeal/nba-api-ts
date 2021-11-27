@@ -3,12 +3,6 @@ import { getBoxScore } from '../../../api/bballRef/games';
 import { Game2Document } from '../../interfaces/mongoose.gen';
 
 export const importBoxScores = async (game: Game2Document) => {
-	//const yesterday = new Date();
-	//yesterday.setDate(yesterday.getDate() - 1);
-	/*for await (const game of Game2.findOne({
-		'game.home.leaders.points.statValue': null,
-		date: { $lte: yesterday }
-	}).populate('home.team visitor.team')) {*/
 	const boxScore = await getBoxScore(game);
 	const unpopulatedGame = await Game2.findById(game._id);
 	if (boxScore && unpopulatedGame) {
