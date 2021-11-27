@@ -9,6 +9,7 @@
     "checkJs": false
   },
 
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "ts-node": {  "files": true },
 }
 

@@ -2,7 +2,7 @@ import path from 'path';
 import dotenv from 'dotenv';
 
 // Parsing the env file.
-dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
+dotenv.config({ path: path.resolve(__dirname, '../../../nba-api-ts/.env') });
 
 // Interface to load env variables
 // Note these variables can possibly be undefined
@@ -37,6 +37,7 @@ const getConfig = (): ENV => {
 // definition.
 
 const getSanitzedConfig = (config: ENV): Config => {
+	console.log(path.resolve(__dirname, '../../../nba-api-ts/.env'));
 	for (const [key, value] of Object.entries(config)) {
 		if (value === undefined) {
 			throw new Error(`Missing key ${key} in config.env`);

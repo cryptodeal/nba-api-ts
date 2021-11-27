@@ -5,6 +5,7 @@
   "main": "dist/src/index.js",
   "scripts": {
     "start": "tsc && node dist/src/index.js",
+    "test": "ts-node tests/*.ts",
     "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
     "lintAction": "eslint '*/**/*.{js,ts,tsx}' --quiet",
     "mtgen": "mtgen --output ./src/db/interfaces ./src/db/models"
@@ -43,6 +44,8 @@
     "eslint-plugin-prettier": "^4.0.0",
     "husky": "^7.0.4",
     "lint-staged": "^12.1.2",
-    "prettier": "^2.5.0"
+    "prettier": "^2.5.0",
+    "ts-node": "^10.4.0",
+    "uvu": "^0.5.2"
   }
 }
