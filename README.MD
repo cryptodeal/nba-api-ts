@@ -56,7 +56,7 @@ Data is aggregated from these sources, looking first to [BasketBall Reference](h
       - [ ] Refined Data Model for TS
   - [ ] Controllers
     - [ ] Team2
-      - []
+      - [ ]
     - [ ] Game2
       - [x] importBoxScores - given game date & opponents, parses and writes boxscore data to mongodb (adds any previously unseen officials & players)
     - [ ] Player2
