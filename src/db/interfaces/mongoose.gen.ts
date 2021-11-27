@@ -1438,6 +1438,7 @@ export type Player2 = {
 				playerUrl: string;
 			};
 		};
+		slug?: string;
 	};
 	name: {
 		full: string;
@@ -1499,7 +1500,7 @@ export type Player2Queries = {};
 export type Player2Methods = {};
 
 export type Player2Statics = {
-	findByPlayerUrl: (this: Player2Model, playerUrl: string) => any;
+	findByPlayerUrl: (this: Player2Model, ...args: any[]) => any;
 };
 
 /**
@@ -1657,6 +1658,7 @@ export type Player2Document = mongoose.Document<mongoose.Types.ObjectId, Player2
 					playerUrl: string;
 				};
 			};
+			slug?: string;
 		};
 		name: {
 			full: string;

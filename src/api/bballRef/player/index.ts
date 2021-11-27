@@ -34,9 +34,8 @@ export type PlayerMetaData = {
 
 const findPlayerMeta = ($: cheerio.Root) => {
 	const name: PlayerName = {
-		display: $('#meta').find("*[itemprop = 'name']").text().trim()
+		display: $('#meta').find("*[itemprop = 'name']").text()
 	};
-	console.log(name);
 	const height = $("*[itemprop = 'height']").text().trim().split('-');
 	const weight = $("*[itemprop = 'weight']").text().trim();
 	const birthDate = $("*[itemprop = 'birthDate']").attr('data-birth')?.split('-');

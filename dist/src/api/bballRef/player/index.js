@@ -5,9 +5,8 @@ const fetchers_1 = require("../fetchers");
 const iso_3166_1_ts_1 = require("iso-3166-1-ts");
 const findPlayerMeta = ($) => {
     const name = {
-        display: $('#meta').find("*[itemprop = 'name']").text().trim()
+        display: $('#meta').find("*[itemprop = 'name']").text()
     };
-    console.log(name);
     const height = $("*[itemprop = 'height']").text().trim().split('-');
     const weight = $("*[itemprop = 'weight']").text().trim();
     const birthDate = $("*[itemprop = 'birthDate']").attr('data-birth')?.split('-');

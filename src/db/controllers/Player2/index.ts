@@ -19,12 +19,14 @@ export const addOrFindPlayer = async (playerData: BoxScorePlayer) => {
 				full: playerData.fullName
 			}
 		};
+
 		return new Player2(player)
 			.save()
 			.then((player) => {
-				return player;
+				return player.save();
 			})
 			.catch((err) => {
+				console.log(playerData);
 				console.trace(err);
 			});
 	} else {
@@ -34,9 +36,9 @@ export const addOrFindPlayer = async (playerData: BoxScorePlayer) => {
 
 export const addPlayerBasicData = (player: Player2Document) => {
 	return getPlayerData(player.meta.helpers.bballRef.playerUrl).then((data) => {
+		//console.log(data);
 		const { height, weight, birthDate, birthPlace, position, shoots, name, college, socials } =
 			data;
-		console.log(college);
 		if (height.feet) {
 			player.height = {
 				feet: height.feet
@@ -47,9 +49,11 @@ export const addPlayerBasicData = (player: Player2Document) => {
 		if (birthDate) player.birthDate = birthDate;
 		if (birthPlace) player.birthPlace = birthPlace;
 		if (name.pronunciation) player.name.pronunciation = name.pronunciation;
+		if (name.display) player.name.display = name.display;
 		if (position) player.position = position;
 		if (shoots) player.shoots = shoots;
 		if (name?.display) player.name.display = name.display;
+		if (college) player.college = college;
 		if (socials?.twitter) player.socials.twitter = socials.twitter;
 		if (socials?.instagram) player.socials.instagram = socials.instagram;
 		return player.save();

@@ -17,8 +17,9 @@ specifiers:
   iso-3166-1-ts: ^0.2.2
   lint-staged: ^12.1.2
   mongoose: ^6.0.13
+  mongoose-slugger-plugin: ^3.0.3
   mongoose-tsgen: ^8.4.6
-  prettier: ^2.4.1
+  prettier: ^2.5.0
   typescript: ^4.5.2
 
 dependencies:
@@ -31,6 +32,7 @@ dependencies:
   iso-3166-1-alpha-2: 1.0.0
   iso-3166-1-ts: 0.2.2
   mongoose: 6.0.13
+  mongoose-slugger-plugin: 3.0.3_mongoose@6.0.13
   mongoose-tsgen: 8.4.6_mongoose@6.0.13+typescript@4.5.2
   typescript: 4.5.2
 
@@ -39,10 +41,10 @@ devDependencies:
   '@typescript-eslint/parser': 5.4.0_eslint@8.3.0+typescript@4.5.2
   eslint: 8.3.0
   eslint-config-prettier: 8.3.0_eslint@8.3.0
-  eslint-plugin-prettier: 4.0.0_6c1acfc8d9d3a8dba99beef4e8bcebae
+  eslint-plugin-prettier: 4.0.0_d8c6a2a4ba8850181fffb74d8e835cec
   husky: 7.0.4
   lint-staged: 12.1.2
-  prettier: 2.4.1
+  prettier: 2.5.0
 
 packages:
 
@@ -86,6 +88,145 @@ packages:
     resolution: {integrity: sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==}
     dev: true
 
+  /@napi-rs/pinyin-android-arm64/1.6.2:
+    resolution: {integrity: sha512-aHsp9p7kac3xHBqhennlIB8VN8nNqVguoLP+YHyfy8mTXzCxvW4ncu8LD/j4ZtrOoxpqOXfMmS+nV8v7f8BLuA==}
+    engines: {node: '>= 10.0'}
+    cpu: [arm64]
+    os: [android]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@napi-rs/pinyin-darwin-arm64/1.6.2:
+    resolution: {integrity: sha512-dchVuvS960Ag7lMyCSCP+GrOkYZt5kBu0a5O4d+hT2GVdpBAj5j/uG2nh6JjflwR2YJiQ35LCEDbspaO2mYE5g==}
+    engines: {node: '>= 10.0'}
+    cpu: [arm64]
+    os: [darwin]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@napi-rs/pinyin-darwin-x64/1.6.2:
+    resolution: {integrity: sha512-+t5HH1dJM3RTbzoq4h1zFHBv7IRAnEVy4DvgIXMBUA0XOgzDjD4OQ4HSPQxmWbFcGfNI8VbidaT4JUTATQL1rA==}
+    engines: {node: '>= 10.0'}
+    cpu: [x64]
+    os: [darwin]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@napi-rs/pinyin-freebsd-x64/1.6.2:
+    resolution: {integrity: sha512-6HIaV8cExEYpSA+IE71CUf0eeg7bY4ZAHpdtZaScLKdUF92UEKlf8fe5tsxGh3F/sgWIIBV5oBa9coPnHfgGYA==}
+    engines: {node: '>= 10.0'}
+    cpu: [x64]
+    os: [freebsd]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@napi-rs/pinyin-linux-arm-gnueabihf/1.6.2:
+    resolution: {integrity: sha512-Yi8UCe0KGRuiahsuXzhXbx7qkNZN/oUiVyGGPARaaulRRw0OmEC+0k91jn6pLfXZrF1IcTYvxt7pRboOehbr+g==}
+    engines: {node: '>= 10.0'}
+    cpu: [arm]
+    os: [linux]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@napi-rs/pinyin-linux-arm64-gnu/1.6.2:
+    resolution: {integrity: sha512-BMyCQ+gP3e1BjjcEtl/EIYvRUx1PQloHcGOUrgtZhu2MZMCOWbGl9X6Te59M6/+bo3/maemYcgIVgGI8/gXIkw==}
+    engines: {node: '>= 10.0'}
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@napi-rs/pinyin-linux-arm64-musl/1.6.2:
+    resolution: {integrity: sha512-vzWEnpgn8kothEaxbipOBSN1EupL67Igc8TvZa75pKcmlgdCGmSL/UsMvW40K57ltE7godose/2vMPHveRUT4A==}
+    engines: {node: '>= 10.0'}
+    cpu: [arm64]
+    os: [linux]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@napi-rs/pinyin-linux-x64-gnu/1.6.2:
+    resolution: {integrity: sha512-Rx7Y6eyZLQfGPFUWZ+0nZ965939HZUBNWNl2Z09pAn1Q7mVzjM8Jqc2Gf6hNqfUzHmNsaQR+2uGkndZY/0yZQg==}
+    engines: {node: '>= 10.0'}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@napi-rs/pinyin-linux-x64-musl/1.6.2:
+    resolution: {integrity: sha512-4T8xNPNaX2DGDEP+RhSNOv6YAFe9ti/75P7SHeLGdIIiudacBCKAdPXMS8Koo/6+DQTyfmanq7lWQ8a0/i424g==}
+    engines: {node: '>= 10.0'}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@napi-rs/pinyin-win32-arm64-msvc/1.6.2:
+    resolution: {integrity: sha512-J25UvOGXo/YYtHxMpoWCUZ2d8zInez1dEMDziB5+VoEIRhCqmsOifS7ffhvjAqd/7VSUK+TgTyF+PwMjSZ4Miw==}
+    engines: {node: '>= 10.0'}
+    cpu: [arm64]
+    os: [win32]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@napi-rs/pinyin-win32-ia32-msvc/1.6.2:
+    resolution: {integrity: sha512-6+4hq4ERX/LnW5GYH3UzlAU6TkO1wVdv9U1t7X92lz6S/kTkQmcOOijMvANHykN0Oic//uosOO3kvE5LQMoTuQ==}
+    engines: {node: '>= 10.0'}
+    cpu: [ia32]
+    os: [win32]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@napi-rs/pinyin-win32-x64-msvc/1.6.2:
+    resolution: {integrity: sha512-5Dwpg0RPhebpFTGTBGooOfBWpCVw3ajmo7ejnMfrsewuIhN5lyh3UKF7k5xrAGjCZysQdqFvTj6F5maVSFwUlw==}
+    engines: {node: '>= 10.0'}
+    cpu: [x64]
+    os: [win32]
+    requiresBuild: true
+    dev: false
+    optional: true
+
+  /@napi-rs/pinyin/1.6.2:
+    resolution: {integrity: sha512-MvBxqtE1JzTYvsKp+XSDg7X+1dUJ+uKiMdt2L5xm7MscsGxynmHaz8mgpNyZuosX0xXC7aeH2h7SUxC4Pgz50A==}
+    engines: {node: '>= 10.0'}
+    requiresBuild: true
+    dependencies:
+      '@node-rs/helper': 1.2.1
+    optionalDependencies:
+      '@napi-rs/pinyin-android-arm64': 1.6.2
+      '@napi-rs/pinyin-darwin-arm64': 1.6.2
+      '@napi-rs/pinyin-darwin-x64': 1.6.2
+      '@napi-rs/pinyin-freebsd-x64': 1.6.2
+      '@napi-rs/pinyin-linux-arm-gnueabihf': 1.6.2
+      '@napi-rs/pinyin-linux-arm64-gnu': 1.6.2
+      '@napi-rs/pinyin-linux-arm64-musl': 1.6.2
+      '@napi-rs/pinyin-linux-x64-gnu': 1.6.2
+      '@napi-rs/pinyin-linux-x64-musl': 1.6.2
+      '@napi-rs/pinyin-win32-arm64-msvc': 1.6.2
+      '@napi-rs/pinyin-win32-ia32-msvc': 1.6.2
+      '@napi-rs/pinyin-win32-x64-msvc': 1.6.2
+    dev: false
+
+  /@napi-rs/triples/1.0.3:
+    resolution: {integrity: sha512-jDJTpta+P4p1NZTFVLHJ/TLFVYVcOqv6l8xwOeBKNPMgY/zDYH/YH7SJbvrr/h1RcS9GzbPcLKGzpuK9cV56UA==}
+    dev: false
+
+  /@node-rs/helper/1.2.1:
+    resolution: {integrity: sha512-R5wEmm8nbuQU0YGGmYVjEc0OHtYsuXdpRG+Ut/3wZ9XAvQWyThN08bTh2cBJgoZxHQUPtvRfeQuxcAgLuiBISg==}
+    dependencies:
+      '@napi-rs/triples': 1.0.3
+    dev: false
+
   /@nodelib/fs.scandir/2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
     engines: {node: '>= 8'}
@@ -104,28 +245,28 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.13.0
 
-  /@oclif/command/1.8.3:
-    resolution: {integrity: sha512-OGjrhdVgTT2TAAj/2RrdXjwxaDoTm16c2LfAzrta1xIFe6/XhgQIYDmeRN/RptQoZQBX8e9Vv2JoQq+TbghJmw==}
-    engines: {node: '>=8.0.0'}
+  /@oclif/command/1.8.4:
+    resolution: {integrity: sha512-fZVzaIzC0CSj5KCgAp84Z+LHqSwElA6G2lCRiQW4UfDaOx1CrHXbUCqGDBpV6lG1sobuJzKlsS6mh5fmJWeEyw==}
+    engines: {node: '>=12.0.0'}
     dependencies:
       '@oclif/config': 1.17.1
       '@oclif/errors': 1.3.5
       '@oclif/parser': 3.8.6
-      '@oclif/plugin-help': 3.2.5
+      '@oclif/plugin-help': 3.2.7
       debug: 4.3.2
       semver: 7.3.5
     transitivePeerDependencies:
       - supports-color
     dev: false
 
-  /@oclif/command/1.8.3_supports-color@8.1.1:
-    resolution: {integrity: sha512-OGjrhdVgTT2TAAj/2RrdXjwxaDoTm16c2LfAzrta1xIFe6/XhgQIYDmeRN/RptQoZQBX8e9Vv2JoQq+TbghJmw==}
-    engines: {node: '>=8.0.0'}
+  /@oclif/command/1.8.4_supports-color@8.1.1:
+    resolution: {integrity: sha512-fZVzaIzC0CSj5KCgAp84Z+LHqSwElA6G2lCRiQW4UfDaOx1CrHXbUCqGDBpV6lG1sobuJzKlsS6mh5fmJWeEyw==}
+    engines: {node: '>=12.0.0'}
     dependencies:
       '@oclif/config': 1.17.1_supports-color@8.1.1
       '@oclif/errors': 1.3.5
       '@oclif/parser': 3.8.6
-      '@oclif/plugin-help': 3.2.5_supports-color@8.1.1
+      '@oclif/plugin-help': 3.2.7_supports-color@8.1.1
       debug: 4.3.2_supports-color@8.1.1
       semver: 7.3.5
     transitivePeerDependencies:
@@ -185,11 +326,11 @@ packages:
       tslib: 2.3.1
     dev: false
 
-  /@oclif/plugin-help/3.2.5:
-    resolution: {integrity: sha512-fjkZTstvacCPicF2oaa3Lc+Yw3ocKEaW6x6O7doVqMLuoMUX6wBOQ+f1a3VFzO1fErqNeFPDlUlVUhwq9yMzQg==}
+  /@oclif/plugin-help/3.2.7:
+    resolution: {integrity: sha512-X6ErYHwsKGZTtfmY64nwx13lHrVHhJJMKhcvBv4KxO170yvu+vw38DirLVibJKrF70A42QjGd9vgiyFTpyeULQ==}
     engines: {node: '>=8.0.0'}
     dependencies:
-      '@oclif/command': 1.8.3
+      '@oclif/command': 1.8.4
       '@oclif/config': 1.17.1
       '@oclif/errors': 1.3.5
       chalk: 4.1.2
@@ -203,11 +344,11 @@ packages:
       - supports-color
     dev: false
 
-  /@oclif/plugin-help/3.2.5_supports-color@8.1.1:
-    resolution: {integrity: sha512-fjkZTstvacCPicF2oaa3Lc+Yw3ocKEaW6x6O7doVqMLuoMUX6wBOQ+f1a3VFzO1fErqNeFPDlUlVUhwq9yMzQg==}
+  /@oclif/plugin-help/3.2.7_supports-color@8.1.1:
+    resolution: {integrity: sha512-X6ErYHwsKGZTtfmY64nwx13lHrVHhJJMKhcvBv4KxO170yvu+vw38DirLVibJKrF70A42QjGd9vgiyFTpyeULQ==}
     engines: {node: '>=8.0.0'}
     dependencies:
-      '@oclif/command': 1.8.3_supports-color@8.1.1
+      '@oclif/command': 1.8.4_supports-color@8.1.1
       '@oclif/config': 1.17.1_supports-color@8.1.1
       '@oclif/errors': 1.3.5
       chalk: 4.1.2
@@ -244,7 +385,7 @@ packages:
   /@types/cheerio/0.22.30:
     resolution: {integrity: sha512-t7ZVArWZlq3dFa9Yt33qFBQIK4CQd1Q3UJp0V+UhP6vgLWLM6Qug7vZuRSGXg45zXeB1Fm5X2vmBkEX58LV2Tw==}
     dependencies:
-      '@types/node': 16.11.9
+      '@types/node': 16.11.10
     dev: false
 
   /@types/json-schema/7.0.9:
@@ -259,8 +400,8 @@ packages:
     resolution: {integrity: sha512-Klz949h02Gz2uZCMGwDUSDS1YBlTdDDgbWHi+81l29tQALUtvz4rAYi5uoVhE5Lagoq6DeqAUlbrHvW/mXDgdQ==}
     dev: false
 
-  /@types/node/16.11.9:
-    resolution: {integrity: sha512-MKmdASMf3LtPzwLyRrFjtFFZ48cMf8jmX5VRYrDQiJa8Ybu5VAmkqBWqKU8fdCwD8ysw4mQ9nrEHvzg6gunR7A==}
+  /@types/node/16.11.10:
+    resolution: {integrity: sha512-3aRnHa1KlOEEhJ6+CvyHKK5vE9BcLGjtUpwvqYLRvYNQKMfabu3BwfJaA/SLW8dxe28LsNDjtHwePTuzn3gmOA==}
     dev: false
 
   /@types/webidl-conversions/6.1.1:
@@ -270,7 +411,7 @@ packages:
   /@types/whatwg-url/8.2.1:
     resolution: {integrity: sha512-2YubE1sjj5ifxievI5Ge1sckb9k/Er66HyR2c+3+I6VDUUg1TLPdYYTEbQ+DjRkS4nTxMJhgWfSfMRD2sl2EYQ==}
     dependencies:
-      '@types/node': 16.11.9
+      '@types/node': 16.11.10
       '@types/webidl-conversions': 6.1.1
     dev: false
 
@@ -537,6 +678,10 @@ packages:
       ieee754: 1.2.1
     dev: false
 
+  /bulk-replace/0.0.1:
+    resolution: {integrity: sha1-8JVoKolqvUs9ngjeQJzCIuIT+d0=}
+    dev: false
+
   /callsites/3.1.0:
     resolution: {integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==}
     engines: {node: '>=6'}
@@ -623,11 +768,11 @@ packages:
       string-width: 5.0.1
     dev: true
 
-  /cli-ux/5.6.3:
-    resolution: {integrity: sha512-/oDU4v8BiDjX2OKcSunGH0iGDiEtj2rZaGyqNuv9IT4CgcSMyVWAMfn0+rEHaOc4n9ka78B0wo1+N1QX89f7mw==}
+  /cli-ux/5.6.4:
+    resolution: {integrity: sha512-jW2oROKZdb3NlIHCMjjtaanuElHB/IhYPE5kgsbhmNtiBcUg/4L5QYyDbJ0n/wF+LAb/tl+Bh30lAHq5bmsbMA==}
     engines: {node: '>=8.0.0'}
     dependencies:
-      '@oclif/command': 1.8.3_supports-color@8.1.1
+      '@oclif/command': 1.8.4_supports-color@8.1.1
       '@oclif/errors': 1.3.5
       '@oclif/linewrap': 1.0.0
       '@oclif/screen': 1.0.4
@@ -768,7 +913,7 @@ packages:
       supports-color: 8.1.1
     dev: false
 
-  /debug/4.3.2_supports-color@9.1.0:
+  /debug/4.3.2_supports-color@9.2.1:
     resolution: {integrity: sha512-mOp8wKcvj7XxC78zLgw/ZA+6TSgkoE2C/ienthhRD298T7UNwAg9diBpLRxC0mOezLl4B0xV7M0cCO6P/O0Xhw==}
     engines: {node: '>=6.0'}
     peerDependencies:
@@ -778,7 +923,7 @@ packages:
         optional: true
     dependencies:
       ms: 2.1.2
-      supports-color: 9.1.0
+      supports-color: 9.2.1
     dev: true
 
   /deep-is/0.1.4:
@@ -871,7 +1016,7 @@ packages:
       eslint: 8.3.0
     dev: true
 
-  /eslint-plugin-prettier/4.0.0_6c1acfc8d9d3a8dba99beef4e8bcebae:
+  /eslint-plugin-prettier/4.0.0_d8c6a2a4ba8850181fffb74d8e835cec:
     resolution: {integrity: sha512-98MqmCJ7vJodoQK359bqQWaxOE0CS8paAz/GgjaZLyex4TTk3g9HugoO89EqWCrFiOqn9EVvcoo7gZzONCWVwQ==}
     engines: {node: '>=6.0.0'}
     peerDependencies:
@@ -884,7 +1029,7 @@ packages:
     dependencies:
       eslint: 8.3.0
       eslint-config-prettier: 8.3.0_eslint@8.3.0
-      prettier: 2.4.1
+      prettier: 2.5.0
       prettier-linter-helpers: 1.0.0
     dev: true
 
@@ -1166,6 +1311,13 @@ packages:
     resolution: {integrity: sha512-EykJT/Q1KjTWctppgIAgfSO0tKVuZUjhgMr17kqTumMl6Afv3EISleU7qZUzoXDFTAHTDC4NOoG/ZxU3EvlMPQ==}
     engines: {node: '>=8'}
 
+  /hepburn/1.2.0:
+    resolution: {integrity: sha512-xWjHb03dN/ivNcqG2vqA//sHQ0oapYGZ9QV/2TR7m2+cggxzoVpbDxZn9s/Zm1tF88/7a1IpdZyn00tNP5oABA==}
+    engines: {node: '>=4'}
+    dependencies:
+      bulk-replace: 0.0.1
+    dev: false
+
   /htmlparser2/6.1.0:
     resolution: {integrity: sha512-gyyPk6rgonLFEDGoeRgQNaEUvdJ4ktTmmUh/h2t7s+M8oPpIPxgNACWa+6ESR57kXstwqPiCut0V8NRpcwgU7A==}
     dependencies:
@@ -1375,6 +1527,15 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
+  /limax/3.0.0:
+    resolution: {integrity: sha512-7O14piibxAkJlQuAvhbJY5uubV7xszi1kQgnr5z+RkDJXyKYoStilqqpH8//LJq+HQpQN7TJmj3qxXzaEJOSfg==}
+    engines: {node: '>=10'}
+    dependencies:
+      '@napi-rs/pinyin': 1.6.2
+      hepburn: 1.2.0
+      speakingurl: 14.0.1
+    dev: false
+
   /lint-staged/12.1.2:
     resolution: {integrity: sha512-bSMcQVqMW98HLLLR2c2tZ+vnDCnx4fd+0QJBQgN/4XkdspGRPc8DGp7UuOEBe1ApCfJ+wXXumYnJmU+wDo7j9A==}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
@@ -1383,7 +1544,7 @@ packages:
       cli-truncate: 3.1.0
       colorette: 2.0.16
       commander: 8.3.0
-      debug: 4.3.2_supports-color@9.1.0
+      debug: 4.3.2_supports-color@9.2.1
       enquirer: 2.3.6
       execa: 5.1.1
       lilconfig: 2.0.4
@@ -1392,7 +1553,7 @@ packages:
       normalize-path: 3.0.0
       object-inspect: 1.11.0
       string-argv: 0.3.1
-      supports-color: 9.1.0
+      supports-color: 9.2.1
       yaml: 1.10.2
     dev: true
 
@@ -1502,6 +1663,16 @@ packages:
       saslprep: 1.0.3
     dev: false
 
+  /mongoose-slugger-plugin/3.0.3_mongoose@6.0.13:
+    resolution: {integrity: sha512-UBsjbWOpWLxs0KEZUBJRUKyW1X+Qos0ErSqh41GktKcihOwCw+kL0RM0COSBVnBdt+W0j9tQVS977AGp9RxkbQ==}
+    engines: {node: '>=12'}
+    peerDependencies:
+      mongoose: ^5.0.0
+    dependencies:
+      limax: 3.0.0
+      mongoose: 6.0.13
+    dev: false
+
   /mongoose-tsgen/8.4.6_mongoose@6.0.13+typescript@4.5.2:
     resolution: {integrity: sha512-9bSQ1UhGDaS7GmxtTH3jMKvHnIaUvMHQ0ZR//ffqgJmueRNadogaLiUMdifWgxRvznQR839bHIJ/7GK00GJyHQ==}
     engines: {node: '>=9.0.0'}
@@ -1510,16 +1681,16 @@ packages:
       mongoose: '>= 5.11.19'
       typescript: '>= 4'
     dependencies:
-      '@oclif/command': 1.8.3
+      '@oclif/command': 1.8.4
       '@oclif/config': 1.17.1
-      '@oclif/plugin-help': 3.2.5
-      cli-ux: 5.6.3
+      '@oclif/plugin-help': 3.2.7
+      cli-ux: 5.6.4
       flat: 5.0.2
       glob: 7.2.0
       lodash: 4.17.21
       mkdirp: 1.0.4
       mongoose: 6.0.13
-      prettier: 2.4.1
+      prettier: 2.5.0
       strip-json-comments: 3.1.1
       ts-morph: 9.1.0
       ts-node: 9.1.1_typescript@4.5.2
@@ -1714,8 +1885,8 @@ packages:
       fast-diff: 1.2.0
     dev: true
 
-  /prettier/2.4.1:
-    resolution: {integrity: sha512-9fbDAXSBcc6Bs1mZrDYb3XKzDLm4EXXL9sC1LqKP5rZkT6KRr/rf9amVUcODVXgguK/isJz0d0hP72WeaKWsvA==}
+  /prettier/2.5.0:
+    resolution: {integrity: sha512-FM/zAKgWTxj40rH03VxzIPdXmj39SwSjwG0heUcNFwI+EMZJnY93yAiKXM3dObIKAM5TA88werc8T/EwhB45eg==}
     engines: {node: '>=10.13.0'}
     hasBin: true
 
@@ -1891,6 +2062,11 @@ packages:
     dev: false
     optional: true
 
+  /speakingurl/14.0.1:
+    resolution: {integrity: sha512-1POYv7uv2gXoyGFpBCmpDVSNV74IfsWlDW216UPjbWufNf+bSU6GdbDsxdcxtfwb4xlI3yxzOTKClUosxARYrQ==}
+    engines: {node: '>=0.10.0'}
+    dev: false
+
   /sprintf-js/1.0.3:
     resolution: {integrity: sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=}
     dev: false
@@ -1972,8 +2148,8 @@ packages:
       has-flag: 4.0.0
     dev: false
 
-  /supports-color/9.1.0:
-    resolution: {integrity: sha512-lOCGOTmBSN54zKAoPWhHkjoqVQ0MqgzPE5iirtoSixhr0ZieR/6l7WZ32V53cvy9+1qghFnIk7k52p991lKd6g==}
+  /supports-color/9.2.1:
+    resolution: {integrity: sha512-Obv7ycoCTG51N7y175StI9BlAXrmgZrFhZOb0/PyjHBher/NmsdBgbbQ1Inhq+gIhz6+7Gb+jWF2Vqi7Mf1xnQ==}
     engines: {node: '>=12'}
     dev: true
 

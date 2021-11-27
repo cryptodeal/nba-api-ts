@@ -3,11 +3,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ParsedOfficial = void 0;
+exports.getBoxScore = void 0;
 const fetchers_1 = require("../fetchers");
 const cheerio_1 = __importDefault(require("cheerio"));
 const mongoose_gen_1 = require("../../../db/interfaces/mongoose.gen");
-const utils_1 = require("./utils");
 const dayjs_1 = __importDefault(require("dayjs"));
 const utc_1 = __importDefault(require("dayjs/plugin/utc"));
 const timezone_1 = __importDefault(require("dayjs/plugin/timezone"));
@@ -23,14 +22,7 @@ class ParsedOfficial {
         this.url = url;
         this.jerseyNumber = jerseyNumber;
     }
-    set id(val) {
-        this._id = val;
-    }
-    get id() {
-        return this._id;
-    }
 }
-exports.ParsedOfficial = ParsedOfficial;
 /** Query Helpers */
 class BoxScoreQuery {
     constructor(game) {
@@ -67,13 +59,13 @@ const parseOfficials = ($) => {
         .parent()
         .find('a')
         .each(function (i, link) {
+        let url;
         const href = $(link).attr('href')?.split('/');
-        if (href) {
-            const url = href[href.length - 1].split('.')[0];
-            const name = $(link).text().trim();
-            const official = new ParsedOfficial(name, url);
-            officials.push(official);
-        }
+        if (href)
+            url = href[href.length - 1].split('.')[0];
+        const name = $(link).text().trim();
+        const official = new ParsedOfficial(name, url);
+        officials.push(official);
     });
     return officials;
 };
@@ -170,18 +162,20 @@ const fetchBasicData = ($, team, period) => {
                 .find('tr')
                 .each(function (j, row) {
                 if (j !== 5) {
-                    const rowData = [[]];
+                    const rowData = [];
                     $(row)
                         .find('th')
                         .each(function (k, cell) {
-                        rowData[0].push($(cell).text().trim());
+                        const tempVal = [$(cell).text().trim()];
                         $(cell)
                             .find('a')
                             .each(function (l, link) {
                             const href = $(link).attr('href')?.split('/');
                             const url = href?.[href.length - 1].split('.')[0];
                             if (url)
-                                rowData[0].push(url);
+                                tempVal.push(url);
+                            if (url)
+                                rowData[k] = tempVal;
                         });
                     });
                     $(row)
@@ -278,7 +272,7 @@ const parseInactivePlayers = ($, homeAbbrev, visitorAbbrev) => {
                 if (p.trim() !== 'None') {
                     const player = {
                         name: p.trim(),
-                        url: ''
+                        url: undefined
                     };
                     inactive.home.push(player);
                 }
@@ -292,7 +286,7 @@ const parseInactivePlayers = ($, homeAbbrev, visitorAbbrev) => {
                 if (p.trim() !== 'None') {
                     const player = {
                         name: p.trim(),
-                        url: ''
+                        url: undefined
                     };
                     inactive.visitor.push(player);
                 }
@@ -417,21 +411,8 @@ const getBoxScore = async (game) => {
             boxScore.officials = officials;
         if (locale !== undefined && typeof locale !== 'boolean')
             boxScore.locale = locale;
-        const boxScoreResult = new utils_1.BoxScore(boxScore);
-        for (let i = 0; i < boxScoreResult.home.players.length; i++) {
-            await (0, utils_1.setPlayerId)(boxScoreResult.home.players[i]);
-        }
-        for (let j = 0; j < boxScoreResult.visitor.players.length; j++) {
-            await (0, utils_1.setPlayerId)(boxScoreResult.visitor.players[j]);
-        }
-        if (boxScoreResult.officials) {
-            for (let k = 0; k < boxScoreResult.officials?.length; k++) {
-                await (0, utils_1.setOfficialId)(boxScoreResult.officials[k]);
-            }
-        }
-        boxScoreResult.setTeamLeaders();
-        return boxScoreResult;
+        return boxScore;
     }
     return;
 };
-exports.default = getBoxScore;
+exports.getBoxScore = getBoxScore;

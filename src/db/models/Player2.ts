@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
+import * as slugger from 'mongoose-slugger-plugin';
 import { Player2Document, Player2Model, Player2Schema } from '../interfaces/mongoose.gen';
+mongoose.set('debug', true);
 
 const Player2Schema = new mongoose.Schema({
 	meta: {
@@ -9,7 +11,8 @@ const Player2Schema = new mongoose.Schema({
 			bballRef: {
 				playerUrl: { type: String, required: true, unique: true }
 			}
-		}
+		},
+		slug: { type: String }
 	},
 	name: {
 		full: { type: String, required: true },
@@ -157,7 +160,21 @@ Player2Schema.statics = {
 	}
 };
 
-export const Player2: Player2Model = mongoose.model<Player2Document, Player2Model>(
-	'Player2',
-	Player2Schema
+Player2Schema.index({ 'meta.slug': 1 }, { name: 'slug', unique: true });
+
+Player2Schema.plugin(
+	slugger.plugin,
+	new slugger.SluggerOptions({
+		// the property path which stores the slug value
+		slugPath: 'meta.slug',
+		// specify the properties which will be used for generating the slug
+		generateFrom: ['name.full'],
+		// the unique index, see above
+		index: 'slug'
+	})
 );
+
+const Player2: Player2Model = slugger.wrap(
+	mongoose.model<Player2Document, Player2Model>('Player2', Player2Schema)
+);
+export { Player2 };

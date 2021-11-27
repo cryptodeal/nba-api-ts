@@ -22,9 +22,10 @@ const addOrFindPlayer = async (playerData) => {
         return new Player2_1.Player2(player)
             .save()
             .then((player) => {
-            return player;
+            return player.save();
         })
             .catch((err) => {
+            console.log(playerData);
             console.trace(err);
         });
     }
@@ -35,8 +36,8 @@ const addOrFindPlayer = async (playerData) => {
 exports.addOrFindPlayer = addOrFindPlayer;
 const addPlayerBasicData = (player) => {
     return (0, player_1.getPlayerData)(player.meta.helpers.bballRef.playerUrl).then((data) => {
+        //console.log(data);
         const { height, weight, birthDate, birthPlace, position, shoots, name, college, socials } = data;
-        console.log(college);
         if (height.feet) {
             player.height = {
                 feet: height.feet
@@ -52,12 +53,16 @@ const addPlayerBasicData = (player) => {
             player.birthPlace = birthPlace;
         if (name.pronunciation)
             player.name.pronunciation = name.pronunciation;
+        if (name.display)
+            player.name.display = name.display;
         if (position)
             player.position = position;
         if (shoots)
             player.shoots = shoots;
         if (name?.display)
             player.name.display = name.display;
+        if (college)
+            player.college = college;
         if (socials?.twitter)
             player.socials.twitter = socials.twitter;
         if (socials?.instagram)

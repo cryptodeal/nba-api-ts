@@ -1,10 +1,31 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Player2 = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
+const slugger = __importStar(require("mongoose-slugger-plugin"));
+mongoose_1.default.set('debug', true);
 const Player2Schema = new mongoose_1.default.Schema({
     meta: {
         helpers: {
@@ -13,7 +34,8 @@ const Player2Schema = new mongoose_1.default.Schema({
             bballRef: {
                 playerUrl: { type: String, required: true, unique: true }
             }
-        }
+        },
+        slug: { type: String }
     },
     name: {
         full: { type: String, required: true },
@@ -159,4 +181,14 @@ Player2Schema.statics = {
         }).exec();
     }
 };
-exports.Player2 = mongoose_1.default.model('Player2', Player2Schema);
+Player2Schema.index({ 'meta.slug': 1 }, { name: 'slug', unique: true });
+Player2Schema.plugin(slugger.plugin, new slugger.SluggerOptions({
+    // the property path which stores the slug value
+    slugPath: 'meta.slug',
+    // specify the properties which will be used for generating the slug
+    generateFrom: ['name.full'],
+    // the unique index, see above
+    index: 'slug'
+}));
+const Player2 = slugger.wrap(mongoose_1.default.model('Player2', Player2Schema));
+exports.Player2 = Player2;

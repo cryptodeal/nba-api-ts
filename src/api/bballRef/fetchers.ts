@@ -29,10 +29,12 @@ export const loadSeasonsPage = (): Promise<cheerio.Root> => {
 };
 
 export const loadPlayerPage = (playerUrl: string): Promise<cheerio.Root> => {
-	return fetch(`${baseUrl}/${playerUrl.slice(0, 1)}/${playerUrl}.html`).then(async (result) => {
-		const body = await result.text();
-		return cheerio.load(body);
-	});
+	return fetch(`${baseUrl}/players/${playerUrl.slice(0, 1)}/${playerUrl}.html`).then(
+		async (result) => {
+			const body = await result.text();
+			return cheerio.load(body);
+		}
+	);
 };
 
 export const loadSeasonSchedule = (

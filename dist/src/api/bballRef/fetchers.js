@@ -28,7 +28,7 @@ const loadSeasonsPage = () => {
 };
 exports.loadSeasonsPage = loadSeasonsPage;
 const loadPlayerPage = (playerUrl) => {
-    return (0, cross_fetch_1.default)(`${baseUrl}/${playerUrl.slice(0, 1)}/${playerUrl}.html`).then(async (result) => {
+    return (0, cross_fetch_1.default)(`${baseUrl}/players/${playerUrl.slice(0, 1)}/${playerUrl}.html`).then(async (result) => {
         const body = await result.text();
         return cheerio_1.default.load(body);
     });
