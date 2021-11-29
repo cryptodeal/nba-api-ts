@@ -35,8 +35,8 @@ export const addOrFindPlayer = async (playerData: BoxScorePlayer) => {
 };
 
 export const addPlayerBasicData = (player: Player2Document) => {
-	return getPlayerData(player.meta.helpers.bballRef.playerUrl).then((data) => {
-		//console.log(data);
+	const { playerUrl } = player.meta.helpers.bballRef;
+	return getPlayerData(playerUrl).then((data) => {
 		const { height, weight, birthDate, birthPlace, position, shoots, name, college, socials } =
 			data;
 		if (height.feet) {

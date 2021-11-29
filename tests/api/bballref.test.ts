@@ -1,16 +1,16 @@
-import { test, suite } from 'uvu';
+import { suite } from 'uvu';
 import * as assert from 'uvu/assert';
 import { Game2 } from '../../src/db/models/index';
+import { Player2 } from '../../src/db/models/index';
 import { getBoxScore } from '../../src/api/bballRef/games';
+import { getPlayerData, PlayerMetaData } from '../../src/api/bballRef/player';
 import { initConnect, endConnect } from '../../src/db/connect';
 import { BoxScore, BoxScorePlayer } from '../../src/api/bballRef/games/utils';
 import { importBoxScores } from '../../src/db/controllers/Game2';
-import { Game2Document } from '../../src/db/interfaces/mongoose.gen';
 
 const BoxScoreTest = suite('boxScoreTest');
 let game: any;
 let boxScore: void | BoxScore;
-let gameResult: Game2Document;
 
 BoxScoreTest.before(async () => {
 	await initConnect();
@@ -69,3 +69,39 @@ BoxScoreTest('boxscore visitor player should be instance of BoxScorePlayer class
 });
 
 BoxScoreTest.run();
+
+const PlayerMetaTest = suite('playerMetaTest');
+let player: any;
+let playerData: PlayerMetaData;
+
+PlayerMetaTest.before(async () => {
+	await initConnect();
+});
+
+PlayerMetaTest.after(async () => {
+	await endConnect();
+});
+
+PlayerMetaTest('find player in Player2 collection ', async () => {
+	player = await Player2.findOne();
+});
+
+PlayerMetaTest('playerUrl should be string', async () => {
+	const { playerUrl } = player.meta.helpers.bballRef;
+	assert.type(playerUrl, 'string');
+});
+
+PlayerMetaTest('getPlayerData should be function', () => {
+	assert.type(getPlayerData, 'function');
+});
+
+PlayerMetaTest('load player profile meta data', async () => {
+	const { playerUrl } = player.meta.helpers.bballRef;
+	playerData = await getPlayerData(playerUrl);
+});
+
+PlayerMetaTest('verify playerData exists', () => {
+	assert.ok(playerData);
+});
+
+PlayerMetaTest.run();
