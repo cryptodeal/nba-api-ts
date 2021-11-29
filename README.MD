@@ -8,17 +8,30 @@ Backend data aggregation, storage, and manipulation for basketball statistics (N
 Data is aggregated from these sources, looking first to [BasketBall Reference](https://www.basketball-reference.com) as the authority on historical data, and then written to varying mongodb collections, which comprise the dataset used for [Baller Analytics](https://balleranalytics.ai).
 
 ## Status:
+- [ ] Tests
+  - [ ] Unit Tests
+    - [ ] API
+      - [x] Import BoxScore
+      - [x] Import Player Profile Data
+    - [ ] DB
+      - [ ] Team2
+      - [ ] Game2
+      - [ ] Player2
+      - [ ] Coach2
+      - [ ] Official2
+      - [ ] League
+  - [ ] Coverage Testing
+    - [x] Setup TS Coverage Tests
+    - [ ] Set Minimum Coverage Testing %
+  - [ ] Add Tests to CI
 - [ ] API
   - [ ] [Basketball Reference](https://www.basketball-reference.com) API
     - [ ] Games
       - [x] Game BoxScore
-        - [x] Basic Unit Test
     - [ ] Players
       - [x] Player Bio/Meta
-        - [ ] Basic Unit Test
     - [ ] Teams
       - [ ] Team Meta Data
-        - [ ] Basic Unit Test
 - [ ] DB
   - [ ] Models
     - [ ] Team2
@@ -63,19 +76,13 @@ Data is aggregated from these sources, looking first to [BasketBall Reference](h
       - [x] addOrFindPlayer - find player in player2 collection by playerUrl; if null -> create a new player in database
       - [x] addPlayerBasicData - given player from dataset, find and store player meta info from player's profile on [Basketball Reference](https://basketball-reference.com)
     - [ ] Coach2
-      - [ ]
     - [ ] Official2
       - [x] addOrFindOfficial - find official in official2 collection by officialUrl; if null -> create a new official in database
     - [ ] League
-      - [ ]
     - [ ] Team (NBA Stats/Old Model)
-      - [ ]
     - [ ] Game (NBA Stats/Old Model)
-      - [ ]
     - [ ] Coach (NBA Stats/Old Model)
-      - [ ]
     - [ ] Official (NBA Stats/Old Model)
-      - [ ]
 
 
 ### Disclosure:
