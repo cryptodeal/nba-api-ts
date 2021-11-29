@@ -1,4 +1,4 @@
-import { initConnect } from './db/init';
+import { initConnect } from './db/connect';
 import { Game2 } from './db/models/Game2';
 import { importBoxScores } from './db/controllers/Game2';
 

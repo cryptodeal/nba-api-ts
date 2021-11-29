@@ -4,12 +4,6 @@ exports.importBoxScores = void 0;
 const models_1 = require("../../models");
 const games_1 = require("../../../api/bballRef/games");
 const importBoxScores = async (game) => {
-    //const yesterday = new Date();
-    //yesterday.setDate(yesterday.getDate() - 1);
-    /*for await (const game of Game2.findOne({
-        'game.home.leaders.points.statValue': null,
-        date: { $lte: yesterday }
-    }).populate('home.team visitor.team')) {*/
     const boxScore = await (0, games_1.getBoxScore)(game);
     const unpopulatedGame = await models_1.Game2.findById(game._id);
     if (boxScore && unpopulatedGame) {
