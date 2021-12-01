@@ -2076,7 +2076,9 @@ export type Team2Queries = {};
 
 export type Team2Methods = {};
 
-export type Team2Statics = {};
+export type Team2Statics = {
+	findByName: (this: Team2Model, name: string) => any;
+};
 
 /**
  * Mongoose Model type

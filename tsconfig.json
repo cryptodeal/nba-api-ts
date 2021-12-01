@@ -4,7 +4,11 @@
   "compilerOptions": {
     "rootDir": "./",
     "outDir": "./dist",
-   },
-  "ts-node": {  "files": true },
+
+    "allowJs": true,
+    "checkJs": false
+  },
+
+  "include": ["src/**/*"]
 }
 

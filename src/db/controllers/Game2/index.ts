@@ -1,5 +1,6 @@
-import { Game2 } from '../../models';
+import { Game2, League, Team2 } from '../../models';
 import { getBoxScore } from '../../../api/bballRef/games';
+import { SeasonGameItem } from '../../../api/bballRef/seasons';
 import { Game2Document } from '../../interfaces/mongoose.gen';
 
 export const importBoxScores = async (game: Game2Document) => {
@@ -298,4 +299,45 @@ export const importBoxScores = async (game: Game2Document) => {
 		return unpopulatedGame.save();
 	}
 	return null;
+};
+
+export const addOrFindGame = async (game: SeasonGameItem, year: number, league: string) => {
+	const result = Game2.findOne({
+		'home.score': game.home.score,
+		'visitor.score': game.visitor.score,
+		'meta.helpers.bballRef.year': year,
+		date: new Date(game.date.toISOString())
+	});
+	if (!result) {
+		const homeTeam = await Team2.findByName(game.home.name);
+		const visitorTeam = await Team2.findByName(game.visitor.name);
+		const leagueDoc = await League.findOne({ name: league });
+
+		if (leagueDoc?._id && homeTeam._id && visitorTeam._id) {
+			const gameDoc = new Game2({
+				meta: {
+					helpers: {
+						bballRef: {
+							year: year
+						}
+					},
+					displaySeason: `${year - 1}-${year.toString().slice(-2)}`,
+					league: leagueDoc._id
+				},
+				date: new Date(game.date.toISOString()),
+				time: game.time,
+				home: {
+					team: homeTeam._id
+				},
+				visitor: {
+					team: visitorTeam._id
+				}
+			});
+
+			if (game.home.score) gameDoc.home.score = game.home.score;
+			if (game.visitor.score) gameDoc.visitor.score = game.visitor.score;
+			return gameDoc.save();
+		}
+	}
+	return result;
 };

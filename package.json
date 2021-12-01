@@ -24,7 +24,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@tsconfig/node14": "^1.0.1",
     "@types/cheerio": "^0.22.30",
     "cheerio": "^1.0.0-rc.10",
     "cross-fetch": "^3.1.4",
@@ -32,7 +31,7 @@
     "dotenv": "^10.0.0",
     "iso-3166-1-alpha-2": "^1.0.0",
     "iso-3166-1-ts": "^0.2.2",
-    "mongoose": "^6.0.14",
+    "mongoose": "^6.0.13",
     "mongoose-slugger-plugin": "^3.0.3",
     "mongoose-tsgen": "^8.4.6",
     "typescript": "^4.5.2"
@@ -48,7 +47,7 @@
     "husky": "^7.0.4",
     "lint-staged": "^12.1.2",
     "prettier": "^2.5.0",
-    "tsm": "^2.1.4",
+    "tsm": "^2.2.1",
     "uvu": "^0.5.2"
   }
 }

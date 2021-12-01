@@ -324,4 +324,16 @@ const Team2Schema = new mongoose.Schema({
 	]
 });
 
+Team2Schema.statics = {
+	findByName(name: string) {
+		return this.findOne({
+			$or: [
+				{ 'infoCommon.name': name },
+				{ 'infoCommon.allNames': name },
+				{ 'seasons.infoCommon': { $elemMatch: { name: name } } }
+			]
+		}).exec();
+	}
+};
+
 export const Team2: Team2Model = mongoose.model<Team2Document, Team2Model>('Team2', Team2Schema);

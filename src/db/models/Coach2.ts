@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 import { Coach2Document, Coach2Model, Coach2Schema } from '../interfaces/mongoose.gen';
 
 const Coach2Schema = new mongoose.Schema({
-	//replaces firstName and lastName with name.first and name.last
 	name: {
 		first: { type: String, required: true, index: true },
 		last: { type: String, required: true, index: true },
