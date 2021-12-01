@@ -13,6 +13,7 @@ Data is aggregated from these sources, looking first to [BasketBall Reference](h
     - [ ] API
       - [x] Import BoxScore
       - [x] Import Player Profile Data
+      - [x] Import Season List & metadata
     - [ ] DB
       - [ ] Team2
       - [ ] Game2
@@ -27,11 +28,13 @@ Data is aggregated from these sources, looking first to [BasketBall Reference](h
 - [ ] API
   - [ ] [Basketball Reference](https://www.basketball-reference.com) API
     - [ ] Games
-      - [x] Game BoxScore
+      - [x] getBoxScore (fetch boxscore data for game by date, home team abbrev)
     - [ ] Players
-      - [x] Player Bio/Meta
+      - [x] getPlayerData (fetch Player Bio/Meta by playerUrl)
     - [ ] Teams
       - [ ] Team Meta Data
+    - [ ] Seasons
+      - [x] getSeasons (returns list of seasons, season meta info)
 - [ ] DB
   - [ ] Models
     - [ ] Team2
