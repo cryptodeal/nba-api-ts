@@ -1,10 +1,9 @@
 import { suite } from 'uvu';
 import * as assert from 'uvu/assert';
-import { getSeasonGames } from '../../../src/api/bballRef/seasons';
-import { Dayjs } from 'dayjs';
+import { getSeasonGames, SeasonGameItem } from '../../../src/api/bballRef/seasons';
 
 const SeasonGamesTest = suite('seasonGamesTest');
-let testGames: (string | boolean | Dayjs)[][];
+let testGames: SeasonGameItem[];
 let testLeague: string;
 let testYear: number;
 
@@ -13,8 +12,8 @@ SeasonGamesTest('getSeasonGames should be function', () => {
 });
 
 SeasonGamesTest('get all seasonGames', async () => {
-	const { allGames, league, year } = await getSeasonGames('NBA', 2021);
-	testGames = allGames;
+	const { games, league, year } = await getSeasonGames('NBA', 2021);
+	testGames = games;
 	testLeague = league;
 	testYear = year;
 });
@@ -29,12 +28,6 @@ SeasonGamesTest('testYear should be number', () => {
 
 SeasonGamesTest('testGames should be array', () => {
 	assert.instance(testGames, Array);
-});
-
-SeasonGamesTest('each index of testGames should contain array of game basic info', () => {
-	testGames.map((g) => {
-		assert.instance(g, Array);
-	});
 });
 
 SeasonGamesTest.run();

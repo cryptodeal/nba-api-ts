@@ -4,7 +4,6 @@ import { Game2 } from '../../../src/db/models/index';
 import { getBoxScore } from '../../../src/api/bballRef/games';
 import { initConnect, endConnect } from '../../../src/db/connect';
 import { BoxScore, BoxScorePlayer } from '../../../src/api/bballRef/games/utils';
-import { importBoxScores } from '../../../src/db/controllers/Game2';
 
 const BoxScoreTest = suite('boxScoreTest');
 let game: any;
@@ -16,10 +15,6 @@ BoxScoreTest.before(async () => {
 
 BoxScoreTest.after(async () => {
 	await endConnect();
-});
-
-BoxScoreTest('importBoxScores should be function', () => {
-	assert.type(importBoxScores, 'function');
 });
 
 BoxScoreTest('getBoxScore should be function', () => {

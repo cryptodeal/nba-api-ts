@@ -1,5 +1,9 @@
 import { loadSeasonsPage, loadSeasonSchedule } from '../fetchers';
 import dayjs, { Dayjs } from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 export type BballRefSeason = {
 	displaySeason: string;
@@ -223,8 +227,26 @@ const parseSeasonMonths = ($: cheerio.Root) => {
 	return months;
 };
 
+export type SeasonGameItem = {
+	date: Dayjs;
+	time: boolean;
+	home: {
+		name: string;
+		abbreviation?: string;
+		score?: number;
+	};
+	visitor: {
+		name: string;
+		abbreviation?: string;
+		score?: number;
+	};
+	otCount?: string;
+	attendance?: number;
+	notes?: string;
+};
+
 const parseSeasonGames = ($: cheerio.Root) => {
-	const tableData: (string | boolean | Dayjs)[][] = [];
+	const tableData: SeasonGameItem[] = [];
 	$(`#schedule`).each(function (i, table) {
 		$(table)
 			.find('tbody')
@@ -233,56 +255,107 @@ const parseSeasonGames = ($: cheerio.Root) => {
 					.find('tr')
 					.each(function (j, row) {
 						if ($(row).attr('class') !== 'thead') {
-							const rowData: (string | boolean | Dayjs)[] = [];
-							$(row)
-								.find('th')
-								.each(function (k, cell) {
-									const dateString = $(cell).text().trim().replace(/ /g, '');
-									const date = dateString.split(',');
-									rowData[k] = dayjs(`${date[1]} ${date[2]}`, 'MMM D YYYY');
-								});
-							$(row)
-								.find('td')
-								.each(function (k, cell) {
-									rowData[k + 1] = $(cell).text().trim();
-								});
-							let teamAbbrev;
-							$(row)
-								.find('td:nth-of-type(1)')
-								.each(function (k, cell) {
-									const csk = $(cell).attr('csk');
-									if (csk) teamAbbrev = csk.trim();
-								});
-							if (!teamAbbrev) {
-								$(row)
-									.find('td:nth-of-type(2)')
-									.each(function (k, cell) {
-										const csk = $(cell).attr('csk');
-										if (csk) teamAbbrev = csk.trim();
-									});
-							}
-							if (teamAbbrev) rowData.push(teamAbbrev);
-							if (rowData.length > 10) {
-								const time = rowData[1];
-								if (time !== '' && typeof time === 'string') {
-									rowData[1] = true;
-									const halfOfDay = time.slice(-1);
-									let hours = parseInt(time.split(':')[0]);
-									const minutes = parseInt(time.split(':')[1].slice(0, -1));
-									if (halfOfDay === 'p') {
-										hours += 12;
-									}
-									if (dayjs.isDayjs(rowData[0])) {
-										const dateTime = rowData[0].set('hour', hours).set('minute', minutes);
-										rowData[0] = dateTime;
-									}
-								} else {
-									rowData[1] = false;
+							const game: SeasonGameItem = {
+								date: dayjs($(row).find('[data-stat=date_game]').text().trim()),
+								time: false,
+								home: {
+									name: $(row).find('[data-stat=home_team_name]').text().trim()
+								},
+								visitor: {
+									name: $(row).find('[data-stat=visitor_team_name]').text().trim()
 								}
-							} else {
-								rowData.splice(1, 0, false);
-							}
-							tableData.push(rowData);
+							};
+
+							/** if exists, set visitor team score */
+							$(row)
+								.find('[data-stat=visitor_pts]')
+								.each(function (i, score) {
+									const visitorScore = $(score).text().trim();
+									if (visitorScore !== '') {
+										game.visitor.score = parseInt(visitorScore);
+									}
+								});
+
+							/** set visitor team abbreviation */
+							$(row)
+								.find('[data-stat=visitor_team_name]')
+								.each(function (i, score) {
+									$(score)
+										.find('a')
+										.each(function (i, a) {
+											const href = $(a).attr('href')?.split('/');
+											if (href) {
+												game.visitor.abbreviation = href[href.length - 2];
+											}
+										});
+								});
+
+							/** if exists, set home team score */
+							$(row)
+								.find('[data-stat=home_pts]')
+								.each(function (i, score) {
+									const homeScore = $(score).text().trim();
+									if (homeScore !== '') {
+										game.home.score = parseInt(homeScore);
+									}
+								});
+
+							/** set home team abbreviation */
+							$(row)
+								.find('[data-stat=home_team_name]')
+								.each(function (i, score) {
+									$(score)
+										.find('a')
+										.each(function (i, a) {
+											const href = $(a).attr('href')?.split('/');
+											if (href) {
+												game.home.abbreviation = href[href.length - 2];
+											}
+										});
+								});
+
+							/** if exists, set overtime count */
+							$(row)
+								.find('[data-stat=overtimes]')
+								.each(function (i, overtimes) {
+									const ot = $(overtimes).text().trim();
+									if (ot !== '') game.otCount = ot;
+								});
+
+							/** if exists, set attendance */
+							$(row)
+								.find('[data-stat=attendance]')
+								.each(function (i, attendance) {
+									const attend = $(attendance).text().trim();
+									if (attend !== '') game.attendance = parseInt(attend);
+								});
+
+							/** if exists, set attendance */
+							$(row)
+								.find('[data-stat=game_remarks]')
+								.each(function (i, remarks) {
+									const notes = $(remarks).text().trim();
+									if (notes !== '') game.notes = notes;
+								});
+
+							/** if start time listed, manipulate date and set game.time = true */
+							$(row)
+								.find('[data-stat=game_start_time]')
+								.each(function (i, t) {
+									const time = $(t).text().trim();
+									if (time !== '') {
+										game.time = true;
+										const halfOfDay = time.slice(-1);
+										let hours = parseInt(time.split(':')[0]);
+										const minutes = parseInt(time.split(':')[1].slice(0, -1));
+										if (halfOfDay === 'p') {
+											hours += 12;
+										}
+										const dateTime = game.date.set('hour', hours).set('minute', minutes);
+										game.date = dateTime;
+									}
+								});
+							tableData.push(game);
 						}
 					});
 			});
@@ -302,12 +375,16 @@ export const getSeasonGames = async (league: string, year: number) => {
 		})
 	);
 
-	const allGames = [...initGames];
+	const games = [...initGames];
 	remainingMonths.forEach((month) => {
 		month.map((game) => {
-			allGames.push(game);
+			games.push(game);
 		});
 	});
 
-	return { allGames, league, year };
+	return {
+		games,
+		league,
+		year
+	};
 };

@@ -11,9 +11,10 @@ Data is aggregated from these sources, looking first to [BasketBall Reference](h
 - [ ] Tests
   - [ ] Unit Tests
     - [ ] API
-      - [x] Import BoxScore
-      - [x] Import Player Profile Data
-      - [x] Import Season List & metadata
+      - [x] getBoxScore - fetch and format game boxscore data from Basketball Reference (e.g. [GSW @ LAL, 10/19/2021](https://www.basketball-reference.com/boxscores/202110190LAL.html))
+      - [x] getPlayerData - fetch player profile meta data from Basketball Reference (e.g. [Steph Curry](https://www.basketball-reference.com/players/c/curryst01.html))
+      - [x] getSeasons - fetch seasonList and meta data from [Basketball Reference](https://www.basketball-reference.com/leagues/)
+      - [x] getSeasonGames - fetch and format all season games from Basketball Reference (e.g. [2020-21 Games](https://www.basketball-reference.com/leagues/NBA_2021_games.html))
     - [ ] DB
       - [ ] Team2
       - [ ] Game2
@@ -35,6 +36,7 @@ Data is aggregated from these sources, looking first to [BasketBall Reference](h
       - [ ] Team Meta Data
     - [ ] Seasons
       - [x] getSeasons (returns list of seasons, season meta info)
+      - [x] getSeasonGames (returns list of games for season)
 - [ ] DB
   - [ ] Models
     - [ ] Team2
