@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.importBoxScores = void 0;
+exports.addOrFindGame = exports.importBoxScores = void 0;
 const models_1 = require("../../models");
 const games_1 = require("../../../api/bballRef/games");
 const importBoxScores = async (game) => {
@@ -252,3 +252,44 @@ const importBoxScores = async (game) => {
     return null;
 };
 exports.importBoxScores = importBoxScores;
+const addOrFindGame = async (game, year, league) => {
+    const result = models_1.Game2.findOne({
+        'home.score': game.home.score,
+        'visitor.score': game.visitor.score,
+        'meta.helpers.bballRef.year': year,
+        date: new Date(game.date.toISOString())
+    });
+    if (!result) {
+        const homeTeam = await models_1.Team2.findByName(game.home.name);
+        const visitorTeam = await models_1.Team2.findByName(game.visitor.name);
+        const leagueDoc = await models_1.League.findOne({ name: league });
+        if (leagueDoc?._id && homeTeam._id && visitorTeam._id) {
+            const gameDoc = new models_1.Game2({
+                meta: {
+                    helpers: {
+                        bballRef: {
+                            year: year
+                        }
+                    },
+                    displaySeason: `${year - 1}-${year.toString().slice(-2)}`,
+                    league: leagueDoc._id
+                },
+                date: new Date(game.date.toISOString()),
+                time: game.time,
+                home: {
+                    team: homeTeam._id
+                },
+                visitor: {
+                    team: visitorTeam._id
+                }
+            });
+            if (game.home.score)
+                gameDoc.home.score = game.home.score;
+            if (game.visitor.score)
+                gameDoc.visitor.score = game.visitor.score;
+            return gameDoc.save();
+        }
+    }
+    return result;
+};
+exports.addOrFindGame = addOrFindGame;

@@ -312,7 +312,6 @@ export const addOrFindGame = async (game: SeasonGameItem, year: number, league: 
 		const homeTeam = await Team2.findByName(game.home.name);
 		const visitorTeam = await Team2.findByName(game.visitor.name);
 		const leagueDoc = await League.findOne({ name: league });
-
 		if (leagueDoc?._id && homeTeam._id && visitorTeam._id) {
 			const gameDoc = new Game2({
 				meta: {

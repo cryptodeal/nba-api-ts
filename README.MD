@@ -18,6 +18,7 @@ Data is aggregated from these sources, looking first to [BasketBall Reference](h
     - [ ] DB
       - [ ] Team2
       - [ ] Game2
+        - [x] addOrFindGame - given game, year and league, queries db for existing game and creates game if not found
       - [ ] Player2
       - [ ] Coach2
       - [ ] Official2
@@ -75,7 +76,8 @@ Data is aggregated from these sources, looking first to [BasketBall Reference](h
   - [ ] Controllers
     - [ ] Team2
     - [ ] Game2
-      - [x] importBoxScores - given game date & opponents, parses and writes boxscore data to mongodb (adds any previously unseen officials & players)
+      - [x] importBoxScores - given game, date, & opponents, parses and writes boxscore data to mongodb (adds any previously unseen officials & players)
+      - [x] addOrFindGame - given game, year and league, queries db for existing game and creates game if not found
     - [ ] Player2
       - [x] addOrFindPlayer - find player in player2 collection by playerUrl; if null -> create a new player in database
       - [x] addPlayerBasicData - given player from dataset, find and store player meta info from player's profile on [Basketball Reference](https://basketball-reference.com)

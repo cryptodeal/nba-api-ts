@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Coach2 = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const Coach2Schema = new mongoose_1.default.Schema({
-    //replaces firstName and lastName with name.first and name.last
     name: {
         first: { type: String, required: true, index: true },
         last: { type: String, required: true, index: true },

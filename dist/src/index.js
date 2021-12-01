@@ -12,4 +12,6 @@ const Game2_2 = require("./db/controllers/Game2");
     }).populate('home.team visitor.team')) {
         await (0, Game2_2.importBoxScores)(game);
     }
-});
+})
+    .then(connect_1.endConnect)
+    .then(() => console.log('Completed!'));
