@@ -7,7 +7,7 @@ const path_1 = __importDefault(require("path"));
 const dotenv_1 = __importDefault(require("dotenv"));
 // Parsing the env file.
 dotenv_1.default.config({
-    path: path_1.default.resolve(__dirname, `${path_1.default.dirname(__dirname).includes('nba-api-ts') ? '../.env' : 'nba-api-ts/.env'}`)
+    path: path_1.default.resolve(__dirname, `${path_1.default.dirname(__dirname).includes('nba-api-ts') ? '../.env' : '.env'}`)
 });
 // Loading process.env as ENV interface
 const getConfig = () => {
@@ -24,7 +24,7 @@ const getConfig = () => {
 // definition.
 const getSanitzedConfig = (config) => {
     console.log('__dirname:', __dirname);
-    console.log(path_1.default.resolve(__dirname, `${path_1.default.dirname(__dirname).includes('nba-api-ts') ? '.env' : 'nba-api-ts/.env'}`));
+    console.log(path_1.default.resolve(__dirname, `${path_1.default.dirname(__dirname).includes('nba-api-ts') ? '../.env' : 'nba-api-ts/.env'}`));
     for (const [key, value] of Object.entries(config)) {
         if (value === undefined) {
             throw new Error(`Missing key ${key} in config.env`);

@@ -35,8 +35,8 @@ const addOrFindPlayer = async (playerData) => {
 };
 exports.addOrFindPlayer = addOrFindPlayer;
 const addPlayerBasicData = (player) => {
-    return (0, player_1.getPlayerData)(player.meta.helpers.bballRef.playerUrl).then((data) => {
-        //console.log(data);
+    const { playerUrl } = player.meta.helpers.bballRef;
+    return (0, player_1.getPlayerData)(playerUrl).then((data) => {
         const { height, weight, birthDate, birthPlace, position, shoots, name, college, socials } = data;
         if (height.feet) {
             player.height = {
