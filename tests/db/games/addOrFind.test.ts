@@ -3,6 +3,7 @@ import * as assert from 'uvu/assert';
 import { getSeasonGames, SeasonGameItem } from '../../../src/api/bballRef/seasons';
 import { addOrFindGame } from '../../../src/db/controllers/Game2';
 import { initConnect, endConnect } from '../../../src/db/connect';
+import { Game2 } from '../../../src/db/models/Game2';
 
 const AddOrFindGameTest = suite('addOrFindGameTest');
 let games: SeasonGameItem[];
@@ -28,6 +29,10 @@ AddOrFindGameTest('fetch list of games in 2020-21 NBA season', async () => {
 
 AddOrFindGameTest('fetch list of games in 2020-21 NBA season', () => {
 	assert.ok(game);
+});
+
+AddOrFindGameTest('fetch list of games in 2020-21 NBA season', () => {
+	assert.instance(game, Game2);
 });
 
 AddOrFindGameTest.run();

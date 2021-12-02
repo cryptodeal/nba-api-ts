@@ -1,12 +1,13 @@
 import { suite } from 'uvu';
 import * as assert from 'uvu/assert';
 import { Game2 } from '../../../src/db/models/index';
+import { Game2Document } from '../../../src/db/interfaces/mongoose.gen';
 import { getBoxScore } from '../../../src/api/bballRef/games';
 import { initConnect, endConnect } from '../../../src/db/connect';
 import { BoxScore, BoxScorePlayer } from '../../../src/api/bballRef/games/utils';
 
 const BoxScoreTest = suite('boxScoreTest');
-let game: any;
+let game: Game2Document;
 let boxScore: void | BoxScore;
 
 BoxScoreTest.before(async () => {
@@ -21,44 +22,32 @@ BoxScoreTest('getBoxScore should be function', () => {
 	assert.type(getBoxScore, 'function');
 });
 
-BoxScoreTest('find game in Game2 collection', async () => {
+BoxScoreTest('find Game2: instance of Game2', async () => {
 	const yesterday = new Date();
 	yesterday.setDate(yesterday.getDate() - 1);
 	game = await Game2.findOne({ date: { $lte: yesterday } }).populate('home.team visitor.team');
+	assert.instance(game, Game2);
 });
 
-BoxScoreTest('find game in Game2 collection', async () => {
-	const yesterday = new Date();
-	yesterday.setDate(yesterday.getDate() - 1);
-	game = await Game2.findOne({ date: { $lte: yesterday } }).populate('home.team visitor.team');
+BoxScoreTest('load boxScore: instance of BoxScore', async () => {
+	boxScore = await getBoxScore(game);
+	assert.instance(boxScore, BoxScore);
 });
 
-BoxScoreTest('game should be instance of Game2Document', () => {
-	if (game) assert.instance(game, Game2);
-});
-
-BoxScoreTest('load boxScore for game', async () => {
-	if (game) {
-		boxScore = await getBoxScore(game);
-	}
-});
-
-BoxScoreTest('gameData (boxscore data) should be instance of BoxScore class', async () => {
+BoxScoreTest('each boxScore home player: instance of BoxScorePlayer', () => {
 	if (boxScore) {
-		assert.instance(boxScore, BoxScore);
+		boxScore.home.players.map((p) => {
+			assert.instance(p, BoxScorePlayer);
+		});
 	}
 });
 
-BoxScoreTest('each boxScore home player should be instance of BoxScorePlayer class', () => {
-	boxScore?.home.players.map((p) => {
-		assert.instance(p, BoxScorePlayer);
-	});
-});
-
-BoxScoreTest('boxscore visitor player should be instance of BoxScorePlayer class', () => {
-	boxScore?.visitor.players.map((p) => {
-		assert.instance(p, BoxScorePlayer);
-	});
+BoxScoreTest('each boxScore visitor player: instance of BoxScorePlayer', () => {
+	if (boxScore) {
+		boxScore.visitor.players.map((p) => {
+			assert.instance(p, BoxScorePlayer);
+		});
+	}
 });
 
 BoxScoreTest.run();

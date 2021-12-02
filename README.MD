@@ -19,6 +19,7 @@ Data is aggregated from these sources, looking first to [BasketBall Reference](h
       - [ ] Team2
       - [ ] Game2
         - [x] addOrFindGame - given game, year and league, queries db for existing game and creates game if not found
+        - [x] importBoxScores - given Game2 instance, import and save boxscore data to db
       - [ ] Player2
       - [ ] Coach2
       - [ ] Official2
