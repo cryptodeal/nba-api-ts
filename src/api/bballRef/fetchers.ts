@@ -100,3 +100,10 @@ export const loadTeamIndex = (teamAbbr: string): Promise<cheerio.Root> => {
 		return $;
 	});
 };
+
+export const loadTx = (league: string, year: number): Promise<cheerio.Root> => {
+	return fetch(`${baseUrl}/leagues/${league}_${year}_transactions.html`).then(async (result) => {
+		const body = await result.text();
+		return cheerio.load(body);
+	});
+};

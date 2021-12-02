@@ -5,7 +5,7 @@ import { initConnect, endConnect } from '../../../src/db/connect';
 import { Game2 } from '../../../src/db/models/Game2';
 import { Game2Document } from '../../../src/db/interfaces/mongoose.gen';
 
-const ImportBoxScoresTest = suite('importBoxScoresTest');
+const ImportBoxScoresTest = suite('importBoxScoresTest', {});
 let game: Game2Document;
 let result: Game2Document;
 

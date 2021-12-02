@@ -15,6 +15,7 @@ Data is aggregated from these sources, looking first to [BasketBall Reference](h
       - [x] getPlayerData - fetch player profile meta data from Basketball Reference (e.g. [Steph Curry](https://www.basketball-reference.com/players/c/curryst01.html))
       - [x] getSeasons - fetch seasonList and meta data from [Basketball Reference](https://www.basketball-reference.com/leagues/)
       - [x] getSeasonGames - fetch and format all season games from Basketball Reference (e.g. [2020-21 Games](https://www.basketball-reference.com/leagues/NBA_2021_games.html))
+      - [x] getSeasonTx - fetch and format all season transactions from Basketball Reference (e.g. [2020-21 NBA Transactions](https://www.basketball-reference.com/leagues/NBA_2021_transactions.html))
     - [ ] DB
       - [ ] Team2
       - [ ] Game2
@@ -39,6 +40,8 @@ Data is aggregated from these sources, looking first to [BasketBall Reference](h
     - [ ] Seasons
       - [x] getSeasons (returns list of seasons, season meta info)
       - [x] getSeasonGames (returns list of games for season)
+    - [ ] Transactions (Tx)
+      - [x] getSeasonTx (returns list of transactions for season)
 - [ ] DB
   - [ ] Models
     - [ ] Team2
