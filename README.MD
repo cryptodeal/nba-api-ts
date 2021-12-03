@@ -7,6 +7,23 @@ Backend data aggregation, storage, and manipulation for basketball statistics (N
 
 Data is aggregated from these sources, looking first to [BasketBall Reference](https://www.basketball-reference.com) as the authority on historical data, and then written to varying mongodb collections, which comprise the dataset used for [Baller Analytics](https://balleranalytics.ai).
 
+## Development:
+
+### Run Unit Tests:
+```
+pnpm test
+```
+
+### Run Coverage Tests:
+```
+pnpm test:coverage
+```
+
+### Import Data:
+```
+pnpm start
+```
+
 ## Status:
 - [ ] Tests
   - [ ] Unit Tests
