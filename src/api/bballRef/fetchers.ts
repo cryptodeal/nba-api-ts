@@ -1,9 +1,7 @@
 import fetch from 'cross-fetch';
 import cheerio from 'cheerio';
 
-/**
- * base url to build API requests
- */
+/* base url to build API requests */
 const baseUrl = 'https://www.basketball-reference.com';
 
 export const loadBoxScorePage = (

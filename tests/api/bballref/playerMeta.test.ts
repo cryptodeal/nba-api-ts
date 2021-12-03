@@ -1,6 +1,6 @@
 import { suite } from 'uvu';
 import * as assert from 'uvu/assert';
-import { Player2 } from '../../../src/db/models/index';
+import { Player2 } from '../../../src/db/models';
 import { Player2Document } from '../../../src/db/interfaces/mongoose.gen';
 import { getPlayerData, PlayerMetaData } from '../../../src/api/bballRef/player';
 import { initConnect, endConnect } from '../../../src/db/connect';

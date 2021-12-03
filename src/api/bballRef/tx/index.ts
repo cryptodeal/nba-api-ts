@@ -1,4 +1,3 @@
-import cheerio from 'cheerio';
 import { loadTx } from '../fetchers';
 import dayjs from 'dayjs';
 
@@ -16,15 +15,23 @@ export type Tx = {
 };
 
 export type SeasonTxList = {
-	start?: Date;
-	end?: Date;
+	start: Date;
+	end: Date;
 	txs: Tx[];
 };
 
 const getPlayerTx = ($: cheerio.Root) => {
+	const p = $('#content').find('p').first();
+	const start = dayjs($(p).find('strong').first().text().trim(), 'MMMM D, YYYY').toDate();
+	$(p).find('strong').first().remove();
+	const end = dayjs($(p).find('strong').first().text().trim(), 'MMMM D, YYYY').toDate();
+
 	const seasonTxList: SeasonTxList = {
+		start,
+		end,
 		txs: []
 	};
+
 	$('.page_index')
 		.find('li')
 		.each(function (i, li) {
@@ -33,7 +40,7 @@ const getPlayerTx = ($: cheerio.Root) => {
 				.find('p')
 				.each(function (i, p) {
 					const tx: Tx = {
-						date: new Date(date.toISOString()),
+						date: date.toDate(),
 						details: $(p).text().trim(),
 						players: [],
 						coaches: [],
@@ -48,21 +55,24 @@ const getPlayerTx = ($: cheerio.Root) => {
 								if (href.includes('coaches')) {
 									const coach: TxEntity = {
 										name: $(a).text().trim(),
-										url: hrefSplit[hrefSplit.length - 1].slice(-5)
+										url: hrefSplit[hrefSplit.length - 1].split('.')[0]
 									};
+									if (tx.coaches.findIndex((c) => c.url === coach.url) === -1)
+										tx.coaches.push(coach);
 									tx.coaches.push(coach);
 								} else if (href.includes('players')) {
 									const player: TxEntity = {
 										name: $(a).text().trim(),
-										url: hrefSplit[hrefSplit.length - 1].slice(-5)
+										url: hrefSplit[hrefSplit.length - 1].split('.')[0]
 									};
-									tx.players.push(player);
+									if (tx.players.findIndex((p) => p.url === player.url) === -1)
+										tx.players.push(player);
 								} else if (href.includes('teams')) {
 									const team: TxEntity = {
 										name: $(a).text().trim(),
 										url: hrefSplit[hrefSplit.length - 2]
 									};
-									tx.teams.push(team);
+									if (tx.teams.findIndex((t) => t.url === team.url) === -1) tx.teams.push(team);
 								}
 							}
 						});

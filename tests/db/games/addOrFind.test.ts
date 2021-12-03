@@ -3,7 +3,7 @@ import * as assert from 'uvu/assert';
 import { getSeasonGames, SeasonGameItem } from '../../../src/api/bballRef/seasons';
 import { addOrFindGame } from '../../../src/db/controllers/Game2';
 import { initConnect, endConnect } from '../../../src/db/connect';
-import { Game2 } from '../../../src/db/models/Game2';
+import { Game2 } from '../../../src/db/models';
 
 const AddOrFindGameTest = suite('addOrFindGameTest');
 let games: SeasonGameItem[];

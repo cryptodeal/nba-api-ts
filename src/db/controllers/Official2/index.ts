@@ -1,4 +1,4 @@
-import { Official2 } from '../../models/Official2';
+import { Official2 } from '../../models';
 import { Official2Document } from '../../interfaces/mongoose.gen';
 import { ParsedOfficial } from '../../../api/bballRef/games/boxScore';
 

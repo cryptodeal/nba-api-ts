@@ -1,4 +1,4 @@
-import { Player2 } from '../../models/Player2';
+import { Player2 } from '../../models';
 import { Player2Document } from '../../interfaces/mongoose.gen';
 import { BoxScorePlayer } from '../../../api/bballRef/games/utils';
 import { getPlayerData } from '../../../api/bballRef/player';

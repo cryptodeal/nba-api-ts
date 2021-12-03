@@ -2,7 +2,7 @@ import { suite } from 'uvu';
 import * as assert from 'uvu/assert';
 import { importBoxScores } from '../../../src/db/controllers/Game2';
 import { initConnect, endConnect } from '../../../src/db/connect';
-import { Game2 } from '../../../src/db/models/Game2';
+import { Game2 } from '../../../src/db/models';
 import { Game2Document } from '../../../src/db/interfaces/mongoose.gen';
 
 const ImportBoxScoresTest = suite('importBoxScoresTest', {});

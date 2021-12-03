@@ -16,7 +16,7 @@ specifiers:
   husky: ^7.0.4
   iso-3166-1-ts: ^0.2.2
   lint-staged: ^12.1.2
-  mongoose: ^6.0.13
+  mongoose: ^6.0.14
   mongoose-slugger-plugin: ^3.0.3
   mongoose-tsgen: ^8.4.6
   prettier: ^2.5.0
@@ -230,14 +230,14 @@ packages:
       '@napi-rs/pinyin-win32-x64-msvc': 1.6.2
     dev: false
 
-  /@napi-rs/triples/1.0.3:
-    resolution: {integrity: sha512-jDJTpta+P4p1NZTFVLHJ/TLFVYVcOqv6l8xwOeBKNPMgY/zDYH/YH7SJbvrr/h1RcS9GzbPcLKGzpuK9cV56UA==}
+  /@napi-rs/triples/1.1.0:
+    resolution: {integrity: sha512-XQr74QaLeMiqhStEhLn1im9EOMnkypp7MZOwQhGzqp2Weu5eQJbpPxWxixxlYRKWPOmJjsk6qYfYH9kq43yc2w==}
     dev: false
 
   /@node-rs/helper/1.2.1:
     resolution: {integrity: sha512-R5wEmm8nbuQU0YGGmYVjEc0OHtYsuXdpRG+Ut/3wZ9XAvQWyThN08bTh2cBJgoZxHQUPtvRfeQuxcAgLuiBISg==}
     dependencies:
-      '@napi-rs/triples': 1.0.3
+      '@napi-rs/triples': 1.1.0
     dev: false
 
   /@nodelib/fs.scandir/2.1.5:

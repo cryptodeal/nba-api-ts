@@ -1,5 +1,5 @@
 import { endConnect, initConnect } from './db/connect';
-import { Game2 } from './db/models/Game2';
+import { Game2 } from './db/models';
 import { importBoxScores } from './db/controllers/Game2';
 
 initConnect()
