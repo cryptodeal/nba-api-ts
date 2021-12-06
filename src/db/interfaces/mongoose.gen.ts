@@ -43,9 +43,16 @@ export type Coach2Season = {
  * ```
  */
 export type Coach2 = {
+	meta: {
+		helpers: {
+			bballRef: {
+				coachUrl: string;
+			};
+		};
+	};
 	name: {
-		first: string;
-		last: string;
+		first?: string;
+		last?: string;
 		full: string;
 	};
 	seasons: Coach2Season[];
@@ -77,7 +84,9 @@ export type Coach2Queries = {};
 
 export type Coach2Methods = {};
 
-export type Coach2Statics = {};
+export type Coach2Statics = {
+	findByUrl: (this: Coach2Model, url: string) => any;
+};
 
 /**
  * Mongoose Model type
@@ -133,9 +142,16 @@ export type Coach2SeasonDocument = mongoose.Types.Subdocument & {
  */
 export type Coach2Document = mongoose.Document<mongoose.Types.ObjectId, Coach2Queries> &
 	Coach2Methods & {
+		meta: {
+			helpers: {
+				bballRef: {
+					coachUrl: string;
+				};
+			};
+		};
 		name: {
-			first: string;
-			last: string;
+			first?: string;
+			last?: string;
 			full: string;
 		};
 		seasons: mongoose.Types.DocumentArray<Coach2SeasonDocument>;
@@ -434,6 +450,7 @@ export type Game2 = {
 			bballRef: {
 				year?: number;
 				missingData?: boolean;
+				boxScoreUrl: string;
 			};
 		};
 		displaySeason: string;
@@ -596,7 +613,9 @@ export type Game2Queries = {
 
 export type Game2Methods = {};
 
-export type Game2Statics = {};
+export type Game2Statics = {
+	findByUrl: (this: Game2Model, url: string) => any;
+};
 
 /**
  * Mongoose Model type
@@ -890,6 +909,7 @@ export type Game2Document = mongoose.Document<mongoose.Types.ObjectId, Game2Quer
 				bballRef: {
 					year?: number;
 					missingData?: boolean;
+					boxScoreUrl: string;
 				};
 			};
 			displaySeason: string;
@@ -2446,6 +2466,127 @@ export type Team2Document = mongoose.Document<mongoose.Types.ObjectId, Team2Quer
 			maxYear: string;
 		};
 		seasons: mongoose.Types.DocumentArray<Team2SeasonDocument>;
+		_id: mongoose.Types.ObjectId;
+	};
+
+/**
+ * Lean version of TxParticipantDocument
+ *
+ * This has all Mongoose getters & functions removed. This type will be returned from `TxDocument.toObject()`.
+ * ```
+ * const txObject = tx.toObject();
+ * ```
+ */
+export type TxParticipant = {
+	team: Team2['_id'] | Team2;
+	received: {
+		players: (Player2['_id'] | Player2)[];
+		coaches: (Coach2['_id'] | Coach2)[];
+		assets: string[];
+	};
+	spent: {
+		players: (Player2['_id'] | Player2)[];
+		coaches: (Coach2['_id'] | Coach2)[];
+		assets: string[];
+	};
+	_id: mongoose.Types.ObjectId;
+};
+
+/**
+ * Lean version of TxDocument
+ *
+ * This has all Mongoose getters & functions removed. This type will be returned from `TxDocument.toObject()`. To avoid conflicts with model names, use the type alias `TxObject`.
+ * ```
+ * const txObject = tx.toObject();
+ * ```
+ */
+export type Tx = {
+	date: Date;
+	season: number;
+	participants: TxParticipant[];
+	_id: mongoose.Types.ObjectId;
+};
+
+/**
+ * Lean version of TxDocument (type alias of `Tx`)
+ *
+ * Use this type alias to avoid conflicts with model names:
+ * ```
+ * import { Tx } from "../models"
+ * import { TxObject } from "../interfaces/mongoose.gen.ts"
+ *
+ * const txObject: TxObject = tx.toObject();
+ * ```
+ */
+export type TxObject = Tx;
+
+/**
+ * Mongoose Query types
+ *
+ * Pass this type to the Mongoose Model constructor:
+ * ```
+ * const Tx = mongoose.model<TxDocument, TxModel>("Tx", TxSchema);
+ * ```
+ */
+export type TxQueries = {};
+
+export type TxMethods = {};
+
+export type TxStatics = {};
+
+/**
+ * Mongoose Model type
+ *
+ * Pass this type to the Mongoose Model constructor:
+ * ```
+ * const Tx = mongoose.model<TxDocument, TxModel>("Tx", TxSchema);
+ * ```
+ */
+export type TxModel = mongoose.Model<TxDocument, TxQueries> & TxStatics;
+
+/**
+ * Mongoose Schema type
+ *
+ * Assign this type to new Tx schema instances:
+ * ```
+ * const TxSchema: TxSchema = new mongoose.Schema({ ... })
+ * ```
+ */
+export type TxSchema = mongoose.Schema<TxDocument, TxModel>;
+
+/**
+ * Mongoose Subdocument type
+ *
+ * Type of `TxDocument["participants"]` element.
+ */
+export type TxParticipantDocument = mongoose.Types.Subdocument & {
+	team: Team2Document['_id'] | Team2Document;
+	received: {
+		players: mongoose.Types.Array<Player2Document['_id'] | Player2Document>;
+		coaches: mongoose.Types.Array<Coach2Document['_id'] | Coach2Document>;
+		assets: mongoose.Types.Array<string>;
+	};
+	spent: {
+		players: mongoose.Types.Array<Player2Document['_id'] | Player2Document>;
+		coaches: mongoose.Types.Array<Coach2Document['_id'] | Coach2Document>;
+		assets: mongoose.Types.Array<string>;
+	};
+	_id: mongoose.Types.ObjectId;
+};
+
+/**
+ * Mongoose Document type
+ *
+ * Pass this type to the Mongoose Model constructor:
+ * ```
+ * const Tx = mongoose.model<TxDocument, TxModel>("Tx", TxSchema);
+ * ```
+ */
+export type TxDocument = mongoose.Document<mongoose.Types.ObjectId, TxQueries> &
+	TxMethods & {
+		date: Date;
+		season: number;
+		participants: mongoose.Types.DocumentArray<TxParticipantDocument>;
 		_id: mongoose.Types.ObjectId;
 	};
 

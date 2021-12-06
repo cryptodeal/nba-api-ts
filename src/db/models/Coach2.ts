@@ -2,9 +2,16 @@ import mongoose from 'mongoose';
 import { Coach2Document, Coach2Model, Coach2Schema } from '../interfaces/mongoose.gen';
 
 const Coach2Schema = new mongoose.Schema({
+	meta: {
+		helpers: {
+			bballRef: {
+				coachUrl: { type: String, required: true }
+			}
+		}
+	},
 	name: {
-		first: { type: String, required: true, index: true },
-		last: { type: String, required: true, index: true },
+		first: { type: String },
+		last: { type: String },
 		full: { type: String, required: true, index: true }
 	},
 	seasons: [
@@ -27,6 +34,12 @@ const Coach2Schema = new mongoose.Schema({
 		}
 	]
 });
+
+Coach2Schema.statics = {
+	findByUrl(url: string) {
+		return this.findOne({ 'meta.helpers.bballRef.coachUrl': url }).exec();
+	}
+};
 
 export const Coach2: Coach2Model = mongoose.model<Coach2Document, Coach2Model>(
 	'Coach2',

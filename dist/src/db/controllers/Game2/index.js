@@ -7,6 +7,9 @@ const importBoxScores = async (game) => {
     const boxScore = await (0, games_1.getBoxScore)(game);
     const unpopulatedGame = await models_1.Game2.findById(game._id);
     if (boxScore && unpopulatedGame) {
+        while (unpopulatedGame.officials.length > 0) {
+            unpopulatedGame.officials.pop();
+        }
         if (boxScore.arena)
             unpopulatedGame.arena = boxScore.arena;
         if (boxScore.city)
@@ -253,43 +256,84 @@ const importBoxScores = async (game) => {
 };
 exports.importBoxScores = importBoxScores;
 const addOrFindGame = async (game, year, league) => {
-    const result = models_1.Game2.findOne({
-        'home.score': game.home.score,
-        'visitor.score': game.visitor.score,
-        'meta.helpers.bballRef.year': year,
-        date: new Date(game.date.toISOString())
-    });
-    if (!result) {
-        const homeTeam = await models_1.Team2.findByName(game.home.name);
-        const visitorTeam = await models_1.Team2.findByName(game.visitor.name);
-        const leagueDoc = await models_1.League.findOne({ name: league });
-        if (leagueDoc?._id && homeTeam._id && visitorTeam._id) {
-            const gameDoc = new models_1.Game2({
-                meta: {
-                    helpers: {
-                        bballRef: {
-                            year: year
-                        }
+    if (game.boxScoreUrl) {
+        const result = await models_1.Game2.findByUrl(game.boxScoreUrl);
+        if (!result) {
+            const homeTeam = await models_1.Team2.findByName(game.home.name);
+            const visitorTeam = await models_1.Team2.findByName(game.visitor.name);
+            const leagueDoc = await models_1.League.findOne({ name: league });
+            if (leagueDoc?._id && homeTeam._id && visitorTeam._id) {
+                const gameDoc = new models_1.Game2({
+                    meta: {
+                        helpers: {
+                            bballRef: {
+                                year: year,
+                                boxScoreUrl: game.boxScoreUrl
+                            }
+                        },
+                        displaySeason: `${year - 1}-${year.toString().slice(-2)}`,
+                        league: leagueDoc._id
                     },
-                    displaySeason: `${year - 1}-${year.toString().slice(-2)}`,
-                    league: leagueDoc._id
-                },
-                date: new Date(game.date.toISOString()),
-                time: game.time,
-                home: {
-                    team: homeTeam._id
-                },
-                visitor: {
-                    team: visitorTeam._id
-                }
-            });
-            if (game.home.score)
-                gameDoc.home.score = game.home.score;
-            if (game.visitor.score)
-                gameDoc.visitor.score = game.visitor.score;
-            return gameDoc.save();
+                    date: new Date(game.date.toISOString()),
+                    time: game.time,
+                    home: {
+                        team: homeTeam._id
+                    },
+                    visitor: {
+                        team: visitorTeam._id
+                    }
+                });
+                if (game.home.score)
+                    gameDoc.home.score = game.home.score;
+                if (game.visitor.score)
+                    gameDoc.visitor.score = game.visitor.score;
+                return gameDoc.save();
+            }
         }
+        console.log('Game already exists');
+        return result;
     }
-    return result;
+    else {
+        const result = await models_1.Game2.findOne({
+            'home.score': game.home.score,
+            'visitor.score': game.visitor.score,
+            'meta.helpers.bballRef.year': year,
+            date: new Date(game.date.toISOString())
+        });
+        if (!result) {
+            const homeTeam = await models_1.Team2.findByName(game.home.name);
+            const visitorTeam = await models_1.Team2.findByName(game.visitor.name);
+            const leagueDoc = await models_1.League.findOne({ name: league });
+            if (leagueDoc?._id && homeTeam._id && visitorTeam._id) {
+                const gameDoc = new models_1.Game2({
+                    meta: {
+                        helpers: {
+                            bballRef: {
+                                year: year,
+                                boxScoreUrl: game.boxScoreUrl
+                            }
+                        },
+                        displaySeason: `${year - 1}-${year.toString().slice(-2)}`,
+                        league: leagueDoc._id
+                    },
+                    date: new Date(game.date.toISOString()),
+                    time: game.time,
+                    home: {
+                        team: homeTeam._id
+                    },
+                    visitor: {
+                        team: visitorTeam._id
+                    }
+                });
+                if (game.home.score)
+                    gameDoc.home.score = game.home.score;
+                if (game.visitor.score)
+                    gameDoc.visitor.score = game.visitor.score;
+                return gameDoc.save();
+            }
+        }
+        console.log('Game already exists');
+        return result;
+    }
 };
 exports.addOrFindGame = addOrFindGame;

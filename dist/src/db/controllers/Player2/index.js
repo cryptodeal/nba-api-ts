@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.addPlayerBasicData = exports.addOrFindPlayer = void 0;
-const Player2_1 = require("../../models/Player2");
+const models_1 = require("../../models");
 const player_1 = require("../../../api/bballRef/player");
 const addOrFindPlayer = async (playerData) => {
     const { playerUrl } = playerData.meta.helpers.bballRef;
-    const result = await Player2_1.Player2.findByPlayerUrl(playerUrl);
+    const result = await models_1.Player2.findByPlayerUrl(playerUrl);
     if (!result) {
         const player = {
             meta: {
@@ -19,7 +19,7 @@ const addOrFindPlayer = async (playerData) => {
                 full: playerData.fullName
             }
         };
-        return new Player2_1.Player2(player)
+        return new models_1.Player2(player)
             .save()
             .then((player) => {
             return player.save();

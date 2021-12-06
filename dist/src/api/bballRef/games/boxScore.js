@@ -35,10 +35,16 @@ exports.ParsedOfficial = ParsedOfficial;
 class BoxScoreQuery {
     constructor(game) {
         this.isValid = false;
-        this.date =
-            game.time == false
-                ? (0, dayjs_1.default)(game?.date).format('YYYYMMDD')
-                : (0, dayjs_1.default)(game?.date).tz('America/New_York').format('YYYYMMDD');
+        this.boxScoreUrl = game.meta.helpers.bballRef.boxScoreUrl;
+        if (game.time) {
+            //const tempDate = dayjs(game.date).tz('America/New_York');
+            //console.log(tempDate);
+            //console.log(tempDate.utcOffset());
+            this.date = (0, dayjs_1.default)(game.date).tz('America/New_York').format('YYYYMMDD');
+        }
+        else {
+            this.date = (0, dayjs_1.default)(game.date).format('YYYYMMDD');
+        }
         /** Find Home Abbreviation for Season */
         if (game.home.team && (0, mongoose_gen_1.IsPopulated)(game.home.team)) {
             for (let i = 0; i < game.home.team.seasons.length; i++) {
@@ -56,7 +62,7 @@ class BoxScoreQuery {
             }
         }
         /** If valid query, isValid = True */
-        if (this.homeAbbrev && this.date && this.visitorAbbrev)
+        if ((this.homeAbbrev && this.date && this.visitorAbbrev) || this.boxScoreUrl)
             this.isValid = true;
     }
 }
@@ -130,6 +136,8 @@ const parseGamePeriods = ($) => {
             periods.push($(period).text().trim().toLowerCase());
         });
     });
+    if (!periods.length)
+        periods.push('game');
     return periods;
 };
 const fetchTeamBasicData = ($, team, period) => {
@@ -383,9 +391,9 @@ const parseLocale = ($) => {
     return false;
 };
 const getBoxScore = async (game) => {
-    const { date, homeAbbrev, visitorAbbrev, isValid } = new BoxScoreQuery(game);
+    const { date, homeAbbrev, visitorAbbrev, isValid, boxScoreUrl } = new BoxScoreQuery(game);
     if (isValid && homeAbbrev && visitorAbbrev) {
-        const $ = await (0, fetchers_1.loadBoxScorePage)(date, homeAbbrev);
+        const $ = await (0, fetchers_1.loadBoxScorePage)(date, homeAbbrev, boxScoreUrl);
         const boxScore = {
             home: {},
             visitor: {},

@@ -7,6 +7,9 @@ export const importBoxScores = async (game: Game2Document) => {
 	const boxScore = await getBoxScore(game);
 	const unpopulatedGame = await Game2.findById(game._id);
 	if (boxScore && unpopulatedGame) {
+		while (unpopulatedGame.officials.length > 0) {
+			unpopulatedGame.officials.pop();
+		}
 		if (boxScore.arena) unpopulatedGame.arena = boxScore.arena;
 		if (boxScore.city) unpopulatedGame.city = boxScore.city;
 		if (boxScore.state) unpopulatedGame.state = boxScore.state;
@@ -302,41 +305,80 @@ export const importBoxScores = async (game: Game2Document) => {
 };
 
 export const addOrFindGame = async (game: SeasonGameItem, year: number, league: string) => {
-	const result = Game2.findOne({
-		'home.score': game.home.score,
-		'visitor.score': game.visitor.score,
-		'meta.helpers.bballRef.year': year,
-		date: new Date(game.date.toISOString())
-	});
-	if (!result) {
-		const homeTeam = await Team2.findByName(game.home.name);
-		const visitorTeam = await Team2.findByName(game.visitor.name);
-		const leagueDoc = await League.findOne({ name: league });
-		if (leagueDoc?._id && homeTeam._id && visitorTeam._id) {
-			const gameDoc = new Game2({
-				meta: {
-					helpers: {
-						bballRef: {
-							year: year
-						}
+	if (game.boxScoreUrl) {
+		const result = await Game2.findByUrl(game.boxScoreUrl);
+		if (!result) {
+			const homeTeam = await Team2.findByName(game.home.name);
+			const visitorTeam = await Team2.findByName(game.visitor.name);
+			const leagueDoc = await League.findOne({ name: league });
+			if (leagueDoc?._id && homeTeam._id && visitorTeam._id) {
+				const gameDoc = new Game2({
+					meta: {
+						helpers: {
+							bballRef: {
+								year: year,
+								boxScoreUrl: game.boxScoreUrl
+							}
+						},
+						displaySeason: `${year - 1}-${year.toString().slice(-2)}`,
+						league: leagueDoc._id
 					},
-					displaySeason: `${year - 1}-${year.toString().slice(-2)}`,
-					league: leagueDoc._id
-				},
-				date: new Date(game.date.toISOString()),
-				time: game.time,
-				home: {
-					team: homeTeam._id
-				},
-				visitor: {
-					team: visitorTeam._id
-				}
-			});
+					date: new Date(game.date.toISOString()),
+					time: game.time,
+					home: {
+						team: homeTeam._id
+					},
+					visitor: {
+						team: visitorTeam._id
+					}
+				});
 
-			if (game.home.score) gameDoc.home.score = game.home.score;
-			if (game.visitor.score) gameDoc.visitor.score = game.visitor.score;
-			return gameDoc.save();
+				if (game.home.score) gameDoc.home.score = game.home.score;
+				if (game.visitor.score) gameDoc.visitor.score = game.visitor.score;
+				return gameDoc.save();
+			}
 		}
+		console.log('Game already exists');
+		return result;
+	} else {
+		const result = await Game2.findOne({
+			'home.score': game.home.score,
+			'visitor.score': game.visitor.score,
+			'meta.helpers.bballRef.year': year,
+			date: new Date(game.date.toISOString())
+		});
+		if (!result) {
+			const homeTeam = await Team2.findByName(game.home.name);
+			const visitorTeam = await Team2.findByName(game.visitor.name);
+			const leagueDoc = await League.findOne({ name: league });
+			if (leagueDoc?._id && homeTeam._id && visitorTeam._id) {
+				const gameDoc = new Game2({
+					meta: {
+						helpers: {
+							bballRef: {
+								year: year,
+								boxScoreUrl: game.boxScoreUrl
+							}
+						},
+						displaySeason: `${year - 1}-${year.toString().slice(-2)}`,
+						league: leagueDoc._id
+					},
+					date: new Date(game.date.toISOString()),
+					time: game.time,
+					home: {
+						team: homeTeam._id
+					},
+					visitor: {
+						team: visitorTeam._id
+					}
+				});
+
+				if (game.home.score) gameDoc.home.score = game.home.score;
+				if (game.visitor.score) gameDoc.visitor.score = game.visitor.score;
+				return gameDoc.save();
+			}
+		}
+		console.log('Game already exists');
+		return result;
 	}
-	return result;
 };

@@ -77,11 +77,17 @@ class BoxScoreQuery {
 	public homeAbbrev?: string;
 	public visitorAbbrev?: string;
 	public isValid = false;
+	public boxScoreUrl: string;
 	constructor(game: Game2Document) {
-		this.date =
-			game.time == false
-				? dayjs(game?.date).format('YYYYMMDD')
-				: dayjs(game?.date).tz('America/New_York').format('YYYYMMDD');
+		this.boxScoreUrl = game.meta.helpers.bballRef.boxScoreUrl;
+		if (game.time) {
+			//const tempDate = dayjs(game.date).tz('America/New_York');
+			//console.log(tempDate);
+			//console.log(tempDate.utcOffset());
+			this.date = dayjs(game.date).tz('America/New_York').format('YYYYMMDD');
+		} else {
+			this.date = dayjs(game.date).format('YYYYMMDD');
+		}
 
 		/** Find Home Abbreviation for Season */
 		if (game.home.team && IsPopulated(game.home.team)) {
@@ -102,7 +108,8 @@ class BoxScoreQuery {
 		}
 
 		/** If valid query, isValid = True */
-		if (this.homeAbbrev && this.date && this.visitorAbbrev) this.isValid = true;
+		if ((this.homeAbbrev && this.date && this.visitorAbbrev) || this.boxScoreUrl)
+			this.isValid = true;
 	}
 }
 
@@ -178,6 +185,7 @@ const parseGamePeriods = ($: cheerio.Root): string[] => {
 				periods.push($(period).text().trim().toLowerCase());
 			});
 	});
+	if (!periods.length) periods.push('game');
 	return periods;
 };
 
@@ -450,9 +458,9 @@ const parseLocale = ($: cheerio.Root): boolean | BoxScoreLocale => {
 };
 
 const getBoxScore = async (game: Game2Document): Promise<void | BoxScore> => {
-	const { date, homeAbbrev, visitorAbbrev, isValid } = new BoxScoreQuery(game);
+	const { date, homeAbbrev, visitorAbbrev, isValid, boxScoreUrl } = new BoxScoreQuery(game);
 	if (isValid && homeAbbrev && visitorAbbrev) {
-		const $ = await loadBoxScorePage(date, homeAbbrev);
+		const $ = await loadBoxScorePage(date, homeAbbrev, boxScoreUrl);
 		const boxScore: BoxScoreData = {
 			home: {},
 			visitor: {},
@@ -480,7 +488,6 @@ const getBoxScore = async (game: Game2Document): Promise<void | BoxScore> => {
 		boxScore.visitor.teamAdvanced = getTeamAdvancedData($, visitorAbbrev);
 		boxScore.visitor.inactive = inactive.visitor;
 		boxScore.visitor.fourFactors = fourFactors.visitor;
-
 		/** Set non-team specific data */
 		if (officials.length) boxScore.officials = officials;
 		if (locale !== undefined && typeof locale !== 'boolean') boxScore.locale = locale;

@@ -3,17 +3,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loadTeamIndex = exports.loadTeamPage = exports.loadPlayoffSchedule = exports.loadSeasonSchedule = exports.loadPlayerPage = exports.loadSeasonsPage = exports.loadBoxScorePage = void 0;
+exports.loadTx = exports.loadTeamIndex = exports.loadTeamPage = exports.loadPlayoffSchedule = exports.loadSeasonSchedule = exports.loadPlayerPage = exports.loadSeasonsPage = exports.loadBoxScorePage = void 0;
 const cross_fetch_1 = __importDefault(require("cross-fetch"));
 const cheerio_1 = __importDefault(require("cheerio"));
-/**
- * base url to build API requests
- */
+/* base url to build API requests */
 const baseUrl = 'https://www.basketball-reference.com';
-const loadBoxScorePage = (date, homeTeam, num) => {
-    const url = num !== undefined
-        ? `${baseUrl}/boxscores/${date}${num}${homeTeam}.html`
+const loadBoxScorePage = (date, homeTeam, boxScoreUrl) => {
+    const url = boxScoreUrl !== undefined
+        ? `${baseUrl}/boxscores/${boxScoreUrl}.html`
         : `${baseUrl}/boxscores/${date}0${homeTeam}.html`;
+    console.log(url);
     return (0, cross_fetch_1.default)(url).then(async (result) => {
         const body = await result.text();
         return cheerio_1.default.load(body);
@@ -86,3 +85,10 @@ const loadTeamIndex = (teamAbbr) => {
     });
 };
 exports.loadTeamIndex = loadTeamIndex;
+const loadTx = (league, year) => {
+    return (0, cross_fetch_1.default)(`${baseUrl}/leagues/${league}_${year}_transactions.html`).then(async (result) => {
+        const body = await result.text();
+        return cheerio_1.default.load(body);
+    });
+};
+exports.loadTx = loadTx;

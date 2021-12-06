@@ -199,74 +199,55 @@ const parseSeasonGames = ($) => {
                             name: $(row).find('[data-stat=visitor_team_name]').text().trim()
                         }
                     };
+                    /** Set boxscore url for SeasonGameItem */
+                    const boxScoreUrl = $(row)
+                        .find('[data-stat=box_score_text]')
+                        .find('a')
+                        .attr('href')
+                        ?.split('/');
+                    if (boxScoreUrl) {
+                        game.boxScoreUrl = boxScoreUrl[boxScoreUrl.length - 1].split('.')[0];
+                    }
                     /** if exists, set visitor team score */
-                    $(row)
-                        .find('[data-stat=visitor_pts]')
-                        .each(function (i, score) {
-                        const visitorScore = $(score).text().trim();
-                        if (visitorScore !== '') {
-                            game.visitor.score = parseInt(visitorScore);
-                        }
-                    });
-                    /** set visitor team abbreviation */
-                    $(row)
-                        .find('[data-stat=visitor_team_name]')
-                        .each(function (i, score) {
-                        $(score)
-                            .find('a')
-                            .each(function (i, a) {
-                            const href = $(a).attr('href')?.split('/');
-                            if (href) {
-                                game.visitor.abbreviation = href[href.length - 2];
-                            }
-                        });
-                    });
+                    const visitorScore = $(row).find('[data-stat=visitor_pts]').text().trim();
+                    if (visitorScore !== '') {
+                        game.visitor.score = parseInt(visitorScore);
+                    }
                     /** if exists, set home team score */
-                    $(row)
-                        .find('[data-stat=home_pts]')
-                        .each(function (i, score) {
-                        const homeScore = $(score).text().trim();
-                        if (homeScore !== '') {
-                            game.home.score = parseInt(homeScore);
-                        }
-                    });
+                    const homeScore = $(row).find('[data-stat=home_pts]').text().trim();
+                    if (homeScore !== '') {
+                        game.home.score = parseInt(homeScore);
+                    }
+                    /** set visitor team abbreviation */
+                    const visitorHref = $(row)
+                        .find('[data-stat=visitor_team_name]')
+                        .find('a')
+                        .attr('href')
+                        ?.split('/');
+                    if (visitorHref) {
+                        game.visitor.abbreviation = visitorHref[visitorHref.length - 2];
+                    }
                     /** set home team abbreviation */
-                    $(row)
+                    const homeHref = $(row)
                         .find('[data-stat=home_team_name]')
-                        .each(function (i, score) {
-                        $(score)
-                            .find('a')
-                            .each(function (i, a) {
-                            const href = $(a).attr('href')?.split('/');
-                            if (href) {
-                                game.home.abbreviation = href[href.length - 2];
-                            }
-                        });
-                    });
+                        .find('a')
+                        .attr('href')
+                        ?.split('/');
+                    if (homeHref) {
+                        game.home.abbreviation = homeHref[homeHref.length - 2];
+                    }
                     /** if exists, set overtime count */
-                    $(row)
-                        .find('[data-stat=overtimes]')
-                        .each(function (i, overtimes) {
-                        const ot = $(overtimes).text().trim();
-                        if (ot !== '')
-                            game.otCount = ot;
-                    });
+                    const otCount = $(row).find('[data-stat=overtimes]').text().trim();
+                    if (otCount !== '')
+                        game.otCount = otCount;
                     /** if exists, set attendance */
-                    $(row)
-                        .find('[data-stat=attendance]')
-                        .each(function (i, attendance) {
-                        const attend = $(attendance).text().trim();
-                        if (attend !== '')
-                            game.attendance = parseInt(attend);
-                    });
+                    const attendance = $(row).find('[data-stat=attendance]').text().trim();
+                    if (attendance !== '')
+                        game.attendance = parseInt(attendance);
                     /** if exists, set attendance */
-                    $(row)
-                        .find('[data-stat=game_remarks]')
-                        .each(function (i, remarks) {
-                        const notes = $(remarks).text().trim();
-                        if (notes !== '')
-                            game.notes = notes;
-                    });
+                    const remarks = $(row).find('[data-stat=game_remarks]').text().trim();
+                    if (remarks !== '')
+                        game.notes = remarks;
                     /** if start time listed, manipulate date and set game.time = true */
                     $(row)
                         .find('[data-stat=game_start_time]')
@@ -277,7 +258,7 @@ const parseSeasonGames = ($) => {
                             const halfOfDay = time.slice(-1);
                             let hours = parseInt(time.split(':')[0]);
                             const minutes = parseInt(time.split(':')[1].slice(0, -1));
-                            if (halfOfDay === 'p') {
+                            if (halfOfDay === 'p' && hours !== 12) {
                                 hours += 12;
                             }
                             const dateTime = game.date.set('hour', hours).set('minute', minutes);

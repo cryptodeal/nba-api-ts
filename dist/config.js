@@ -14,7 +14,9 @@ const getConfig = () => {
     return {
         MONGO_PORT: process.env.MONGO_PORT ? Number(process.env.MONGO_PORT) : undefined,
         MONGO_HOST: process.env.MONGO_HOST,
-        MONGO_DB: process.env.MONGO_DB
+        MONGO_DB: process.env.MONGO_DB,
+        S3_ACCESS_KEY: process.env.S3_ACCESS_KEY,
+        S3_SECRET: process.env.S3_SECRET
     };
 };
 // Throwing an Error if any field was undefined we don't

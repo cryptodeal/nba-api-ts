@@ -7,12 +7,13 @@ const baseUrl = 'https://www.basketball-reference.com';
 export const loadBoxScorePage = (
 	date: string,
 	homeTeam: string,
-	num?: number
+	boxScoreUrl?: string
 ): Promise<cheerio.Root> => {
 	const url: string =
-		num !== undefined
-			? `${baseUrl}/boxscores/${date}${num}${homeTeam}.html`
+		boxScoreUrl !== undefined
+			? `${baseUrl}/boxscores/${boxScoreUrl}.html`
 			: `${baseUrl}/boxscores/${date}0${homeTeam}.html`;
+	console.log(url);
 	return fetch(url).then(async (result) => {
 		const body = await result.text();
 		return cheerio.load(body);

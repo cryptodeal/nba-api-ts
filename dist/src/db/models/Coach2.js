@@ -7,8 +7,8 @@ exports.Coach2 = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const Coach2Schema = new mongoose_1.default.Schema({
     name: {
-        first: { type: String, required: true, index: true },
-        last: { type: String, required: true, index: true },
+        first: { type: String },
+        last: { type: String },
         full: { type: String, required: true, index: true }
     },
     seasons: [

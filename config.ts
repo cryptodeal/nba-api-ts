@@ -1,5 +1,6 @@
 import path from 'path';
 import dotenv from 'dotenv';
+import { SeasonGameItem } from './src/api/bballRef/seasons';
 
 // Parsing the env file.
 dotenv.config({
@@ -17,12 +18,16 @@ interface ENV {
 	MONGO_PORT: number | undefined;
 	MONGO_HOST: string | undefined;
 	MONGO_DB: string | undefined;
+	S3_ACCESS_KEY: string | undefined;
+	S3_SECRET: string | undefined;
 }
 
 interface Config {
 	MONGO_PORT: number;
 	MONGO_HOST: string;
 	MONGO_DB: string;
+	S3_ACCESS_KEY: string;
+	S3_SECRET: string;
 }
 
 // Loading process.env as ENV interface
@@ -31,7 +36,9 @@ const getConfig = (): ENV => {
 	return {
 		MONGO_PORT: process.env.MONGO_PORT ? Number(process.env.MONGO_PORT) : undefined,
 		MONGO_HOST: process.env.MONGO_HOST,
-		MONGO_DB: process.env.MONGO_DB
+		MONGO_DB: process.env.MONGO_DB,
+		S3_ACCESS_KEY: process.env.S3_ACCESS_KEY,
+		S3_SECRET: process.env.S3_SECRET
 	};
 };
 

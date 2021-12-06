@@ -12,7 +12,8 @@ const Game2Schema = new mongoose_1.default.Schema({
             espnGameId: { type: String },
             bballRef: {
                 year: { type: Number },
-                missingData: { type: Boolean, default: false }
+                missingData: { type: Boolean, default: false },
+                boxScoreUrl: { type: String, required: true }
             }
         },
         displaySeason: { type: String, required: true },
@@ -404,6 +405,11 @@ const Game2Schema = new mongoose_1.default.Schema({
 Game2Schema.query = {
     populatePlayers() {
         return this.populate('home.players.player visitor.players.player', 'name.full');
+    }
+};
+Game2Schema.statics = {
+    findByUrl(url) {
+        return this.findOne({ 'meta.helpers.bballRef.boxScoreUrl': url }).exec();
     }
 };
 exports.Game2 = mongoose_1.default.model('Game2', Game2Schema);

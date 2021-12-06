@@ -25,6 +25,7 @@ GetSeasonTxTest('Load league: instance of LeagueDocument', async () => {
 GetSeasonTxTest('get seasonTxList: object', async () => {
 	seasonTxList = await getSeasonTx(league.name, league.seasons[league.seasons.length - 3].year);
 	assert.type(seasonTxList, 'object');
+	console.log(seasonTxList.txs.filter((tx) => tx.players.length > 0));
 });
 
 GetSeasonTxTest.run();
